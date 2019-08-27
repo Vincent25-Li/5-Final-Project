@@ -1,0 +1,4 @@
+# Don't track the following folders/files
+
+*.Ds_Store
+*.pyc
