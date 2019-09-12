@@ -7,112 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href={% static "tripblog/css/main.css" %} />
-    <style>
-        * {
-            box-sizing: border-box;
-        }
 
-        /* Button used to open the chat form - fixed at the bottom of the page */
-        .open-button {
-            background-color: #555;
-            color: white;
-            padding: 16px 20px;
-            border: none;
-            cursor: pointer;
-            opacity: 0.8;
-            position: fixed;
-            bottom: 23px;
-            right: 28px;
-            width: 280px;
-        }
-
-        /* The popup chat - hidden by default */
-        .chat-popup {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            right: 15px;
-            border: 3px solid #f1f1f1;
-            z-index: 9;
-        }
-
-        /* Add styles to the form container */
-        .form-container {
-            max-width: 300px;
-            padding: 10px;
-            background-color: white;
-        }
-
-        /* Full-width textarea */
-        .form-container textarea {
-            width: 100%;
-            padding: 15px;
-            margin: 5px 0 22px 0;
-            border: none;
-            background: #f1f1f1;
-            resize: none;
-            min-height: 200px;
-        }
-
-        /* When the textarea gets focus, do something */
-        .form-container textarea:focus {
-            background-color: #ddd;
-            outline: none;
-        }
-
-        /* Set a style for the submit/send button */
-        .form-container .btn {
-            position: relative;
-            background-color: #2bb3d7;
-            color: black;
-            padding: 16px 20px;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 10px;
-            opacity: 0.8;
-
-        }
-
-        /* Add a red background color to the cancel button */
-        .form-container .cancel {
-            background-color: #2bb3d7;
-        }
-
-        /* Add some hover effects to buttons */
-        .form-container .btn:hover,
-        .open-button:hover {
-            opacity: 1;
-        }
-
-
-        .outerDiv {
-            text-align: center;
-        }
-
-        .innerDiv {
-            display: inline-block;
-            padding: 1% 2%;
-            width: 70%;
-            background-color: #DCDCDC;
-        }
-
-        }
-
-        .imgClass {
-            width: 40%;
-            padding: 5% 2%;
-            background-color: white;
-        }
-
-        .floatR {
-            float: right;
-        }
-
-        .floatL {
-            float: left;
-        }
-    </style>
 </head>
 
 <body>
@@ -123,9 +18,6 @@
             <a href="#menu"><span>Menu</span></a>
         </nav>
         <a href="index.html" class="logo">intensify</a>
-        <nav class="right">
-            <a href="#" class="button alt">Login</a>
-        </nav>
     </header>
 
     <!-- Menu -->
@@ -145,13 +37,14 @@
         <div class="contentDiv">
             <img src='/media/jessie/headshot.jpg' />
         </div>
-
+    </section>
+    <section>
         <div>
             <h3 style="text-align: center">Jessie's Travel Blog</h3>
         </div>
     </section>
 
-{% comment %} upload picture start {% endcomment %}
+{% comment %} upload picture start-Vincet(not complete){% endcomment %}
 
 	<form action="." method='POST' enctype="multipart/form-data" style='display: none'>
 		{% csrf_token %}
@@ -164,9 +57,9 @@
     <!-- scrollong -->
     <div class="outer-wrapper_BH">
         <div class="wrapper_BH">
-            <div class="slide_BH one_BH">photo one</div>
-            <div class="slide_BH two_BH">photo two</div>
-            <div class="slide_BH three_BH">photo three</div>
+            <div class="slide_BH one_BH"><img src={% static "tripblog/images/me.JPG" %} />photo one</div>
+            <div class="slide_BH two_BH"><img src={% static "tripblog/images/test1.JPG" %}/>photo two</div>
+            <div class="slide_BH three_BH"><img src={% static "tripblog/images/test2.JPG" %}/>photo three</div>
             <div class="slide_BH four_BH">photo four</div>
             <div class="slide_BH one_BH">photo one</div>
             <div class="slide_BH two_BH">photo two</div>

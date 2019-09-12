@@ -22,3 +22,6 @@ def index(request):
             for chunk in headshot.chunks():
                 destination.write(chunk)
         return redirect('/tripblog/')
+
+def add_post(request):
+    return render(request, 'tripblog/add_post.html')
