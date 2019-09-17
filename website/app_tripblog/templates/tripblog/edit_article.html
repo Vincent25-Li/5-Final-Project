@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	{% load static %}
+	<meta charset="UTF-8">
+	<title>article_edit</title>
+	<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+	<link rel="stylesheet" href={% static "tripblog/css/edit_article.css" %}>
+</head>
+
+<body>
+	<form method="post">
+		<div class="flex-parent">
+			<div class="parent-flex-content">
+				<div ><img src="{% static "tripblog/images/plus.png" %}" alt="addnewday" class="imgplus" id="addform" /></div>
+				
+				<div id="addinput1">
+					<a>時間</a><input type="text"><a>景點</a><input type="text"><br>
+				</div>
+			</div>
+		</div>
+		<div class="flex-child">
+			<div class="child-flex-content" id="addinput2">
+				<textarea class="daily-trip-content"></textarea>
+
+
+
+			</div>
+		</div>
+	</form>
+
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+	<script>
+		$("#addform").click(function () {
+			var addtextinput = $("<a>時間</a><input type='text'><a>景點</a><input type='text'><br>");
+			$("#addinput1").append(addtextinput);
+			var addtextinput = $("<textarea class='daily-trip-content' name='waitfordjango'></textarea>");
+			$("#addinput2").append(addtextinput);
+		});
+	</script>
+</body>
+
+</html>
