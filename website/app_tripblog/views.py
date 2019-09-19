@@ -25,3 +25,6 @@ def index(request):
 
 def add_post(request):
     return render(request, 'tripblog/add_post.html')
+    
+def edit_article(request):
+    return render(request, 'tripblog/edit_article.html')
