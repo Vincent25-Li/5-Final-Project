@@ -62,7 +62,7 @@ if __name__ == '__main__':
         table_qa_pairs = db.Table('table_qa_pairs', metadata, autoload=True, autoload_with=engine)
 
 
-        base_directory = f'./{language}'
+        base_directory = f'./data/{language}'
         file_list = os.listdir(base_directory)
         for file in file_list:
             path = os.path.join(base_directory, file)
