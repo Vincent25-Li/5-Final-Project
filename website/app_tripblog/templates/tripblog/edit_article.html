@@ -1,16 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'tripblog/base.html' %}
 
-<head>
+{% block css %}
 	{% load static %}
-	<meta charset="UTF-8">
-	<title>article_edit</title>
 	<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 	<link rel="stylesheet" href={% static "tripblog/css/edit_article.css" %}>
-</head>
+{% endblock %}
 
-<body>
+
+{% block content %}
 	<form method="post">
 		<div class="flex-parent">
 			<div class="parent-flex-content">
@@ -30,7 +28,9 @@
 			</div>
 		</div>
 	</form>
+{% endblock %}
 
+{% block script %}
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
 	<script>
 		$("#addform").click(function () {
@@ -40,6 +40,4 @@
 			$("#addinput2").append(addtextinput);
 		});
 	</script>
-</body>
-
-</html>
+{% endblock %}

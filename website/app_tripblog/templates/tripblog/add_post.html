@@ -1,16 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
+{% extends 'tripblog/base.html' %}
+{% block css %}
 	{% load static %}
-	<meta charset="UTF-8">
-	<title>responsive timeline v3</title>
+	<link rel="stylesheet" href={% static "tripblog/css/main.css" %} />
 	<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 	<link rel="stylesheet" href={% static "tripblog/css/style.css" %}>
-</head>
+{% endblock %}
 
-<body>
+{% block content %}
 	<div class="flex-parent">
 		<div class="input-flex-container">
 
@@ -53,11 +50,9 @@
 		<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0	
 		</div>
 	</div>
+{% endblock %}
 
-
+{% block script %}
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
 	<script src={% static "tripblog/js/script.js" %}></script>
-
-</body>
-
-</html>
+{% endblock %}

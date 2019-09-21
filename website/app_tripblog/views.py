@@ -7,9 +7,15 @@ from django.http import HttpResponse
 
 # Create your views here.
 
+# base template
+def base(request):
+    title = 'base template'
+    return render(request, 'tripblog/base.html', locals())
+
 def index(request):
+    title = 'homepage'
     if request.method == 'GET':
-        return render(request, 'tripblog/index.html')
+        return render(request, 'tripblog/index.html', locals())
 
     elif request.method == 'POST':
         headshot = request.FILES['headshot'] # retrieve post image
@@ -24,7 +30,9 @@ def index(request):
         return redirect('/tripblog/')
 
 def add_post(request):
-    return render(request, 'tripblog/add_post.html')
+    title = 'responsive timeline v3'
+    return render(request, 'tripblog/add_post.html', locals())
     
 def edit_article(request):
-    return render(request, 'tripblog/edit_article.html')
+    title = 'article_edit'
+    return render(request, 'tripblog/edit_article.html', locals())

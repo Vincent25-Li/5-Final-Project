@@ -1,37 +1,8 @@
-<!DOCTYPE html>
-<html>
+{% extends 'tripblog/base.html' %}
 
-<head>
-    {% load static %}
-    <title>Intensify by TEMPLATED</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href={% static "tripblog/css/main.css" %} />
+{% block css %}{% endblock %}
 
-</head>
-
-<body>
-
-    <!-- Header -->
-    <header id="header">
-        <nav class="left">
-            <a href="#menu"><span>Menu</span></a>
-        </nav>
-        <a href="index.html" class="logo">intensify</a>
-    </header>
-
-    <!-- Menu -->
-    <nav id="menu">
-        <ul class="links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="generic.html">Schedule</a></li>
-            <li><a href="elements.html">Setting</a></li>
-        </ul>
-        <ul class="actions vertical">
-            <li><a href="#" class="button fit">Login</a></li>
-        </ul>
-    </nav>
-
+{% block content %}
     <!-- profile -->
     <section>
         <div class="contentDiv">
@@ -53,11 +24,11 @@
 	</form>
 {% comment %} upload picture end {% endcomment %}
 
-
     <!-- scrollong -->
+    {% load static %}
     <div class="outer-wrapper_BH">
         <div class="wrapper_BH">
-            <div class="slide_BH one_BH"><img src={% static "tripblog/images/me.JPG" %} />photo one</div>
+            <div class="slide_BH one_BH"><img src={% static "tripblog/images/me.JPG" %}/>photo one</div>
             <div class="slide_BH two_BH"><img src={% static "tripblog/images/test1.JPG" %}/>photo two</div>
             <div class="slide_BH three_BH"><img src={% static "tripblog/images/test2.JPG" %}/>photo three</div>
             <div class="slide_BH four_BH">photo four</div>
@@ -83,39 +54,6 @@
             <div class="slide_BH four_BH">photo four</div>
         </div>
     </div>
+{% endblock %}
 
-    <!--  Popup Chat -->
-    <button class="open-button" onclick="openForm()">Chat</button>
-
-    <div class="chat-popup" id="myForm">
-        <form action="/action_page.php" class="form-container">
-            <h1>Your Travel Assistant</h1>
-
-
-            <textarea placeholder="Type message.." name="msg" required></textarea>
-
-            <button type="submit" class="btn"><span style="vertical-align: middle;">Send</span></button>
-            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-        </form>
-    </div>
-
-
-    <!-- Scripts -->
-    <script src={% static "tripblog/js/jquery.min.js" %}></script>
-    <script src={% static "tripblog/js/jquery.scrolly.min.js" %}></script>
-    <script src={% static "tripblog/js/skel.min.js" %}></script>
-    <script src={% static "tripblog/js/util.js" %}></script>
-    <script src={% static "tripblog/js/main.js" %}></script>
-    <script>
-        function openForm() {
-            document.getElementById("myForm").style.display = "block";
-        }
-
-        function closeForm() {
-            document.getElementById("myForm").style.display = "none";
-        }
-    </script>
-
-</body>
-
-</html>
+{% block script %}{% endblock %}
