@@ -1,43 +1,104 @@
 {% extends 'tripblog/base.html' %}
 
 {% block css %}
-	{% load static %}
-	<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-	<link rel="stylesheet" href={% static "tripblog/css/edit_article.css" %}>
+{% load static %}
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+<link rel="stylesheet" href={% static "tripblog/css/froala_editor.css" %}>
+<link rel="stylesheet" href={% static "tripblog/css/froala_style.css" %}>
+<link rel="stylesheet" href={% static "tripblog/css/plugins/code_view.css" %}>
+<link rel="stylesheet" href={% static "tripblog/css/plugins/image_manager.css" %}>
+<link rel="stylesheet" href={% static "tripblog/css/plugins/image.css" %}>
+<link rel="stylesheet" href={% static "tripblog/css/plugins/table.css" %}>
+<link rel="stylesheet" href={% static "tripblog/css/plugins/video.css" %}>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.css">
+<link rel="stylesheet" href={% static "tripblog/css/edit_article.css" %}>
 {% endblock %}
 
 
 {% block content %}
-	<form method="post">
-		<div class="flex-parent">
-			<div class="parent-flex-content">
-				<div ><img src="{% static "tripblog/images/plus.png" %}" alt="addnewday" class="imgplus" id="addform" /></div>
-				
-				<div id="addinput1">
-					<a>時間</a><input type="text"><a>景點</a><input type="text"><br>
-				</div>
+<form method="post">
+	<div class="flex-parent">
+		<div class="parent-flex-content">
+			<div><img src="{% static "tripblog/images/plus.png" %}" alt="addnewday" class="imgplus" id="addform" />
+			</div>
+			<div id="addinput1">
+				<a>日期</a><input type="text" style="width: 100px"><a>to</a><input type="text"
+					style="width: 100px"><a>交通</a><input type="text"><br>
+				<a>時間</a><input type="text"><a>景點</a><input type="text"><br>
 			</div>
 		</div>
-		<div class="flex-child">
-			<div class="child-flex-content" id="addinput2">
-				<textarea class="daily-trip-content"></textarea>
-
-
-
+	</div>
+	<div class="flex-child">
+		<div class="child-flex-content" id="addinput2">
+			<div id="editor">
+				<input type="submit">
+				<textarea id='edit' style="margin-top: 30px;" placeholder="">
+                        <h1>Textarea</h1>
+                    </textarea>
 			</div>
 		</div>
-	</form>
+	</div>
+</form>
 {% endblock %}
 
 {% block script %}
-	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-	<script>
-		$("#addform").click(function () {
-			var addtextinput = $("<a>時間</a><input type='text'><a>景點</a><input type='text'><br>");
-			$("#addinput1").append(addtextinput);
-			var addtextinput = $("<textarea class='daily-trip-content' name='waitfordjango'></textarea>");
-			$("#addinput2").append(addtextinput);
-		});
-	</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/mode/xml/xml.min.js"></script>
+<script type="text/javascript" src={% static "tripblog/js/froala_editor.min.js" %}></script>
+<script type="text/javascript" src={% static "tripblog/js/plugins/align.min.js" %}></script>
+<script type="text/javascript" src={% static "tripblog/js/plugins/code_beautifier.min.js" %}></script>
+<script type="text/javascript" src={% static "tripblog/js/plugins/code_view.min.js" %}></script>
+<script type="text/javascript" src={% static "tripblog/js/plugins/draggable.min.js" %}></script>
+<script type="text/javascript" src={% static "tripblog/js/plugins/image.min.js" %}></script>
+<script type="text/javascript" src={% static "tripblog/js/plugins/image_manager.min.js" %}></script>
+<script type="text/javascript" src={% static "tripblog/js/plugins/link.min.js" %}></script>
+<script type="text/javascript" src={% static "tripblog/js/plugins/lists.min.js" %}></script>
+<script type="text/javascript" src={% static "tripblog/js/plugins/paragraph_format.min.js" %}></script>
+<script type="text/javascript" src={% static "tripblog/js/plugins/paragraph_style.min.js" %}></script>
+<script type="text/javascript" src={% static "tripblog/js/plugins/table.min.js" %}></script>
+<script type="text/javascript" src={% static "tripblog/js/plugins/video.min.js" %}></script>
+<script type="text/javascript" src={% static "tripblog/js/plugins/url.min.js" %}></script>
+<script type="text/javascript" src={% static "tripblog/js/plugins/entities.min.js" %}></script>
+<script>
+	(function () {
+		const editorInstance = new FroalaEditor('#edit', {
+			enter: FroalaEditor.ENTER_P,
+			placeholderText: null,
+			events: {
+				initialized: function () {
+					const editor = this
+					this.el.closest('form').addEventListener('submit', function (e) {
+						console.log(editor.$oel.val())
+						e.preventDefault()
+					})
+				}
+			}
+		})
+	})()
+</script>
+<script>
+	$("#addform").click(function () {
+		var addtextinput = $("<a>時間</a><input type='text'><a>景點</a><input type='text'><br>");
+		$("#addinput1").append(addtextinput);
+		var addtextinput = $("<textarea id='edit' style='margin-top: 30px;' placeholder='Type some text'><h1>Textarea</h1></textarea>");
+		$("#editor").append(addtextinput);
+		const editorInstance = new FroalaEditor('#edit', {
+			enter: FroalaEditor.ENTER_P,
+			placeholderText: null,
+			events: {
+				initialized: function () {
+					const editor = this
+					this.el.closest('form').addEventListener('submit', function (e) {
+						console.log(editor.$oel.val())
+						e.preventDefault()
+					})
+				}
+			}
+		})
+	});
+</script>
 {% endblock %}
