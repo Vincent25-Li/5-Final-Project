@@ -11,7 +11,6 @@
     {% block css %}{% endblock %}
     <link rel="stylesheet" href={% static "tripblog/css/main.css" %} />
     
-
 </head>
 
 <body>
@@ -37,22 +36,23 @@
     
     {% block content %}{% endblock %}
 
-    <!--  Popup Chat -->
+    <!--  Popup Chatbot -->
     <button class="open-button" onclick="openForm()">Chat</button>
-
+{% comment %} action="/tripblog/chatbot/" {% endcomment %}
     <div class="chat-popup" id="myForm">
-        <form action="/action_page.php" class="form-container">
+        <form method="POST" class="form-container">
+            {% csrf_token %}
             <h1>Your Travel Assistant</h1>
+            <div id="chat_window_V"></div>
 
+            <textarea placeholder="Type message.." id="user_msg" name="user_msg" required></textarea>
 
-            <textarea placeholder="Type message.." name="msg" required></textarea>
-
-            <button type="submit" class="btn"><span style="vertical-align: middle;">Send</span></button>
+            <button type="button" id="chatbot_btn" class="btn"><span style="vertical-align: middle;">Send</span></button>
             <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
         </form>
     </div>
 
-    {% comment %} put css file here for each page {% endcomment %}
+    {% comment %} put js file here for each page {% endcomment %}
     {% block script %}{% endblock %}
     <!-- Scripts -->
     <script src={% static "tripblog/js/jquery.min.js" %}></script>
@@ -68,6 +68,59 @@
         function closeForm() {
             document.getElementById("myForm").style.display = "none";
         }
+    </script>
+    <script>
+        $(document).ready(() => {
+
+            {% comment %} ajax for chatbot to deal user message {% endcomment %}
+            $("#chatbot_btn").click( event => {
+                let user_msg = "<div>" + $('#user_msg').val() + "</div>";
+                $("#chat_window_V").append(user_msg)
+                $.ajax({
+                    url: "/tripblog/chatbot/",
+                    type: "POST",
+                    data: {
+                        "user_msg": user_msg,
+                    },
+                    datatype: "json", 
+                    success: data => {
+                        reply = "<div>" + data['reply'] + "</div>";
+                        $("#chat_window_V").append(reply);
+                    }
+                });
+                $("#user_msg").val('');
+            });
+
+            // csrf code
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            var csrftoken = getCookie('csrftoken');
+        
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+        });
     </script>
 
 </body>

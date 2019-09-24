@@ -1,15 +1,21 @@
 import os
+import json
+import pickle
 
 from django.shortcuts import render, redirect
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
 
 # Create your views here.
+chatbot_clf = pickle.load()
+# templates
 
 # base template
 def base(request):
     title = 'base template'
+    if request.is_ajax():
+        print('success')
     return render(request, 'tripblog/base.html', locals())
 
 def index(request):
@@ -36,3 +42,13 @@ def add_post(request):
 def edit_article(request):
     title = 'article_edit'
     return render(request, 'tripblog/edit_article.html', locals())
+
+# functions
+
+def chatbot(request):
+    if request.method =='POST' and request.is_ajax():
+        user_msg = request.POST.get('user_msg')
+        data = json.dumps({'reply': 'Hi'})
+        return HttpResponse(data, content_type='application/json')
+    else:
+        raise Http404
