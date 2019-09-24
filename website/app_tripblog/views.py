@@ -7,9 +7,14 @@ from django.conf import settings
 from django.http import HttpResponse, Http404
 
 
-# Create your views here.
-chatbot_clf = pickle.load()
-# templates
+''' load chatbot classifier model '''
+chatbot_clf_path = os.path.join(settings.MEDIA_ROOT, 'chatbot', 'topic_clf_RF.pkl')
+chatbot_clf = pickle.load(
+    open(chatbot_clf_path, 'rb')
+)
+
+
+''' templates '''
 
 # base template
 def base(request):
@@ -43,7 +48,9 @@ def edit_article(request):
     title = 'article_edit'
     return render(request, 'tripblog/edit_article.html', locals())
 
-# functions
+
+''' functions '''
+
 
 def chatbot(request):
     if request.method =='POST' and request.is_ajax():
