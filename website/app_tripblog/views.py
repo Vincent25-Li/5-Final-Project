@@ -6,12 +6,14 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.http import HttpResponse, Http404
 
+from app_tripblog.function_chatbot import ChatbotObject
+
 
 ''' load chatbot classifier model '''
-chatbot_clf_path = os.path.join(settings.MEDIA_ROOT, 'chatbot', 'topic_clf_RF.pkl')
-chatbot_clf = pickle.load(
-    open(chatbot_clf_path, 'rb')
-)
+# chatbot_clf_path = os.path.join(settings.MEDIA_ROOT, 'chatbot', 'topic_clf_RF.pkl')
+# chatbot_clf = pickle.load(
+#     open(chatbot_clf_path, 'rb')
+# )
 
 
 ''' templates '''
@@ -51,11 +53,12 @@ def edit_article(request):
 
 ''' functions '''
 
-
 def chatbot(request):
     if request.method =='POST' and request.is_ajax():
         user_msg = request.POST.get('user_msg')
-        data = json.dumps({'reply': 'Hi'})
+        chatbot_object = ChatbotObject()
+        reply = chatbot_object.reply(user_msg)
+        data = json.dumps({'reply': reply})
         return HttpResponse(data, content_type='application/json')
     else:
         raise Http404
