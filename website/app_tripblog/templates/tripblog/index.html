@@ -3,57 +3,60 @@
 {% block css %}{% endblock %}
 
 {% block content %}
-    <!-- profile -->
-    <section>
-        <div class="contentDiv">
+<!-- profile -->
+<section>
+    <div class="contentDiv">
+        <label for="file-input">
             <img src='/media/jessie/headshot.jpg' />
-        </div>
-    </section>
-    <section>
-        <div>
-            <h3 style="text-align: center">Jessie's Travel Blog</h3>
-        </div>
-    </section>
+        </label>
+        <input id="file-input" type="file" style="display:none"/>
+    </div>
+</section>
+<!-- <section>
+    <div>
+        <h3 style="text-align: center">Jessie's Travel Blog</h3>
+    </div>
+</section> -->
 
 {% comment %} upload picture start-Vincet(not complete){% endcomment %}
 
-	<form action="." method='POST' enctype="multipart/form-data" style='display: none'>
-		{% csrf_token %}
-		<input type="file" name='headshot'>
-		<input type="submit" vlaue='Submit'>
-	</form>
+<form action="." method='POST' enctype="multipart/form-data" style='display: none'>
+    {% csrf_token %}
+    <input type="file" name='headshot'>
+    <input type="submit" vlaue='Submit'>
+</form>
 {% comment %} upload picture end {% endcomment %}
 
-    <!-- scrollong -->
-    {% load static %}
-    <div class="outer-wrapper_BH">
-        <div class="wrapper_BH">
-            <div class="slide_BH one_BH"><img src={% static "tripblog/images/me.JPG" %}/>photo one</div>
-            <div class="slide_BH two_BH"><img src={% static "tripblog/images/test1.JPG" %}/>photo two</div>
-            <div class="slide_BH three_BH"><img src={% static "tripblog/images/test2.JPG" %}/>photo three</div>
-            <div class="slide_BH four_BH">photo four</div>
-            <div class="slide_BH one_BH">photo one</div>
-            <div class="slide_BH two_BH">photo two</div>
-            <div class="slide_BH three_BH">photo three</div>
-            <div class="slide_BH four_BH">photo four</div>
-            <div class="slide_BH one_BH">photo one</div>
-            <div class="slide_BH two_BH">photo two</div>
-            <div class="slide_BH three_BH">photo three</div>
-            <div class="slide_BH four_BH">photo four</div>
-            <div class="slide_BH one_BH">photo one</div>
-            <div class="slide_BH two_BH">photo two</div>
-            <div class="slide_BH three_BH">photo three</div>
-            <div class="slide_BH four_BH">photo four</div>
-            <div class="slide_BH one_BH">photo one</div>
-            <div class="slide_BH two_BH">photo two</div>
-            <div class="slide_BH three_BH">photo three</div>
-            <div class="slide_BH four_BH">photo four</div>
-            <div class="slide_BH one_BH">photo one</div>
-            <div class="slide_BH two_BH">photo two</div>
-            <div class="slide_BH three_BH">photo three</div>
-            <div class="slide_BH four_BH">photo four</div>
-        </div>
+<!-- scrollong -->
+{% load static %}
+<div class="outer-wrapper_BH">
+    <div class="wrapper_BH">
+        <div class="slide_BH one_BH"><img src={% static "tripblog/images/me.JPG" %} />photo one</div>
+        <div class="slide_BH two_BH"><img src={% static "tripblog/images/test1.JPG" %} />photo two</div>
+        <div class="slide_BH three_BH"><img src={% static "tripblog/images/test2.JPG" %} />photo three</div>
+        <div class="slide_BH four_BH">photo four</div>
+        <div class="slide_BH one_BH">photo one</div>
+        <div class="slide_BH two_BH">photo two</div>
+        <div class="slide_BH three_BH">photo three</div>
+        <div class="slide_BH four_BH">photo four</div>
+        <div class="slide_BH one_BH">photo one</div>
+        <div class="slide_BH two_BH">photo two</div>
+        <div class="slide_BH three_BH">photo three</div>
+        <div class="slide_BH four_BH">photo four</div>
+        <div class="slide_BH one_BH">photo one</div>
+        <div class="slide_BH two_BH">photo two</div>
+        <div class="slide_BH three_BH">photo three</div>
+        <div class="slide_BH four_BH">photo four</div>
+        <div class="slide_BH one_BH">photo one</div>
+        <div class="slide_BH two_BH">photo two</div>
+        <div class="slide_BH three_BH">photo three</div>
+        <div class="slide_BH four_BH">photo four</div>
+        <div class="slide_BH one_BH">photo one</div>
+        <div class="slide_BH two_BH">photo two</div>
+        <div class="slide_BH three_BH">photo three</div>
+        <div class="slide_BH four_BH">photo four</div>
     </div>
+</div>
 {% endblock %}
 
 {% block script %}{% endblock %}

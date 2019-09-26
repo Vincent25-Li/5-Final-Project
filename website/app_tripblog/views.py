@@ -26,7 +26,8 @@ def base(request):
     return render(request, 'tripblog/base.html', locals())
 
 def index(request):
-    title = 'homepage'
+    title = 'homepage' 
+    user = 'Jessie'
     if request.method == 'GET':
         return render(request, 'tripblog/index.html', locals())
 
@@ -44,10 +45,12 @@ def index(request):
 
 def add_post(request):
     title = 'responsive timeline v3'
+    user = 'Jessie'
     return render(request, 'tripblog/add_post.html', locals())
     
 def edit_article(request):
     title = 'article_edit'
+    user = 'Jessie'
     return render(request, 'tripblog/edit_article.html', locals())
 
 

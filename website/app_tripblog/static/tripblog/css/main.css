@@ -230,7 +230,7 @@ button,
 	align-items: center;
 	background: #fff;
 	cursor: default;
-	height: 10%;
+	height: 7%;
 	left: 0;
 	/* line-height: 6em; */
 	position: fixed;
@@ -244,7 +244,7 @@ button,
 	#header .logo {
 		color: #f6755e;
 		font-family: "Pacifico", cursive;
-		font-size: 5vh;
+		font-size: 3.5vh;
 		letter-spacing: 2px;
 		text-decoration: none;
 		display: inline-block;
@@ -252,7 +252,7 @@ button,
 
 	#header nav {
 		position: absolute;
-		top: 3vh;
+		top: 1.5vh;
 		height: inherit;
 		line-height: inherit;
 	}
