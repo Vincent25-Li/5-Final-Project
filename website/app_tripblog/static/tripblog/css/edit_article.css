@@ -90,14 +90,14 @@ h1 span {
 .input {
   width: 25px;
   height: 25px;
-  background-color: #2C3E50;
+  background-color: #AEB6BF;
   position: relative;
   border-radius: 50%;
 }
 .input:hover {
   cursor: pointer;
 }
-.input::before, .input::after {
+.inputline::before, .inputline::after {
   content: "";
   display: block;
   position: absolute;
@@ -109,10 +109,10 @@ h1 span {
   height: 5px;
   
 }
-.input::before {
+.inputline::before {
   left: calc(-4vw + 12.5px);
 }
-.input::after {
+.inputline::after {
   right: calc(-4vw + 12.5px);
 }
 .input.active {
