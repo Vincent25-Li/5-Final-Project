@@ -19,6 +19,8 @@ from app_tripblog.function_chatbot import ChatbotObject
 ''' templates '''
 
 # base template
+
+    
 def base(request):
     title = 'base template'
     if request.is_ajax():
@@ -43,16 +45,16 @@ def index(request):
                 destination.write(chunk)
         return redirect('/tripblog/')
 
-def add_post(request):
-    title = 'responsive timeline v3'
+def article(request):
+    title = 'test_article'
     user = 'Jessie'
-    return render(request, 'tripblog/add_post.html', locals())
-    
+    return render(request, 'tripblog/article.html', locals())
+        
 def edit_article(request):
     title = 'article_edit'
     user = 'Jessie'
     return render(request, 'tripblog/edit_article.html', locals())
-
+    
 
 ''' functions '''
 

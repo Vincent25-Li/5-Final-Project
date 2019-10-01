@@ -27,26 +27,26 @@
         <ul class="links">
             <li><a href="/tripblog/">Home</a></li>
             <li><a href="/tripblog/edit_article/">Add New Schedule</a></li>
-            <li><a href="/tripblog/add_post/">test_article</a></li>
+            <li><a href="/tripblog/article/">test_article</a></li>
             <li><a href="/tripblog/">Album</a></li>
         </ul>
-        <ul class="actions vertical">
-            <li><a href="#" class="button fit">Login</a></li>
-        </ul>
+        <div class="loginbutton">
+            <button type="button" class="btn"><span style="vertical-align: middle;">Login</span></button>
+        </div>
     </nav>
     
     {% block content %}{% endblock %}
 
     <!--  Popup Chatbot -->
-    <button class="open-button" onclick="openForm()">Chat</button>
+	<img class="open-button" onclick="openForm()" src="{% static "tripblog/images/robot.png" %}" alt="open form">
 {% comment %} action="/tripblog/chatbot/" {% endcomment %}
     <div class="chat-popup" id="myForm">
         <form method="POST" class="form-container">
             {% csrf_token %}
             <h1>Your Travel Assistant</h1>
-            <div id="chat_window_V"></div>
+            <div id="chat_window_V" class="chatwindow"></div>
 
-            <textarea placeholder="Type message.." id="user_msg" name="user_msg" required></textarea>
+            <textarea placeholder="Type message.." id="user_msg" name="user_msg" cols="20" wrap="hard" required></textarea>
 
             <button type="button" id="chatbot_btn" class="btn"><span style="vertical-align: middle;">Send</span></button>
             <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
@@ -75,7 +75,7 @@
 
             {% comment %} ajax for chatbot to deal user message {% endcomment %}
             $("#chatbot_btn").click( event => {
-                let user_msg = "<div>" + $('#user_msg').val() + "</div>";
+                let user_msg = "<div style='text-align:right;'>" + $('#user_msg').val() + "</div>";
                 $("#chat_window_V").append(user_msg)
                 $.ajax({
                     url: "/tripblog/chatbot/",
@@ -87,7 +87,10 @@
                     success: data => {
                         reply = "<div>" + data['reply'] + "</div>";
                         $("#chat_window_V").append(reply);
-                    }
+                    },
+					complete: function(){
+						$('#chat_window_V').scrollTop(9999999);
+					}
                 });
                 $("#user_msg").val('');
             });

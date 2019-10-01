@@ -1,16 +1,19 @@
 {% extends 'tripblog/base.html' %}
 {% block css %}
 	{% load static %}
-	<link rel="stylesheet" href={% static "tripblog/css/main.css" %} />
+	
 	<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-	<link rel="stylesheet" href={% static "tripblog/css/style.css" %}>
+	<link rel="stylesheet" href={% static "tripblog/css/edit_article2.css" %}>
 {% endblock %}
 
 {% block content %}
 	<div class="flex-parent">
+		<div class="titleinput-flex-container">
+				<a>旅程標題</a> <a>測試標題</a> <br>
+				<a>旅程期間</a> <a>20191030</a> to <a>20191106</a> <a>交通方式</a>
+		</div>
 		<div class="input-flex-container inputline">
-
 			<div class="input active">
 				<span data-info="1日"></span>
 			</div>
@@ -32,7 +35,6 @@
 			<div class="input">
 				<span data-info="7日"></span>
 			</div>
-
 		</div>
 		<div class="description-flex-container">
 			<p class="active">上午：<br>中午：<br>下午：<br>傍晚：<br>黃昏：<br>晚上：<br></p>
@@ -45,7 +47,7 @@
 		</div>
 	</div>
 	<div class="flex-child">
-		<div class="flex-content">
+		<div class="child-flex-content">
 		內文
 		<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0	
 		</div>

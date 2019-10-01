@@ -13,30 +13,36 @@
 <link rel="stylesheet" href={% static "tripblog/css/plugins/table.css" %}>
 <link rel="stylesheet" href={% static "tripblog/css/plugins/video.css" %}>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.css">
-<link rel="stylesheet" href={% static "tripblog/css/edit_article.css" %}>
+<link rel="stylesheet" href={% static "tripblog/css/edit_article2.css" %}>
 {% endblock %}
 
 
 {% block content %}
 <form method="post">
 	<div class="flex-parent">
-		<div class="parent-flex-content">
-			<div><img src="{% static "tripblog/images/plus.png" %}" alt="addnewday" class="imgplus" id="addform" />
+		<img src="{% static "tripblog/images/plus.png" %}" alt="addnewday" class="imgdayplus" />
+		<div class="titleinput-flex-container">
+			<a>旅程標題</a> <input type="text"style="width: 400px;"> <br>
+			<a>旅程期間</a> <input type="text" style="width: 100px;"> to <input type="text" style="width: 100px;"> <a>交通方式</a> <input type="text">	
+		</div>
+		<div class="input-flex-container inputline" id="addinput1">
+		
+			<div class="input active">
+				<span data-info="1日"></span>
 			</div>
-			<div id="addinput1">
-				<a>日期</a><input type="text" style="width: 100px"><a>to</a><input type="text"
-					style="width: 100px"><a>交通</a><input type="text"><br>
-				<a>時間</a><input type="text"><a>景點</a><input type="text"><br>
-			</div>
+		</div>
+		<div class="description-flex-container" id="addinput2">
+			<p class="active">
+				<a>時間</a><input type="text"> <a>景點</a><input type="text">
+				<img src="{% static "tripblog/images/plus.png" %}" alt="addnewinput" class="imginputplus canclick" /><br>
+			</p>
 		</div>
 	</div>
 	<div class="flex-child">
-		<div class="child-flex-content" id="addinput2">
+		<div class="child-flex-content" id="addinput3">
 			<div id="editor">
-				<input type="submit">
-				<textarea id='edit' style="margin-top: 30px;" placeholder="">
-                        <h1>Textarea</h1>
-                    </textarea>
+				<input type="submit" value="儲存行程">
+				<textarea id='edit' style="margin-top: 30px;" placeholder="從這裡開始寫"></textarea>
 			</div>
 		</div>
 	</div>
@@ -81,11 +87,46 @@
 	})()
 </script>
 <script>
-	$("#addform").click(function () {
-		var addtextinput = $("<a>時間</a><input type='text'><a>景點</a><input type='text'><br>");
+	$(function () {
+		$($('.input')).click(function () {
+			var t = $(this),
+				ind = t.index(),
+				matchedPara = $($('.description-flex-container').find('p')).eq(ind);
+
+			$(t).add(matchedPara).addClass('active');
+			$($('.input')).not(t).add($($('.description-flex-container').find('p')).not(matchedPara)).removeClass('active');
+		});
+	});
+
+	$("img.imginputplus").click(function () {
+		var addtextinput = $("<a>時間</a><input type='text'> <a>景點</a><input type='text'><br>");
+		$("p.active").append(addtextinput);
+		$("img.imginputplus").addClass("canclick")
+	});
+	a = 1
+	$(".imgdayplus").click(function () {
+		a = a + 1;
+		var addtextinput = $("<div class='input'><span data-info='" + a + "日'></span></div>");
 		$("#addinput1").append(addtextinput);
-		var addtextinput = $("<textarea id='edit' style='margin-top: 30px;' placeholder='Type some text'><h1>Textarea</h1></textarea>");
+		var addtextinput = $("<p><a>時間</a><input type='text'> <a>景點</a><input type='text'> <img src='{% static "tripblog/images/plus.png" %}' alt='addnewinput' class='imginputplus'/><br></p>");
+		$("#addinput2").append(addtextinput);
+		$("img[class='imginputplus'][class!='imginputplus canclick']").click(function () {
+			var addtextinput = $("<a>時間</a><input type='text'> <a>景點</a><input type='text'><br>");
+			$("p.active").append(addtextinput);
+		});		
+		$("img[class='imginputplus']").addClass("canclick")
+		var addtextinput = $("<textarea id='edit' style='margin-top: 30px;' placeholder='從這裡開始寫'></textarea>");
 		$("#editor").append(addtextinput);
+		$($('.input')).click(function () {
+			var t = $(this),
+				ind = t.index(),
+				matchedPara = $($('.description-flex-container').find('p')).eq(ind);
+			$(t).add(matchedPara).addClass('active');
+			$($('.input')).not(t).add($($('.description-flex-container').find('p')).not(matchedPara)).removeClass('active');
+		});
+
+		
+
 		const editorInstance = new FroalaEditor('#edit', {
 			enter: FroalaEditor.ENTER_P,
 			placeholderText: null,
