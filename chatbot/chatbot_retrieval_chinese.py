@@ -3,6 +3,7 @@ from collections import Counter
 
 import pandas as pd
 import numpy as np
+import jieba
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -13,7 +14,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import sqlalchemy as db
 
 def db_connection():
-    engine = db.create_engine('mysql+pymysql://root:root@localhost:3306/chatbot_english')
+    engine = db.create_engine('mysql+pymysql://root:root@localhost:3306/chatbot_chinese')
     conn = engine.connect()
     metadata = db.MetaData()
     return engine, conn, metadata
@@ -22,6 +23,11 @@ def get_table_content(table_name, engine, conn, metadata):
     table = db.Table(table_name , metadata, autoload=True, autoload_with=engine)
     table_content = conn.execute(table.select()).fetchall()
     return table, table_content
+
+def jieba_cut(item):
+    terms = [t for t in jieba.cut(item, cut_all=True)]
+    x = " ".join(terms)
+    return x
 
 def count_category(df, column):
     category_number = len(df[column].unique())
@@ -87,6 +93,9 @@ def main():
     df_qa_pairs.columns = table_qa_pairs.columns.keys()
     category_dict = {i:category for (i, category) in category}
     df_qa_pairs['category'] = df_qa_pairs['FK_category'].map(category_dict)
+    
+    # jieba cut
+    df_qa_pairs['jieba'] = df_qa_pairs['question'].apply(preprocess)
 
     # count_category(df_qa_pairs, column='category') # count each category numbers
 
