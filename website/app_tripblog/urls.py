@@ -10,4 +10,5 @@ urlpatterns = [
 
     # function
     path('chatbot/', views.chatbot, name='chatbot'),
+    path('jessie/albums/album1/upload', views.show_photos),
 ]
