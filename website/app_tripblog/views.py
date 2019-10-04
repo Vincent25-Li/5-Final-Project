@@ -104,7 +104,7 @@ def show_photos(request):
             if duplicate_img != None:
                 duplicate_imgs.append(duplicate_img)
         
-        # print(f'duplicate_imgs: {duplicate_imgs}')
+        # print(f'duplicate_imgs: {duplicate_imgs}') 暫時不寫
         for category in os.listdir(album_path):
             if category == '.DS_Store':
                 continue
@@ -114,12 +114,9 @@ def show_photos(request):
                 image_path = os.path.join(relative_path2cat, category, image)
                 display_imgs.append(image_path)
 
-        # print(display_imgs[0])
-
-        # return HttpResponse('Success!')
         return render(request, 'tripblog/gallery.html', locals())
 
-def ajax_show_photos(request):
+def ajax_show_photos(request, cat):
     if request.method =='POST' and request.is_ajax():
         _, _, user, albums, album, cat = request.get_full_path().split('/')
         display_imgs = []
