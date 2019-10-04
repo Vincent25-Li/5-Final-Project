@@ -11,4 +11,10 @@ urlpatterns = [
     # function
     path('chatbot/', views.chatbot, name='chatbot'),
     path('jessie/albums/album1/upload', views.show_photos),
+    path('jessie/albums/album1/all', views.ajax_show_photos),
+    path('jessie/albums/album1/people', views.ajax_show_photos),
+    path('jessie/albums/album1/food', views.ajax_show_photos),
+    path('jessie/albums/album1/nature', views.ajax_show_photos),
+    path('jessie/albums/album1/architecture', views.ajax_show_photos),
+    path('jessie/albums/album1/other', views.ajax_show_photos)
 ]

@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.template import loader
+from django.http import JsonResponse
 
 from app_tripblog.function_chatbot import ChatbotObject
 from app_tripblog.fn_image_classifier import Image_Classifier
@@ -105,12 +106,42 @@ def show_photos(request):
         
         # print(f'duplicate_imgs: {duplicate_imgs}')
         for category in os.listdir(album_path):
+            if category == '.DS_Store':
+                continue
             for image in os.listdir(os.path.join(album_path, category)):
+                if image == '.DS_Store':
+                    continue
                 image_path = os.path.join(relative_path2cat, category, image)
-                print(f'image_path: {image_path}')
                 display_imgs.append(image_path)
 
         # print(display_imgs[0])
 
         # return HttpResponse('Success!')
         return render(request, 'tripblog/gallery.html', locals())
+
+def ajax_show_photos(request):
+    if request.method =='POST' and request.is_ajax():
+        _, _, user, albums, album, cat = request.get_full_path().split('/')
+        display_imgs = []
+
+        if cat != 'all':
+            des = os.path.join(settings.MEDIA_ROOT, user, albums, album, cat)
+            images = os.listdir(des)
+            for image in images:
+                image_path = os.path.join('/media', user, albums, album, cat, image)
+                display_imgs.append(image_path)
+        else:
+            album_path = os.path.join(settings.MEDIA_ROOT, user, albums, album)
+            categories = os.listdir(album_path)
+            for cat in categories:
+                if cat == '.DS_Store':
+                    continue
+                des = os.path.join(settings.MEDIA_ROOT, user, albums, album, cat)
+                images = os.listdir(des)
+                for image in images:
+                    if image == '.DS_Store':
+                        continue
+                    image_path = os.path.join('/media', user, albums, album, cat, image)
+                    display_imgs.append(image_path)
+
+    return JsonResponse(display_imgs, safe=False)
