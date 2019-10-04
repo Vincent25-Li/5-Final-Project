@@ -13,10 +13,4 @@ urlpatterns = [
     path('chatbot/', views.chatbot, name='chatbot'),
     re_path(r'jessie/albums/album1/$', views.show_photos),
     re_path(r'jessie/albums/album1/(\w+)$', views.ajax_show_photos),
-    # path('jessie/albums/album1/all', views.ajax_show_photos),
-    # path('jessie/albums/album1/people', views.ajax_show_photos),
-    # path('jessie/albums/album1/food', views.ajax_show_photos),
-    # path('jessie/albums/album1/nature', views.ajax_show_photos),
-    # path('jessie/albums/album1/architecture', views.ajax_show_photos),
-    # path('jessie/albums/album1/other', views.ajax_show_photos)
 ]
