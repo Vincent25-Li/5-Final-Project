@@ -1,6 +1,6 @@
 <form action="" method='POST' enctype='multipart/form-data'>
     {% csrf_token %}
-    <input type="file" name='upload_imgs' multiple>
+    <input type="file" name='upload_imgs' accept=".png, .jpg, .jpeg" multiple>
     <input type="submit" value='upload'>
 </form>
 
