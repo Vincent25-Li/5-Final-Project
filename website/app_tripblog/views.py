@@ -5,8 +5,11 @@ import pickle
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.http import HttpResponse, Http404
+from django.template import loader
 
 from app_tripblog.function_chatbot import ChatbotObject
+from app_tripblog.fn_image_classifier import Image_Classifier
+from matplotlib import pyplot as plt
 
 
 ''' load chatbot classifier model '''
@@ -67,3 +70,47 @@ def chatbot(request):
         return HttpResponse(data, content_type='application/json')
     else:
         raise Http404
+
+def show_photos(request):
+    title = 'Gallery'
+    _, _, user, _, album, _ = request.get_full_path().split('/')
+    user = user.capitalize()
+    album_path = os.path.join(settings.MEDIA_ROOT, user, 'albums', album)
+    relative_path2cat = os.path.join('/media', user, 'albums', album)
+
+    if request.method == 'GET':
+        template = loader.get_template('tripblog/upload_photos.html')
+        context = {}
+        return HttpResponse(template.render(context, request))
+    elif request.method == 'POST':
+        model_file = os.path.join(settings.MEDIA_ROOT, 
+                                'models_weights', 'image_classifier', 'output_graph.pb')
+        label_file = os.path.join(settings.MEDIA_ROOT, 
+                                'models_weights', 'image_classifier', 'output_labels.txt')
+        img_classifier = Image_Classifier(model_file, label_file, user, album)
+
+        duplicate_imgs = []
+        display_imgs = []
+        for img in request.FILES.getlist('upload_imgs'):
+            img_fp = os.path.join(settings.MEDIA_ROOT, img.name) # img file path
+            with open(img_fp, 'wb+') as destination:
+                for chunk in img.chunks():
+                    destination.write(chunk)
+            
+            predict_result = img_classifier.predict(img_fp)
+            des = os.path.join(album_path, predict_result)
+            duplicate_img = img_classifier.photo2category(img_fp, des)
+            if duplicate_img != None:
+                duplicate_imgs.append(duplicate_img)
+        
+        # print(f'duplicate_imgs: {duplicate_imgs}')
+        for category in os.listdir(album_path):
+            for image in os.listdir(os.path.join(album_path, category)):
+                image_path = os.path.join(relative_path2cat, category, image)
+                print(f'image_path: {image_path}')
+                display_imgs.append(image_path)
+
+        # print(display_imgs[0])
+
+        # return HttpResponse('Success!')
+        return render(request, 'tripblog/gallery.html', locals())

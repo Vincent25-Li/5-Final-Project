@@ -1,0 +1,5 @@
+architecture
+food
+nature
+other
+people

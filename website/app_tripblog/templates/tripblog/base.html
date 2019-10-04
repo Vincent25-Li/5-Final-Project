@@ -6,11 +6,9 @@
     <title>{{ title }}</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
+    <link rel="stylesheet" href={% static "tripblog/css/main.css" %} />
     {% comment %} put css file here for each page {% endcomment %}
     {% block css %}{% endblock %}
-    <link rel="stylesheet" href={% static "tripblog/css/main.css" %} />
-    
 </head>
 
 <body>
@@ -53,8 +51,7 @@
         </form>
     </div>
 
-    {% comment %} put js file here for each page {% endcomment %}
-    {% block script %}{% endblock %}
+    
     <!-- Scripts -->
     <script src={% static "tripblog/js/jquery.min.js" %}></script>
     <script src={% static "tripblog/js/jquery.scrolly.min.js" %}></script>
@@ -126,7 +123,9 @@
             });
         });
     </script>
-
+    {% comment %} put js file here for each page {% endcomment %}
+    {% block script %}
+    {% endblock %}
 </body>
 
 </html>
