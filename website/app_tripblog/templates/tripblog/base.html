@@ -23,10 +23,10 @@
     <!-- Menu -->
     <nav id="menu">
         <ul class="links">
-            <li><a href="/tripblog/">Home</a></li>
-            <li><a href="/tripblog/edit_article/">Add New Schedule</a></li>
-            <li><a href="/tripblog/article/">test_article</a></li>
-            <li><a href="/tripblog/jessie/albums/album1/">Album</a></li>
+            <li><a href="/tripblog/{{ user|lower }}">Home</a></li>
+            <li><a href="/tripblog/{{ user|lower }}/edit_article/">Add New Schedule</a></li>
+            <li><a href="/tripblog/{{ user|lower }}/article/">test_article</a></li>
+            <li><a href="/tripblog/{{ user|lower }}/albums/{{ album }}/">Album</a></li>
         </ul>
         <div class="loginbutton">
             <button type="button" class="btn"><span style="vertical-align: middle;">Login</span></button>

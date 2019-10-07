@@ -24,16 +24,17 @@ from matplotlib import pyplot as plt
 
 # base template
 
-    
 def base(request):
     title = 'base template'
+    user = 'Jessie'
     if request.is_ajax():
         print('success')
     return render(request, 'tripblog/base.html', locals())
 
-def index(request):
-    title = 'homepage' 
-    user = 'Jessie'
+def index(request, user=None):
+    title = 'homepage'
+    user = user.capitalize()
+    
     if request.method == 'GET':
         return render(request, 'tripblog/index.html', locals())
 
@@ -49,14 +50,14 @@ def index(request):
                 destination.write(chunk)
         return redirect('/tripblog/')
 
-def article(request):
+def article(request, user=None):
     title = 'test_article'
-    user = 'Jessie'
+    user = user.capitalize()
     return render(request, 'tripblog/article.html', locals())
         
-def edit_article(request):
+def edit_article(request, user=None):
     title = 'article_edit'
-    user = 'Jessie'
+    user = user.capitalize()
     return render(request, 'tripblog/edit_article.html', locals())
     
 
@@ -72,10 +73,10 @@ def chatbot(request):
     else:
         raise Http404
 
-def show_photos(request):
+def show_photos(request, user=None, album=None):
     title = 'Gallery'
-    _, _, user, _, album, _ = request.get_full_path().split('/')
-    user = user.capitalize()
+    # _, _, user, _, album, _ = request.get_full_path().split('/')
+    # user = user.capitalize()
     album_path = os.path.join(settings.MEDIA_ROOT, user, 'albums', album)
     relative_path2cat = os.path.join('/media', user, 'albums', album)
 
@@ -113,7 +114,6 @@ def show_photos(request):
                     continue
                 image_path = os.path.join(relative_path2cat, category, image)
                 display_imgs.append(image_path)
-
         return render(request, 'tripblog/gallery.html', locals())
 
 def ajax_show_photos(request, cat):
