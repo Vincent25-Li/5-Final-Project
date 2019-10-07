@@ -126,6 +126,8 @@ def ajax_show_photos(request, user=None, albums='albums', album=None, category=N
             des = os.path.join(settings.MEDIA_ROOT, user, albums, album, category)
             images = os.listdir(des)
             for image in images:
+                if image == '.DS_Store':
+                    continue
                 image_path = os.path.join('/media', user, albums, album, category, image)
                 if settings.MEDIA_ROOT.startswith('C:'): # for windows
                         image_path = image_path.replace('\\', '/')
