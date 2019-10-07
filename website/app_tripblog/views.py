@@ -78,7 +78,6 @@ def show_photos(request):
     user = user.capitalize()
     album_path = os.path.join(settings.MEDIA_ROOT, user, 'albums', album)
     relative_path2cat = os.path.join('/media', user, 'albums', album)
-
     if request.method == 'GET':
         template = loader.get_template('tripblog/upload_photos.html')
         context = {}
@@ -100,6 +99,7 @@ def show_photos(request):
             
             predict_result = img_classifier.predict(img_fp)
             des = os.path.join(album_path, predict_result)
+
             duplicate_img = img_classifier.photo2category(img_fp, des)
             if duplicate_img != None:
                 duplicate_imgs.append(duplicate_img)
@@ -112,6 +112,9 @@ def show_photos(request):
                 if image == '.DS_Store':
                     continue
                 image_path = os.path.join(relative_path2cat, category, image)
+
+                if settings.MEDIA_ROOT.startswith('C:'): # for windows
+                    image_path = image_path.replace('\\', '/')
                 display_imgs.append(image_path)
 
         return render(request, 'tripblog/gallery.html', locals())
@@ -126,6 +129,8 @@ def ajax_show_photos(request, cat):
             images = os.listdir(des)
             for image in images:
                 image_path = os.path.join('/media', user, albums, album, cat, image)
+                if settings.MEDIA_ROOT.startswith('C:'): # for windows
+                        image_path = image_path.replace('\\', '/')
                 display_imgs.append(image_path)
         else:
             album_path = os.path.join(settings.MEDIA_ROOT, user, albums, album)
@@ -139,6 +144,8 @@ def ajax_show_photos(request, cat):
                     if image == '.DS_Store':
                         continue
                     image_path = os.path.join('/media', user, albums, album, cat, image)
+                    if settings.MEDIA_ROOT.startswith('C:'): # for windows
+                        image_path = image_path.replace('\\', '/')
                     display_imgs.append(image_path)
 
     return JsonResponse(display_imgs, safe=False)
