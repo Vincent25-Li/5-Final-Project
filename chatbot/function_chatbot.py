@@ -11,12 +11,12 @@ jieba.set_dictionary('dict.txt')
 from collections import Counter
 from sklearn.metrics.pairwise import cosine_similarity
 
-from app_tripblog.models import ChatbotQA
+from app_tripblog.models import ChatbotQA_ch
 from django.conf import settings
 
 class ChatbotObject():
     def __init__ (self):
-        chatbot_clf_path = os.path.join(settings.MEDIA_ROOT, 'chatbot', 'topic_clf_RF.pkl')
+        #chatbot_clf_path = os.path.join(settings.MEDIA_ROOT, 'chatbot', 'topic_clf_RF.pkl')
 
         #self.vectorizer = TfidfVectorizer(ngram_range=(1, 2), max_df=0.3)
         #self.classifier = pickle.load(open(chatbot_clf_path, 'rb'))
@@ -80,7 +80,7 @@ class ChatbotObject():
         if y_category[np.argmax(similarity)].tolist()[0] == 18:
             print('跳轉到編輯功能')
         else:
-            reply = ChatbotQA.objects.values_list('chatbot_answer').get(id=reply_index)
+            reply = ChatbotQA_ch.objects.values_list('chatbot_answer').get(id=reply_index)
             return reply
         
         #reply = ChatbotQA.objects.values_list('chatbot_answer').get(id=reply_index)
