@@ -73,12 +73,11 @@ def chatbot(request):
     else:
         raise Http404
 
-def show_photos(request, user=None, album=None):
+def show_photos(request, user=None, albums='albums', album=None):
     title = 'Gallery'
-    # _, _, user, _, album, _ = request.get_full_path().split('/')
-    # user = user.capitalize()
-    album_path = os.path.join(settings.MEDIA_ROOT, user, 'albums', album)
-    relative_path2cat = os.path.join('/media', user, 'albums', album)
+    user = user.capitalize()
+    album_path = os.path.join(settings.MEDIA_ROOT, user, albums, album)
+    relative_path2cat = os.path.join('/media', user, albums, album)
     if request.method == 'GET':
         template = loader.get_template('tripblog/upload_photos.html')
         context = {}
@@ -94,18 +93,17 @@ def show_photos(request, user=None, album=None):
         display_imgs = []
         for img in request.FILES.getlist('upload_imgs'):
             img_fp = os.path.join(settings.MEDIA_ROOT, img.name) # img file path
-            with open(img_fp, 'wb+') as destination:
+            with open(img_fp, 'wb+') as f:
                 for chunk in img.chunks():
-                    destination.write(chunk)
+                    f.write(chunk)
             
             predict_result = img_classifier.predict(img_fp)
             des = os.path.join(album_path, predict_result)
-
             duplicate_img = img_classifier.photo2category(img_fp, des)
             if duplicate_img != None:
                 duplicate_imgs.append(duplicate_img)
         
-        # print(f'duplicate_imgs: {duplicate_imgs}') 暫時不寫
+        print(f'duplicate_imgs: {duplicate_imgs}') #暫時不寫
         for category in os.listdir(album_path):
             if category == '.DS_Store':
                 continue
@@ -119,16 +117,16 @@ def show_photos(request, user=None, album=None):
                 display_imgs.append(image_path)
         return render(request, 'tripblog/gallery.html', locals())
 
-def ajax_show_photos(request, cat):
+def ajax_show_photos(request, user=None, albums='albums', album=None, category=None):
     if request.method =='POST' and request.is_ajax():
-        _, _, user, albums, album, cat = request.get_full_path().split('/')
+        # _, _, user, albums, album, cat = request.get_full_path().split('/')
         display_imgs = []
 
-        if cat != 'all':
-            des = os.path.join(settings.MEDIA_ROOT, user, albums, album, cat)
+        if category != 'all':
+            des = os.path.join(settings.MEDIA_ROOT, user, albums, album, category)
             images = os.listdir(des)
             for image in images:
-                image_path = os.path.join('/media', user, albums, album, cat, image)
+                image_path = os.path.join('/media', user, albums, album, category, image)
                 if settings.MEDIA_ROOT.startswith('C:'): # for windows
                         image_path = image_path.replace('\\', '/')
                 display_imgs.append(image_path)
