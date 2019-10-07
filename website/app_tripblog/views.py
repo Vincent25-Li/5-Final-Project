@@ -34,21 +34,8 @@ def base(request):
 def index(request, user=None):
     title = 'homepage'
     user = user.capitalize()
-    
     if request.method == 'GET':
         return render(request, 'tripblog/index.html', locals())
-
-    elif request.method == 'POST':
-        headshot = request.FILES['headshot'] # retrieve post image
-
-        # define stored media path
-        headshot_path = os.path.join(settings.MEDIA_ROOT, 'jessie', 'headshot.jpg')
-
-        # store image at local side
-        with open(headshot_path, 'wb+') as destination:
-            for chunk in headshot.chunks():
-                destination.write(chunk)
-        return redirect('/tripblog/')
 
 def article(request, user=None):
     title = 'test_article'
@@ -62,6 +49,20 @@ def edit_article(request, user=None):
     
 
 ''' functions '''
+
+def headshot_upload(request, user=None):
+    print('Hi')
+    if request.method =='POST' and request.is_ajax():
+        headshot = request.FILES['headshot'] # retrieve post image
+
+        # define stored media path
+        headshot_path = os.path.join(settings.MEDIA_ROOT, user, 'headshot.jpg')
+
+        # store image at local side
+        with open(headshot_path, 'wb+') as destination:
+            for chunk in headshot.chunks():
+                destination.write(chunk)
+        return JsonResponse(display_imgs)
 
 def chatbot(request):
     if request.method =='POST' and request.is_ajax():

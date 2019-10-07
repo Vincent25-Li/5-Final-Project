@@ -8,26 +8,15 @@
 <!-- profile -->
 <section>
     <div class="contentDiv">
-        <label for="file-input">
-            <img src="/media/{{ user|lower }}/headshot.jpg"/>
-        </label>
-        <input id="file-input" type="file" style="display:none"/>
+            <label for="headshot">
+                <img src="/media/{{ user|lower }}/headshot.jpg"/>
+            </label>
+        <form method="POST" id='headshot_upload' class="form-container" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input id="headshot" type="file" style="display:none"/>
+        </form>
     </div>
 </section>
-<!-- <section>
-    <div>
-        <h3 style="text-align: center">Jessie's Travel Blog</h3>
-    </div>
-</section> -->
-
-{% comment %} upload picture start-Vincet(not complete){% endcomment %}
-
-<form action="." method='POST' enctype="multipart/form-data" style='display: none'>
-    {% csrf_token %}
-    <input type="file" name='headshot'>
-    <input type="submit" vlaue='Submit'>
-</form>
-{% comment %} upload picture end {% endcomment %}
 
 <!-- scrollong -->
 {% load static %}
@@ -61,4 +50,58 @@
 </div>
 {% endblock %}
 
-{% block script %}{% endblock %}
+{% block script %}
+
+<script>
+        $(document).ready(() => {
+
+            {% comment %} ajax to upload headshot {% endcomment %}
+            $("#headshot").change(event => {
+                var data = new FormData($('#headshot_upload').get(0));
+                $.ajax({
+                    url: "/tripblog/{{ user|lower }}/headshot_upload/",
+                    type: "POST",
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    success: data => {
+                        reply = "<div>" + data['reply'] + "</div>";
+                        $("#chat_window_V").append(reply);
+                    },
+                });
+                $("#headshot").val('');
+            });
+
+            // csrf code
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            var csrftoken = getCookie('csrftoken');
+        
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+        });
+    </script>
+
+{% endblock %}
