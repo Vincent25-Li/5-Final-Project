@@ -104,13 +104,24 @@ class Image_Classifier:
 
     def photo2category(self, img_fp, des):
         self.ensure_dir_exists(des)
-        # print(f'img_fp: {img_fp}')
-        img_name = img_fp.split('/')[-1]
-        img_des = os.path.join(des, img_name)
 
-        if not os.path.isfile(img_des):
-            shutil.move(img_fp, des)
-        else:
-            os.remove(img_fp)
-            return img_name
+        img_des = ''
+        
+        if img_fp.startswith('C:'): # for windows
+            img_name = img_fp.split('\\')[-1]
+            img_des = des + '\\' + img_name
+            if not os.path.isfile(img_des):
+                shutil.move(img_fp, des)
+            else:
+                os.remove(img_fp)
+                return img_name
+
+        if img_fp.startswith('/'): # for OS
+            img_name = img_fp.split('/')[-1]
+            img_des = os.path.join(des, img_name)
+            if not os.path.isfile(img_des):
+                shutil.move(img_fp, des)
+            else:
+                os.remove(img_fp)
+                return img_name
 
