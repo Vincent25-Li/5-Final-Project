@@ -108,12 +108,9 @@ class Image_Classifier:
         img_name = img_fp.split('/')[-1]
         img_des = os.path.join(des, img_name)
 
-        print(f'img_des: {img_des}')
         if not os.path.isfile(img_des):
             shutil.move(img_fp, des)
-            print(f'img: {img_name} created')
         else:
-            print(f'img: {img_name} already exists')
+            os.remove(img_fp)
             return img_name
 
-    

@@ -103,7 +103,7 @@ def show_photos(request, user=None, albums='albums', album=None):
             if duplicate_img != None:
                 duplicate_imgs.append(duplicate_img)
         
-        # print(f'duplicate_imgs: {duplicate_imgs}') 暫時不寫
+        print(f'duplicate_imgs: {duplicate_imgs}') #暫時不寫
         for category in os.listdir(album_path):
             if category == '.DS_Store':
                 continue
