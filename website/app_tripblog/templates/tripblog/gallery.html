@@ -35,6 +35,8 @@
     {% endfor %}
 </ul>
 
+
+
 {% endblock %}
 
 {% block script %}
@@ -54,7 +56,7 @@
 
         $('#select_cat').change(function () {
             var e = document.getElementById("select_cat");
-            var url = './' + e.value;
+            var url = './' + e.value + '/';
             $.ajax({
                 url: url,
                 type: "POST", // or "get"

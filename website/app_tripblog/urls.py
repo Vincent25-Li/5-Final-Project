@@ -12,6 +12,6 @@ urlpatterns = [
     # function
     path('<user>/headshot_upload/', views.headshot_upload),
     path('chatbot/', views.chatbot, name='chatbot'),
-    path('<user>/albums/<album>/', views.show_photos),
-    path('<user>/albums/<album>/<category>/', views.ajax_show_photos),
+    path('<user>/<albums>/<album>/', views.show_photos),
+    path('<user>/<albums>/<album>/<category>/', views.ajax_show_photos),
 ]
