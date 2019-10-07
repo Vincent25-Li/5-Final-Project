@@ -33,8 +33,6 @@
     {% for photo in display_imgs %}
     <li><img src={{photo}}></li>
     {% endfor %}
-
-    <li><img src="/media/jessie/albums/album1/food/food1.jpeg" alt=""></li>
 </ul>
 
 
@@ -58,7 +56,7 @@
 
         $('#select_cat').change(function () {
             var e = document.getElementById("select_cat");
-            var url = './' + e.value;
+            var url = './' + e.value + '/';
             $.ajax({
                 url: url,
                 type: "POST", // or "get"

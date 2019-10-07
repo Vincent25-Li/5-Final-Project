@@ -101,16 +101,19 @@ class Image_Classifier:
     def ensure_dir_exists(self, dir_path):
         if not os.path.exists(dir_path):
             os.makedirs(dir_path)
-        return
 
     def photo2category(self, img_fp, des):
         self.ensure_dir_exists(des)
         # print(f'img_fp: {img_fp}')
         img_name = img_fp.split('/')[-1]
         img_des = os.path.join(des, img_name)
-        if not os.path.exists(img_des): # ensure if file exists
+
+        print(f'img_des: {img_des}')
+        if not os.path.isfile(img_des):
             shutil.move(img_fp, des)
+            print(f'img: {img_name} created')
         else:
+            print(f'img: {img_name} already exists')
             return img_name
 
     
