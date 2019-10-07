@@ -79,9 +79,7 @@ def show_photos(request, user=None, albums='albums', album=None):
     album_path = os.path.join(settings.MEDIA_ROOT, user, albums, album)
     relative_path2cat = os.path.join('/media', user, albums, album)
     if request.method == 'GET':
-        template = loader.get_template('tripblog/upload_photos.html')
-        context = {}
-        return HttpResponse(template.render(context, request))
+        return render(request, 'tripblog/upload_photos.html', locals())
     elif request.method == 'POST':
         model_file = os.path.join(settings.MEDIA_ROOT, 
                                 'models_weights', 'image_classifier', 'output_graph.pb')
@@ -100,10 +98,10 @@ def show_photos(request, user=None, albums='albums', album=None):
             predict_result = img_classifier.predict(img_fp)
             des = os.path.join(album_path, predict_result)
             duplicate_img = img_classifier.photo2category(img_fp, des)
-            if duplicate_img != None:
+            if duplicate_img != None: # 判斷重複
                 duplicate_imgs.append(duplicate_img)
         
-        print(f'duplicate_imgs: {duplicate_imgs}') #暫時不寫
+        # print(f'duplicate_imgs: {duplicate_imgs}') #暫時不寫
         for category in os.listdir(album_path):
             if category == '.DS_Store':
                 continue
@@ -119,13 +117,14 @@ def show_photos(request, user=None, albums='albums', album=None):
 
 def ajax_show_photos(request, user=None, albums='albums', album=None, category=None):
     if request.method =='POST' and request.is_ajax():
-        # _, _, user, albums, album, cat = request.get_full_path().split('/')
         display_imgs = []
 
         if category != 'all':
             des = os.path.join(settings.MEDIA_ROOT, user, albums, album, category)
             images = os.listdir(des)
             for image in images:
+                if image == '.DS_Store':
+                    continue
                 image_path = os.path.join('/media', user, albums, album, category, image)
                 if settings.MEDIA_ROOT.startswith('C:'): # for windows
                         image_path = image_path.replace('\\', '/')
