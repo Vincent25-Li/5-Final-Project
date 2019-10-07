@@ -33,26 +33,25 @@ def base(request):
 
 def index(request, user=None):
     title = 'homepage'
-    user = user.capitalize()
+    user = user
     if request.method == 'GET':
         return render(request, 'tripblog/index.html', locals())
 
 def article(request, user=None):
     title = 'test_article'
-    user = user.capitalize()
+    user = user
     return render(request, 'tripblog/article.html', locals())
         
 def edit_article(request, user=None):
     title = 'article_edit'
-    user = user.capitalize()
+    user = user
     return render(request, 'tripblog/edit_article.html', locals())
     
 
 ''' functions '''
 
 def headshot_upload(request, user=None):
-    print('Hi')
-    if request.method =='POST' and request.is_ajax():
+    if request.method == 'POST' and request.is_ajax():
         headshot = request.FILES['headshot'] # retrieve post image
 
         # define stored media path
@@ -62,7 +61,10 @@ def headshot_upload(request, user=None):
         with open(headshot_path, 'wb+') as destination:
             for chunk in headshot.chunks():
                 destination.write(chunk)
-        return JsonResponse(display_imgs)
+
+        return JsonResponse({'headshot_src': f'/media/{user}/headshot.jpg'})
+    else:
+        raise Http404
 
 def chatbot(request):
     if request.method =='POST' and request.is_ajax():
@@ -76,7 +78,7 @@ def chatbot(request):
 
 def show_photos(request, user=None, albums='albums', album=None):
     title = 'Gallery'
-    user = user.capitalize()
+    user = user
     album_path = os.path.join(settings.MEDIA_ROOT, user, albums, album)
     relative_path2cat = os.path.join('/media', user, albums, album)
     if request.method == 'GET':

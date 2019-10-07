@@ -13,7 +13,8 @@
             </label>
         <form method="POST" id='headshot_upload' class="form-container" enctype="multipart/form-data">
             {% csrf_token %}
-            <input id="headshot" type="file" style="display:none"/>
+            <input type="file" id="headshot" name='headshot'>
+       
         </form>
     </div>
 </section>
@@ -57,16 +58,17 @@
 
             {% comment %} ajax to upload headshot {% endcomment %}
             $("#headshot").change(event => {
-                var data = new FormData($('#headshot_upload').get(0));
+                
+                let data = new FormData($('#headshot_upload').get(0));
+                
                 $.ajax({
-                    url: "/tripblog/{{ user|lower }}/headshot_upload/",
+                    url: "/tripblog/{{user|lower}}/headshot_upload/",
                     type: "POST",
                     data: data,
                     processData: false,
                     contentType: false,
                     success: data => {
-                        reply = "<div>" + data['reply'] + "</div>";
-                        $("#chat_window_V").append(reply);
+                        console.log(data['headshot_src']);
                     },
                 });
                 $("#headshot").val('');
