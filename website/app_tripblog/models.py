@@ -12,9 +12,9 @@ class ChatbotCategory(models.Model):
         return self.chatbot_category
     
 class ChatbotCategory_ch(models.Model):
-    chatbot_category_ch = models.CharField(max_length=40, unique=True)
+    chatbot_category = models.CharField(max_length=40, unique=True)
     def __str__(self):
-        return self.chatbot_category_ch
+        return self.chatbot_category
 
 class ChatbotQA(models.Model):
     chatbot_category =  models.ForeignKey(ChatbotCategory, on_delete=models.CASCADE)

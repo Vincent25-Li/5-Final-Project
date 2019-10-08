@@ -22,9 +22,9 @@ class Migration(migrations.Migration):
             name='ChatbotQA_ch',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('chatbot_category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='app_tripblog.ChatbotCategory_ch')),
                 ('chatbot_question', models.CharField(max_length=255)),
                 ('chatbot_answer', models.CharField(max_length=255)),
-                ('chatbot_category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='app_tripblog.ChatbotCategory_ch')),
             ],
         ),
     ]
