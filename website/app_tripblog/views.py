@@ -1,6 +1,5 @@
 import os
 import json
-import pickle
 
 from django.shortcuts import render, redirect
 from django.conf import settings
@@ -13,12 +12,7 @@ from app_tripblog.fn_image_classifier import Image_Classifier
 from matplotlib import pyplot as plt
 
 
-''' load chatbot classifier model '''
-# chatbot_clf_path = os.path.join(settings.MEDIA_ROOT, 'chatbot', 'topic_clf_RF.pkl')
-# chatbot_clf = pickle.load(
-#     open(chatbot_clf_path, 'rb')
-# )
-
+chatbot_object = ChatbotObject()
 
 ''' templates '''
 
@@ -65,10 +59,9 @@ def headshot_upload(request, user=None):
     else:
         raise Http404
 
-def chatbot(request):
+def chatbot(request, user=None):
     if request.method =='POST' and request.is_ajax():
         user_msg = request.POST.get('user_msg')
-        chatbot_object = ChatbotObject()
         reply = chatbot_object.reply(user_msg)
         data = json.dumps({'reply': reply})
         return HttpResponse(data, content_type='application/json')

@@ -37,7 +37,7 @@
 
     <!--  Popup Chatbot -->
 	<img class="open-button" onclick="openForm()" src="{% static "tripblog/images/robot.png" %}" alt="open form">
-{% comment %} action="/tripblog/chatbot/" {% endcomment %}
+
     <div class="chat-popup" id="myForm">
         <form method="POST" class="form-container">
             {% csrf_token %}
@@ -75,7 +75,7 @@
                 let user_msg = "<div style='text-align:right;'>" + $('#user_msg').val() + "</div>";
                 $("#chat_window_V").append(user_msg)
                 $.ajax({
-                    url: "/tripblog/chatbot/",
+                    url: "/tripblog/{{ user }}/chatbot/",
                     type: "POST",
                     data: {
                         "user_msg": user_msg,
