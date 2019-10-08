@@ -9,7 +9,7 @@
 <section>
     <div class="contentDiv">
             <label for="headshot">
-                <img id='headshot_shown' src="/media/{{ user|lower }}/headshot.jpg?*cachebuster*"/>
+                <img id='headshot_shown' src="/media/{{ user|lower }}/headshot.jpg?cachebuster=2"/>
             </label>
         <form method="POST" id='headshot_upload' class="form-container" enctype="multipart/form-data", style='display:none'>
             {% csrf_token %}
