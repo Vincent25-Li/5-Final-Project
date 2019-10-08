@@ -23,7 +23,6 @@ from matplotlib import pyplot as plt
 ''' templates '''
 
 # base template
-
 def base(request):
     title = 'base template'
     user = 'Jessie'
