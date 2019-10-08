@@ -1,6 +1,5 @@
 import os
 import json
-import pickle
 
 from django.shortcuts import render, redirect
 from django.conf import settings
@@ -13,17 +12,11 @@ from app_tripblog.fn_image_classifier import Image_Classifier
 from matplotlib import pyplot as plt
 
 
-''' load chatbot classifier model '''
-# chatbot_clf_path = os.path.join(settings.MEDIA_ROOT, 'chatbot', 'topic_clf_RF.pkl')
-# chatbot_clf = pickle.load(
-#     open(chatbot_clf_path, 'rb')
-# )
-
+chatbot_object = ChatbotObject()
 
 ''' templates '''
 
 # base template
-
 def base(request):
     title = 'base template'
     user = 'Jessie'
@@ -33,40 +26,42 @@ def base(request):
 
 def index(request, user=None):
     title = 'homepage'
-    user = user.capitalize()
-    
+    user = user
     if request.method == 'GET':
         return render(request, 'tripblog/index.html', locals())
 
-    elif request.method == 'POST':
-        headshot = request.FILES['headshot'] # retrieve post image
-
-        # define stored media path
-        headshot_path = os.path.join(settings.MEDIA_ROOT, 'jessie', 'headshot.jpg')
-
-        # store image at local side
-        with open(headshot_path, 'wb+') as destination:
-            for chunk in headshot.chunks():
-                destination.write(chunk)
-        return redirect('/tripblog/')
-
 def article(request, user=None):
     title = 'test_article'
-    user = user.capitalize()
+    user = user
     return render(request, 'tripblog/article.html', locals())
         
 def edit_article(request, user=None):
     title = 'article_edit'
-    user = user.capitalize()
+    user = user
     return render(request, 'tripblog/edit_article.html', locals())
     
 
 ''' functions '''
 
-def chatbot(request):
+def headshot_upload(request, user=None):
+    if request.method == 'POST' and request.is_ajax():
+        headshot = request.FILES['headshot'] # retrieve post image
+
+        # define stored media path
+        headshot_path = os.path.join(settings.MEDIA_ROOT, user, 'headshot.jpg')
+
+        # store image at local side
+        with open(headshot_path, 'wb+') as destination:
+            for chunk in headshot.chunks():
+                destination.write(chunk)
+
+        return JsonResponse({'headshot_src': f'/media/{user}/headshot.jpg'})
+    else:
+        raise Http404
+
+def chatbot(request, user=None):
     if request.method =='POST' and request.is_ajax():
         user_msg = request.POST.get('user_msg')
-        chatbot_object = ChatbotObject()
         reply = chatbot_object.reply(user_msg)
         data = json.dumps({'reply': reply})
         return HttpResponse(data, content_type='application/json')
@@ -75,7 +70,7 @@ def chatbot(request):
 
 def show_photos(request, user=None, albums='albums', album=None):
     title = 'Gallery'
-    user = user.capitalize()
+    user = user
     album_path = os.path.join(settings.MEDIA_ROOT, user, albums, album)
     relative_path2cat = os.path.join('/media', user, albums, album)
     if request.method == 'GET':

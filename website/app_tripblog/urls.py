@@ -10,7 +10,8 @@ urlpatterns = [
     path('<user>/edit_article/', views.edit_article, name='edit_article'),
 
     # function
-    path('chatbot/', views.chatbot, name='chatbot'),
+    path('<user>/headshot_upload/', views.headshot_upload),
+    path('<user>/chatbot/', views.chatbot, name='chatbot'),
     path('<user>/<albums>/<album>/', views.show_photos),
     path('<user>/<albums>/<album>/<category>/', views.ajax_show_photos),
 ]
