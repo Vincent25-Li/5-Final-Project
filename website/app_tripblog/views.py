@@ -141,3 +141,6 @@ def ajax_show_photos(request, user=None, albums='albums', album=None, category=N
                     display_imgs.append(image_path)
 
     return JsonResponse(display_imgs, safe=False)
+
+def cyclegan(request):
+    pass

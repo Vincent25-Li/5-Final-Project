@@ -11,6 +11,7 @@ urlpatterns = [
 
     # function
     path('<user>/headshot_upload/', views.headshot_upload),
+    path('<user>/blog_image_upload/', views.blog_image_upload), #in order to indicate to fxn by url
     path('<user>/chatbot/', views.chatbot, name='chatbot'),
     path('<user>/<albums>/<album>/', views.show_photos),
     path('<user>/<albums>/<album>/<category>/', views.ajax_show_photos),
