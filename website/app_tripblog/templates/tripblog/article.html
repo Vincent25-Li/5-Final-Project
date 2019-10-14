@@ -1,4 +1,5 @@
 {% extends 'tripblog/base.html' %}
+{% load customed_filter %}
 {% block css %}
 	{% load static %}
 	
@@ -10,47 +11,41 @@
 {% block content %}
 	<div class="flex-parent">
 		<div class="titleinput-flex-container">
-				<a>旅程標題</a> <a>測試標題</a> <br>
-				<a>旅程期間</a> <a>20191030</a> to <a>20191106</a> <a>交通方式</a>
+				<span>旅程標題</span> <span>{{user_article.article_title}}</span> <br>
+				<span>旅程期間</span> <span>{{ user_article.article_content.first_date}}</a> to <span>{{ user_article.article_content.last_date}}</a> <span>交通方式</span> <span>{{ user_article.article_content.transportation}}</span>
 		</div>
 		<div class="input-flex-container inputline">
-			<div class="input active">
-				<span data-info="1日"></span>
-			</div>
-			<div class="input">
-				<span data-info="2日"></span>
-			</div>
-			<div class="input">
-				<span data-info="3日"></span>
-			</div>
-			<div class="input">
-				<span data-info="4日"></span>
-			</div>
-			<div class="input">
-				<span data-info="5日"></span>
-			</div>
-			<div class="input">
-				<span data-info="6日"></span>
-			</div>
-			<div class="input">
-				<span data-info="7日"></span>
-			</div>
+			{% for key in user_article.article_content.schedule.keys %}
+				<div class="input {% if key == '0' %} active {% endif %}">
+					<span data-info="{{ key|add:1 }}日"></span>
+				</div>
+			{% empty %}
+				<div class="input active">
+					<span data-info="1日"></span>
+				</div>
+			{% endfor %}
 		</div>
 		<div class="description-flex-container">
-			<p class="active">上午：<br>中午：<br>下午：<br>傍晚：<br>黃昏：<br>晚上：<br></p>
-			<p>睡一天</p>
-			<p>測試<br>測試<br>測試<br>測試<br>測試<br>測試<br>測試<br>測試<br>測試<br>測試<br>測試<br>測試<br>測試<br>測試<br>測試<br>測試<br>測試<br>測試<br>測試<br></p>
-			<p>Ain’t nobody got time to rake.</p>
-			<p>Because paper currency is for noobs.</p>
-			<p>Nobody likes cords. Nobody.</p>
-			<p>Brighter than glow memory.</p>
+			{% for key, value in user_article.article_content.schedule.items %}
+				<p {% if key == '0' %} class="active" {% endif %}>
+				{% for i in value.time|length|get_range %}
+					{{ value.time|get_listitem:i }} {{ value.spot|get_listitem:i }}<br>
+				{% endfor %}
+			{% empty %}
+				<p class="active"></p>
+			{% endfor %}
+
 		</div>
 	</div>
+	<h1 style="z-index:1000"><a href='/tripblog/{{ user_account }}/edit_article/{{ article_id }}/'>button</a></h1>
 	<div class="flex-child">
 		<div class="child-flex-content">
-		內文
-		<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0<br>0	
-		</div>
+		{% for value in user_article.article_content.post.values %}
+			{% autoescape off %}
+				{{ value }}
+			{% endautoescape %}
+		{% endfor %}	
+		</div>	
 	</div>
 {% endblock %}
 

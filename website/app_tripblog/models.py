@@ -9,11 +9,13 @@ class User(models.Model):
     def __str__(self):
         return self.user_account
 
-class UserBlogs(models.Model):
+class UserArticles(models.Model):
     user_account = models.ForeignKey(User, on_delete=models.CASCADE)
-    cover_picture = models.CharField(max_length=20)
-    blog_title = models.CharField(max_length=40)
-    blog_content = JSONField()
+    cover_picture = models.CharField(max_length=20, blank=True)
+    article_title = models.CharField(max_length=40)
+    article_content = JSONField(blank=True)
+    def __str__(self):
+        return f'{self.user_account.user_account}: {self.article_title}'
 
 class Dog(models.Model):
     name = models.CharField(max_length=200)

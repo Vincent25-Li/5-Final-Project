@@ -9,12 +9,11 @@
 <section>
     <div class="contentDiv">
             <label for="headshot">
-                <img id='headshot_shown' src="/media/{{ user|lower }}/headshot.jpg?cachebuster=2"/>
+                <img id='headshot_shown' src="/media/{{ user_account }}/headshot.jpg?*cachebuster*"/>
             </label>
         <form method="POST" id='headshot_upload' class="form-container" enctype="multipart/form-data", style='display:none'>
             {% csrf_token %}
             <input type="file" id="headshot" name='headshot'>
-       
         </form>
     </div>
 </section>
@@ -23,30 +22,13 @@
 {% load static %}
 <div class="outer-wrapper_BH">
     <div class="wrapper_BH">
-        <div class="slide_BH one_BH"><img src={% static "tripblog/images/me.JPG" %} />photo one</div>
-        <div class="slide_BH two_BH"><img src={% static "tripblog/images/test1.JPG" %} />photo two</div>
-        <div class="slide_BH three_BH"><img src={% static "tripblog/images/test2.JPG" %} />photo three</div>
-        <div class="slide_BH four_BH">photo four</div>
-        <div class="slide_BH one_BH">photo one</div>
-        <div class="slide_BH two_BH">photo two</div>
-        <div class="slide_BH three_BH">photo three</div>
-        <div class="slide_BH four_BH">photo four</div>
-        <div class="slide_BH one_BH">photo one</div>
-        <div class="slide_BH two_BH">photo two</div>
-        <div class="slide_BH three_BH">photo three</div>
-        <div class="slide_BH four_BH">photo four</div>
-        <div class="slide_BH one_BH">photo one</div>
-        <div class="slide_BH two_BH">photo two</div>
-        <div class="slide_BH three_BH">photo three</div>
-        <div class="slide_BH four_BH">photo four</div>
-        <div class="slide_BH one_BH">photo one</div>
-        <div class="slide_BH two_BH">photo two</div>
-        <div class="slide_BH three_BH">photo three</div>
-        <div class="slide_BH four_BH">photo four</div>
-        <div class="slide_BH one_BH">photo one</div>
-        <div class="slide_BH two_BH">photo two</div>
-        <div class="slide_BH three_BH">photo three</div>
-        <div class="slide_BH four_BH">photo four</div>
+        {% for user_article in user_articles %}
+        <div id='article_{{user_article.id}}' class="slide_BH one_BH">
+            <p class='delete_article' id='delete_{{user_article.id}}'>X</p>
+            <a href="/tripblog/{{ user_account }}/article/{{ user_article.id }}">
+            <img src= "/media/{{ user_account }}/articles/{{ user_article.id }}/cover.jpg" alt=""/>{{ user_article.article_title }}</a>
+        </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}
@@ -54,57 +36,74 @@
 {% block script %}
 
 <script>
-        $(document).ready(() => {
+    $(document).ready(() => {
 
-            {% comment %} ajax to upload headshot {% endcomment %}
-            $("#headshot").change(event => {
-                
-                let data = new FormData($('#headshot_upload').get(0));
-                
+        {% comment %} ajax to upload headshot {% endcomment %}
+        $("#headshot").change(event => {  
+            let data = new FormData($('#headshot_upload').get(0));
+            
+            $.ajax({
+                url: "/tripblog/{{ user_account }}/headshot_upload/",
+                type: "POST",
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: data => {
+                    $('#headshot_shown').attr('src', data['headshot_src']+'?cachebuster='+Math.floor(Math.random()*100+1));
+                },
+            });
+            $("#headshot").val('');
+        });
+        
+        {% comment %} ajax to delete article {% endcomment %}
+        $('p.delete_article').click(event=>{
+            let id = event.target.id.split('_')[1];
+            let article_title = $(event.target).siblings('a').text()
+            article_title = article_title.replace(/\s/g, '');
+            if (confirm('Please confirm the deletion of article: '+article_title)){
                 $.ajax({
-                    url: "/tripblog/{{user|lower}}/headshot_upload/",
+                    url: "/tripblog/{{ user_account }}/delete_article/",
                     type: "POST",
-                    data: data,
-                    cache: false,
-                    processData: false,
-                    contentType: false,
-                    success: data => {
-                        $('#headshot_shown').attr('src', data['headshot_src']+'?cachebuster='+Math.floor(Math.random()*100+1));
+                    data: {'id': id,},
+                    datatype: 'json',
+                    success: response => {
+                        $('#article_'+id).remove()
                     },
                 });
-                $("#headshot").val('');
-            });
+            };
+        })
 
-            // csrf code
-            function getCookie(name) {
-                var cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    var cookies = document.cookie.split(';');
-                    for (var i = 0; i < cookies.length; i++) {
-                        var cookie = cookies[i].trim();
-                        // Does this cookie string begin with the name we want?
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
+        // csrf code
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
                     }
                 }
-                return cookieValue;
             }
-            var csrftoken = getCookie('csrftoken');
-        
-            function csrfSafeMethod(method) {
-                // these HTTP methods do not require CSRF protection
-                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-            }
-            $.ajaxSetup({
-                beforeSend: function(xhr, settings) {
-                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                    }
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+    
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 }
-            });
+            }
         });
-    </script>
+    });
+</script>
 
 {% endblock %}

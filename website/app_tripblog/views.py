@@ -1,5 +1,9 @@
 import os
 import json
+import shutil
+
+import numpy as np
+from matplotlib import pyplot as plt
 
 from django.shortcuts import render, redirect
 from django.conf import settings
@@ -7,9 +11,9 @@ from django.http import HttpResponse, Http404
 from django.template import loader
 from django.http import JsonResponse
 
-from app_tripblog.function_chatbot import ChatbotObject
+from app_tripblog.models import User, UserArticles
+from app_tripblog.function_chatbot_ch import ChatbotObject
 from app_tripblog.fn_image_classifier import Image_Classifier
-from matplotlib import pyplot as plt
 
 
 chatbot_object = ChatbotObject()
@@ -24,42 +28,103 @@ def base(request):
         print('success')
     return render(request, 'tripblog/base.html', locals())
 
-def index(request, user=None):
+def index(request, user_account=None):
     title = 'homepage'
-    user = user
+    user_name = check_useraccount_exist(user_account)
+    if not bool(user_name):
+        return HttpResponse(f'Page not found: user account "{user_account}" not exist')
+
+    user_articles = reversed(UserArticles.objects.filter(user_account__user_account=user_account))
+
     if request.method == 'GET':
         return render(request, 'tripblog/index.html', locals())
 
-def article(request, user=None):
-    title = 'test_article'
-    user = user
-    return render(request, 'tripblog/article.html', locals())
+
+def article(request, user_account=None, article_id=None):
+
+    user_name = check_useraccount_exist(user_account)
+    if not bool(user_name):
+        return HttpResponse(f'Page not found: user account "{user_account}" not exist')
+
+    user_article = UserArticles.objects.get(id=article_id)
+    title = user_article.article_title
+
+    if request.method == 'GET':
+        return render(request, 'tripblog/article.html', locals())
+
+def new_article(request, user_account=None):
+    title = 'new_article'
+    user_name = check_useraccount_exist(user_account)
+    if not bool(user_name):
+        return HttpResponse(f'Page not found: user account "{user_account}" not exist')
+    
+    if request.method == 'GET':
+        return render(request, 'tripblog/new_article.html', locals())
+    elif request.method == 'POST' and request.is_ajax():
+        article_title = request.POST['article_title']
+        article_content = request.POST['article_content']
+        article_content = json.loads(article_content)
+
+        # save new data in MySQL
+        user_id = User.objects.only('id').get(user_account=user_account)
+        user_article = UserArticles.objects.create(user_account=user_id, article_title=article_title, article_content=article_content)
+        user_article.save()
+
+        # create new article directory
+        dir_path = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id))
+        try:
+            os.mkdir(dir_path)
+        except FileExistsError:
+            print(f"Directory {dir_path} already exists")
+
+        response = {}
+        response['redirect'] = f'/tripblog/{ user_account }/'
+        return JsonResponse(response)
         
-def edit_article(request, user=None):
+def edit_article(request, user_account=None, article_id=None):
     title = 'article_edit'
-    user = user
-    return render(request, 'tripblog/edit_article.html', locals())
+    user_name = check_useraccount_exist(user_account)
+    if not bool(user_name):
+        return HttpResponse(f'Page not found: user account "{user_account}" not exist')
+
+    user_article = UserArticles.objects.get(id=article_id)
+
+    if request.method == 'GET':
+        return render(request, 'tripblog/edit_article.html', locals())
+    elif request.method == 'POST' and request.is_ajax():
+        article_title = request.POST['article_title']
+        article_content = request.POST['article_content']
+        article_content = json.loads(article_content)
+        
+        # update data in MySQL
+        user_article.article_title = article_title
+        user_article.article_content = article_content
+        user_article.save()
+
+        response = {}
+        response['redirect'] = f'/tripblog/{ user_account }/article/{ article_id }/'
+        return JsonResponse(response)
     
 
 ''' functions '''
 
-def headshot_upload(request, user=None):
+def headshot_upload(request, user_account=None):
     if request.method == 'POST' and request.is_ajax():
         headshot = request.FILES['headshot'] # retrieve post image
 
         # define stored media path
-        headshot_path = os.path.join(settings.MEDIA_ROOT, user, 'headshot.jpg')
+        headshot_path = os.path.join(settings.MEDIA_ROOT, user_account, 'headshot.jpg')
 
         # store image at local side
         with open(headshot_path, 'wb+') as destination:
             for chunk in headshot.chunks():
                 destination.write(chunk)
 
-        return JsonResponse({'headshot_src': f'/media/{user}/headshot.jpg'})
+        return JsonResponse({'headshot_src': f'/media/{user_account}/headshot.jpg'})
     else:
         raise Http404
 
-def chatbot(request, user=None):
+def chatbot(request, user_account=None):
     if request.method =='POST' and request.is_ajax():
         user_msg = request.POST.get('user_msg')
         reply = chatbot_object.reply(user_msg)
@@ -68,11 +133,10 @@ def chatbot(request, user=None):
     else:
         raise Http404
 
-def show_photos(request, user=None, albums='albums', album=None):
+def show_photos(request, user_account=None, albums='albums', album=None):
     title = 'Gallery'
-    user = user
-    album_path = os.path.join(settings.MEDIA_ROOT, user, albums, album)
-    relative_path2cat = os.path.join('/media', user, albums, album)
+    album_path = os.path.join(settings.MEDIA_ROOT, user_account, albums, album)
+    relative_path2cat = os.path.join('/media', user_account, albums, album)
     if request.method == 'GET':
         return render(request, 'tripblog/upload_photos.html', locals())
     elif request.method == 'POST':
@@ -110,34 +174,65 @@ def show_photos(request, user=None, albums='albums', album=None):
                 display_imgs.append(image_path)
         return render(request, 'tripblog/gallery.html', locals())
 
-def ajax_show_photos(request, user=None, albums='albums', album=None, category=None):
+def ajax_show_photos(request, user_account=None, albums='albums', album=None, category=None):
     if request.method =='POST' and request.is_ajax():
         display_imgs = []
 
         if category != 'all':
-            des = os.path.join(settings.MEDIA_ROOT, user, albums, album, category)
+            des = os.path.join(settings.MEDIA_ROOT, user_account, albums, album, category)
             images = os.listdir(des)
             for image in images:
                 if image == '.DS_Store':
                     continue
-                image_path = os.path.join('/media', user, albums, album, category, image)
+                image_path = os.path.join('/media', user_account, albums, album, category, image)
                 if settings.MEDIA_ROOT.startswith('C:'): # for windows
                         image_path = image_path.replace('\\', '/')
                 display_imgs.append(image_path)
         else:
-            album_path = os.path.join(settings.MEDIA_ROOT, user, albums, album)
+            album_path = os.path.join(settings.MEDIA_ROOT, user_account, albums, album)
             categories = os.listdir(album_path)
             for cat in categories:
                 if cat == '.DS_Store':
                     continue
-                des = os.path.join(settings.MEDIA_ROOT, user, albums, album, cat)
+                des = os.path.join(settings.MEDIA_ROOT, user_account, albums, album, cat)
                 images = os.listdir(des)
                 for image in images:
                     if image == '.DS_Store':
                         continue
-                    image_path = os.path.join('/media', user, albums, album, cat, image)
+                    image_path = os.path.join('/media', user_account, albums, album, cat, image)
                     if settings.MEDIA_ROOT.startswith('C:'): # for windows
                         image_path = image_path.replace('\\', '/')
                     display_imgs.append(image_path)
 
     return JsonResponse(display_imgs, safe=False)
+
+def delete_article(request, user_account=None):
+    
+    if request.method == 'POST' and request.is_ajax():
+        article_id = request.POST.get('id')
+        dir_path = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', article_id)
+    
+        try:
+            os.rmdir(dir_path)
+            UserArticles.objects.get(id=article_id).delete()
+        except OSError:
+            shutil.rmtree(dir_path, ignore_errors=True)
+            UserArticles.objects.get(id=article_id).delete()
+
+        response = {}
+        response['reply'] = 'success'
+        return HttpResponse('')
+
+
+'''internal functions'''
+
+# check user_account whether exist in database
+# if yes, return user_name
+# if not, return None
+def check_useraccount_exist(user_account):
+    user_accounts = User.objects.values_list('user_account')
+    if user_account in np.array(user_accounts):
+        user_name = User.objects.get(user_account=user_account).user_name
+        return user_name
+    else:
+        return None

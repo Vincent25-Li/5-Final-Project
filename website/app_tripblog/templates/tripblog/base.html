@@ -17,16 +17,15 @@
         <nav class="left">
             <a href="#menu"><span>Menu</span></a>
         </nav>
-        <a href="/tripblog/{{ user }}" class="logo">{{ user|capfirst }}'s Travel Blog</a>
+        <a href="/tripblog/{{ user_account }}" class="logo">{{ user_name }}'s Travel Blog</a>
     </header>
 
     <!-- Menu -->
     <nav id="menu">
         <ul class="links">
-            <li><a href="/tripblog/{{ user }}">Home</a></li>
-            <li><a href="/tripblog/{{ user }}/edit_article/">Add New Schedule</a></li>
-            <li><a href="/tripblog/{{ user }}/article/">test_article</a></li>
-            <li><a href="/tripblog/{{ user }}/albums/{{ album }}/">Album</a></li>
+            <li><a href="/tripblog/{{ user_account }}">Home</a></li>
+            <li><a href="/tripblog/{{ user_account }}/new_article/">Add New Schedule</a></li>
+            <li><a href="/tripblog/{{ user_account }}/albums/{{ album }}/">Album</a></li>
         </ul>
         <div class="loginbutton">
             <button type="button" class="btn"><span style="vertical-align: middle;">Login</span></button>
@@ -75,7 +74,7 @@
                 let user_msg = "<div style='text-align:right;'>" + $('#user_msg').val() + "</div>";
                 $("#chat_window_V").append(user_msg)
                 $.ajax({
-                    url: "/tripblog/{{ user }}/chatbot/",
+                    url: "/tripblog/{{ user_account }}/chatbot/",
                     type: "POST",
                     data: {
                         "user_msg": user_msg,

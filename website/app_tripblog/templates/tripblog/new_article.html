@@ -23,51 +23,26 @@
 	<div class="flex-parent">
 		<img src="{% static "tripblog/images/plus.png" %}" alt="addnewday" class="imgdayplus" />
 		<div class="titleinput-flex-container">
-			<span>旅程標題</span> <input type="text" name='article_title' style="width: 400px;" value='{{ user_article.article_title }}'> <br>
-			<span>旅程期間</span> <input type="text" name='first_date' style="width: 100px;" value='{{ user_article.article_content.first_date }}'> to <input type="text" name='last_date' style="width: 100px;" value='{{ user_article.article_content.last_date }}'> <span>交通方式</span> <input type="text" name='transportation' value='{{ user_article.article_content.transportation }}'>	
+			<span>旅程標題</span> <input type="text" name='article_title' style="width: 400px;"> <br>
+			<span>旅程期間</span> <input type="text" name='first_date' style="width: 100px;"> to <input type="text" name='last_date' style="width: 100px;"> <span>交通方式</span> <input type="text" name='transportation'>	
 		</div>
 		<div class="input-flex-container inputline" id="addinput1">
-			{% for key in user_article.article_content.schedule.keys %}
-				<div class="input {% if key == '0' %} active {% endif %}">
-					<span data-info="{{ key|add:1 }}日"></span>
-				</div>
-			{% empty %}
-				<div class="input active">
-					<span data-info="1日"></span>
-				</div>
-			{% endfor %}
+			<div class="input active">
+				<span data-info="1日"></span>
+			</div>
 		</div>
-		<div class="description-flex-container" id="addinput2">
-			{% for key, value in user_article.article_content.schedule.items %}
-				<p {% if key == '0' %} class="active" {% endif %}>
-				
-				{% for i in value.time|length|get_range %}
-					<span>時間</span><input type="text" name='time' value={{ value.time|get_listitem:i }}>
-					<span>景點</span><input type="text" name='spot' value={{ value.spot|get_listitem:i }}>
-					{% if i == 0 %}
-						<img src="{% static "tripblog/images/plus.png" %}" alt="addnewinput" class="imginputplus canclick" /><br>
-					{% endif %}
-				{% endfor %}
-				</p>
-			
-			{% empty %}
+		<div class="description-flex-container" id="addinput2"> 
 			<p class="active">
 				<span>時間</span><input type="text" name='time'> <span>景點</span><input type="text" name='spot'>
 				<img src="{% static "tripblog/images/plus.png" %}" alt="addnewinput" class="imginputplus canclick" /><br>
 			</p>
-			{% endfor %}
-
 		</div>
 	</div>
 	<div class="flex-child">
 		<div class="child-flex-content" id="addinput3">
 			<div id="editor">
 				<input type="submit" value="儲存行程">
-				{% for value in user_article.article_content.post.values %}
 					<textarea id='edit' style="margin-top: 30px;" placeholder="從這裡開始寫"></textarea>
-				{% empty %}
-					<textarea id='edit' style="margin-top: 30px;" placeholder="從這裡開始寫"></textarea>
-				{% endfor %}
 			</div>
 		</div>
 	</div>
@@ -174,9 +149,10 @@
 
         {% comment %} ajax to upload headshot {% endcomment %}
         $("input[type=submit]").click(event => {
-            
-			let article_content = {};
+
 			let article_title = $("input[name=article_title]").val();
+			
+			let article_content = {};
 			article_content['first_date'] = $("input[name=first_date]").val();
 			article_content['last_date'] = $("input[name=last_date]").val();
 			article_content['transportation'] =$("input[name=transportation]").val();
@@ -208,8 +184,9 @@
 				post[i] = post_input[i].innerHTML
 			}
 			article_content['post'] = post
+
             $.ajax({
-                url: "/tripblog/{{ user_article.user_account }}/edit_article/{{ user_article.id }}/",
+                url: "/tripblog/{{ user_account }}/new_article/",
                 type: "POST",
                 data: {
 					'article_title': article_title,
