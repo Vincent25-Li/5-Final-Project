@@ -236,3 +236,6 @@ def check_useraccount_exist(user_account):
         return user_name
     else:
         return None
+        
+def cyclegan(request):
+    pass
