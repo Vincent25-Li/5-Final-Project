@@ -71,7 +71,7 @@
 
             {% comment %} ajax for chatbot to deal user message {% endcomment %}
             $("#chatbot_btn").click(event => {
-                let user_msg = "<div style='text-align:right;'>" + $('#user_msg').val() + "</div>";
+                let user_msg = "<div style='text-align:right;'><span style='background-color: #009FCC;padding: 3px;border-radius: 10px;'>" + $('#user_msg').val() + "</span></div>";
                 $("#chat_window_V").append(user_msg)
                 $.ajax({
                     url: "/tripblog/{{ user_account }}/chatbot/",
@@ -81,7 +81,7 @@
                     },
                     datatype: "json", 
                     success: data => {
-                        reply = "<div>" + data['reply'] + "</div>";
+                        reply = "<div><span style='background-color: #FFDD55;padding: 3px;border-radius: 10px;'>" + data['reply'] + "</span></div>";
                         $("#chat_window_V").append(reply);
                     },
 					complete: function(){

@@ -17,6 +17,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
+	text-decoration: none;
 }
 
 /*上傳頭像 */
@@ -425,13 +426,15 @@ button,
     margin-right: 5vh;
     margin-left: 5vh;
     width: 25vh;
-    height: 35vh;
+	height: 35vh;
+	
 }
 /*以下是各相片顏色*/
 .one_BH {
 	background-color: #efdefe;
 	transform: rotate(-1deg);
-    transform-origin: top left;
+	transform-origin: top left;
+	text-decoration: none;
 }
 .two_BH {
 	background-color: #a3f3d3;
@@ -461,7 +464,7 @@ button,
     overflow-y: scroll;
     overflow-x: hidden;
     scrollbar-width: none;
-    -ms-overflow-style: none;
+	-ms-overflow-style: none;
 }
 .wrapper_BH {/*內div，把文字轉正*/
     position: absolute;
@@ -591,5 +594,24 @@ button,
 .floatL {
 	float: left;
 }
-		
-		
+
+.delete_article {
+	position: absolute;
+	top: -8px;
+	right: 5px;
+}
+
+.delete_article:hover {
+	cursor: pointer;
+}
+
+.edit_picture {
+	position: absolute;
+	top: 13px;
+	background-color: #a7d9e7;
+	
+}
+
+.edit_picture:hover {
+	cursor: pointer;
+}
