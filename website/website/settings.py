@@ -29,7 +29,7 @@ SECRET_KEY = '9-x&%&*o7+9)9j!e&#-erc_+b6ux@358540q*e))i2qz91lmjj'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -53,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+SESSION_COOKIE_AGE = 180
 
 ROOT_URLCONF = 'website.urls'
 

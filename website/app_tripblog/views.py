@@ -20,6 +20,7 @@ chatbot_object = ChatbotObject()
 
 ''' templates '''
 
+
 # base template
 def base(request):
     title = 'base template'
@@ -30,18 +31,22 @@ def base(request):
 
 def index(request, user_account=None):
     title = 'homepage'
+    status = ''
     user_name = check_useraccount_exist(user_account)
     if not bool(user_name):
         return HttpResponse(f'Page not found: user account "{user_account}" not exist')
 
     user_articles = reversed(UserArticles.objects.filter(user_account__user_account=user_account))
-    print(f"login status {request.session['is_login']}")
     if request.method == 'GET':
+
+        if 'is_login' in request.session:
+            login_user = request.session['login_user']
+            status = 'login'
         return render(request, 'tripblog/index.html', locals())
 
 def login(request):
+    # request.session['is_login'] = False
     if request.method == 'GET':
-        request.session['is_login'] = False
         return render(request, "tripblog/login.html", locals())
 
     elif request.method == 'POST':
@@ -53,24 +58,15 @@ def login(request):
             if user.password == user_password:
                 user_name = user.user_name
                 user_articles = reversed(UserArticles.objects.filter(user_account__user_account=user_account))
-                # return render(request, "tripblog/index.html", locals())
-                request.session['user_account'] = user_account
+                request.session['login_user'] = user_account
                 request.session['is_login'] = True
                 return redirect(f'/tripblog/{user_account}/')
+            else:
+                message = '帳號或密碼錯誤，請重新輸入！'
         except: 
-            errormessage = '帳號或密碼錯誤，請重新輸入！'
+            message = '帳號或密碼錯誤，請重新輸入！'
         
         return render(request, "tripblog/login.html", locals())
-		# if user is not None:
-		# 	if user.is_active:
-		# 		auth.login(request,user)
-		# 		return redirect('/index/')
-		# 		message = '登入成功！'
-		# 	else:
-		# 		message = '帳號尚未啟用！'
-		# else:
-		# 	message = '登入失敗！'
-	# return render(request, "tripblog/login.html", locals())
 
 def article(request, user_account=None, article_id=None):
 
