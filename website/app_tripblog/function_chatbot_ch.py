@@ -23,21 +23,20 @@ class ChatbotObject():
         self.category_id = np.array(ChatbotQA_ch.objects.values_list('chatbot_category_id'))
         self.all_terms = []
         self.questions['chatbot_question'] = self.questions['chatbot_question'].apply(self.jiebacut_all)
-        print('~~~~~data jeiba cut~~~~~')
+        
         # 建立termindex: 將all_terms取出不重複的詞彙，並轉換型別為list(避免順序亂掉)
         self.termindex = list(set(self.all_terms))
         self.Idf_vector = [] ## 初始化IDF向量
         self.idf()
-        print('~~~~~set idf~~~~~')
-        self.questions['vector'] = self.questions['chatbot_question'].apply(self.tfidf)
-        print('~~~~~set tfidf~~~~~')
         
-        print(len(self.Idf_vector))
-        print(len(self.termindex))
-        print(self.termindex[:10])
-        print(self.Idf_vector[:10])
-        # transform to tfidf
-        #self.questions_tfidf = self.tfidf(self.jiebacut_all(self.questions))
+        self.questions['vector'] = self.questions['chatbot_question'].apply(self.tfidf)
+        
+        
+        # print(len(self.Idf_vector))
+        # print(len(self.termindex))
+        # print(self.termindex[:10])
+        # print(self.Idf_vector[:10])
+        
             
     def jiebacut_all(self,item):
         terms = [t for t in jieba.cut(item, cut_all=True)]
@@ -70,7 +69,7 @@ class ChatbotObject():
         return vector
     
     def reply(self, user_msg):
-        pattern = r'\>(.*)\<'
+        pattern = r"[x][;]\'\>(.*)\<\/[s]"
         x = re.search(pattern, user_msg)
         user_msg_str = x.group(1)
         

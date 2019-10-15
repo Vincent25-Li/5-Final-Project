@@ -24,7 +24,8 @@
     <div class="wrapper_BH">
         {% for user_article in user_articles %}
         <div id='article_{{user_article.id}}' class="slide_BH one_BH">
-            <p class='delete_article' id='delete_{{user_article.id}}'>X</p>
+            <p class='delete_article' id='delete_{{user_article.id}}'>[X]</p>
+            <p class='edit_picture' id='edit_{{user_article.id}}'>換圖片</p>
             <a href="/tripblog/{{ user_account }}/article/{{ user_article.id }}">
             <img src= "/media/{{ user_account }}/articles/{{ user_article.id }}/cover.jpg" alt=""/>{{ user_article.article_title }}</a>
         </div>
