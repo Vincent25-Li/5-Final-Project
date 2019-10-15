@@ -5,22 +5,30 @@
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href={% static "tripblog/css/jquery.bsPhotoGallery.css" %} />
-
 <style>
-    @import url(https://fonts.googleapis.com/css?family=Bree+Serif);
-
-    body {
-        color: red;
+    .cateselect {
+        margin-left: 2vw;
+        margin-bottom: 3vh;
+        width: 200px;
     }
+    .imginputplus{
+        position: fixed;
+        top:10vh;
+        right:2vw;
+        width: 25px;
+        height: 25px;
+    }
+    .imginputplus:hover {
+        cursor: pointer;
+    }
+
 </style>
-
-
 {% endblock %}
 
 {% block content %}
-<br><br><br><br><br><br>
+<div style="height:10vh"></div>
 <form action="/">
-    <select name="" id="select_cat">
+    <select class="cateselect" name="" id="select_cat">
         <option value="all">All</option>
         <option value="people">People</option>
         <option value="food">Food</option>
@@ -29,6 +37,8 @@
         <option value="other">Other</option>
     </select>
 </form>
+<img src="{% static "tripblog/images/plus.png" %}" class="imginputplus"/>
+
 <ul class="row first">
     {% for photo in display_imgs %}
     <li><img src={{photo}}></li>

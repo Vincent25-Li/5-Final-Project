@@ -493,9 +493,9 @@ button,
 	position: fixed;
 	bottom: 23px;
 	right: 28px;
-	width: 5vh;
-	height:5vh;
-	border-radius:50%;
+	width: 6vh;
+	height:6vh;
+	border-radius:20%;
 }
 
 /* The popup chat - hidden by default */
