@@ -104,7 +104,10 @@ def edit_article(request, user_account=None, article_id=None):
         response = {}
         response['redirect'] = f'/tripblog/{ user_account }/article/{ article_id }/'
         return JsonResponse(response)
-    
+
+def albums(request, user_account=None):
+    title = "albums"
+    return render(request, 'tripblog/albums.html', locals())
 
 ''' functions '''
 
@@ -138,13 +141,13 @@ def show_photos(request, user_account=None, albums='albums', album=None):
     album_path = os.path.join(settings.MEDIA_ROOT, user_account, albums, album)
     relative_path2cat = os.path.join('/media', user_account, albums, album)
     if request.method == 'GET':
-        return render(request, 'tripblog/upload_photos.html', locals())
+        return render(request, 'tripblog/gallery.html', locals())
     elif request.method == 'POST':
         model_file = os.path.join(settings.MEDIA_ROOT, 
                                 'models_weights', 'image_classifier', 'output_graph.pb')
         label_file = os.path.join(settings.MEDIA_ROOT, 
                                 'models_weights', 'image_classifier', 'output_labels.txt')
-        img_classifier = Image_Classifier(model_file, label_file, user, album)
+        img_classifier = Image_Classifier(model_file, label_file, user_account, album)
 
         duplicate_imgs = []
         display_imgs = []
