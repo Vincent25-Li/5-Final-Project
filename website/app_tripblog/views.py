@@ -139,6 +139,8 @@ def edit_article(request, user_account=None, article_id=None):
 
 def albums(request, user_account=None):
     title = "albums"
+    user = User.objects.get(user_account=user_account)
+    user_name = user.user_name
     return render(request, 'tripblog/albums.html', locals())
 
 ''' functions '''
