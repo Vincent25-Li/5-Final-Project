@@ -35,10 +35,42 @@ def index(request, user_account=None):
         return HttpResponse(f'Page not found: user account "{user_account}" not exist')
 
     user_articles = reversed(UserArticles.objects.filter(user_account__user_account=user_account))
-
+    print(f"login status {request.session['is_login']}")
     if request.method == 'GET':
         return render(request, 'tripblog/index.html', locals())
 
+def login(request):
+    if request.method == 'GET':
+        request.session['is_login'] = False
+        return render(request, "tripblog/login.html", locals())
+
+    elif request.method == 'POST':
+        user_account = request.POST['user_account']
+        user_password = request.POST['user_password']
+    
+        try: 
+            user = User.objects.get(user_account=user_account)
+            if user.password == user_password:
+                user_name = user.user_name
+                user_articles = reversed(UserArticles.objects.filter(user_account__user_account=user_account))
+                # return render(request, "tripblog/index.html", locals())
+                request.session['user_account'] = user_account
+                request.session['is_login'] = True
+                return redirect(f'/tripblog/{user_account}/')
+        except: 
+            errormessage = '帳號或密碼錯誤，請重新輸入！'
+        
+        return render(request, "tripblog/login.html", locals())
+		# if user is not None:
+		# 	if user.is_active:
+		# 		auth.login(request,user)
+		# 		return redirect('/index/')
+		# 		message = '登入成功！'
+		# 	else:
+		# 		message = '帳號尚未啟用！'
+		# else:
+		# 	message = '登入失敗！'
+	# return render(request, "tripblog/login.html", locals())
 
 def article(request, user_account=None, article_id=None):
 
@@ -140,7 +172,6 @@ def show_photos(request, user_account=None, albums='albums', album=None):
     title = 'Gallery'
     user = User.objects.get(user_account=user_account)
     user_name = user.user_name
-    print(user_name)
     album_path = os.path.join(settings.MEDIA_ROOT, user_account, albums, album)
     relative_path2cat = os.path.join('/media', user_account, albums, album)
     if request.method == 'GET':
@@ -178,7 +209,7 @@ def show_photos(request, user_account=None, albums='albums', album=None):
                 if settings.MEDIA_ROOT.startswith('C:'): # for windows
                     image_path = image_path.replace('\\', '/')
                 display_imgs.append(image_path)
-        print(locals())
+
         return render(request, 'tripblog/gallery.html', locals())
 
 def ajax_show_photos(request, user_account=None, albums='albums', album=None, category=None):
