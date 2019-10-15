@@ -138,11 +138,14 @@ def chatbot(request, user_account=None):
 
 def show_photos(request, user_account=None, albums='albums', album=None):
     title = 'Gallery'
+    user = User.objects.get(user_account=user_account)
+    user_name = user.user_name
+    print(user_name)
     album_path = os.path.join(settings.MEDIA_ROOT, user_account, albums, album)
     relative_path2cat = os.path.join('/media', user_account, albums, album)
     if request.method == 'GET':
-        return render(request, 'tripblog/gallery.html', locals())
-    elif request.method == 'POST':
+        # return render(request, 'tripblog/gallery.html', locals())
+    # elif request.method == 'POST':
         model_file = os.path.join(settings.MEDIA_ROOT, 
                                 'models_weights', 'image_classifier', 'output_graph.pb')
         label_file = os.path.join(settings.MEDIA_ROOT, 
@@ -175,6 +178,7 @@ def show_photos(request, user_account=None, albums='albums', album=None):
                 if settings.MEDIA_ROOT.startswith('C:'): # for windows
                     image_path = image_path.replace('\\', '/')
                 display_imgs.append(image_path)
+        print(locals())
         return render(request, 'tripblog/gallery.html', locals())
 
 def ajax_show_photos(request, user_account=None, albums='albums', album=None, category=None):
