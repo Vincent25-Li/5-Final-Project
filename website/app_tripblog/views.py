@@ -180,7 +180,10 @@ def albums(request, user_account=None):
             login_user = request.session['login_user']
             status = 'login'
         return render(request, 'tripblog/albums.html', locals())
-    
+
+def openpose(request, user_account=None):
+    title = 'OpenPose'
+    return render(request, 'tripblog/openpose.html', locals())
 
 ''' functions '''
 
@@ -209,16 +212,47 @@ def chatbot(request, user_account=None):
             reply = chatbot_object.chat_reply(reply_index)
 
         elif chatbot_object.category_id[reply_index][0] == 2 or 'NER' in request.session:
+            
             if 'NER' not in request.session:
-                request.session['NER'] = {'S-loc': False, 'D-loc': False, 'B-obj': False, 'first_date': False, 'last-date': False}
+                request.session['NER'] = {'S-loc': False, 'D-loc': False, 'B-obj': False, 'first_date': False, 'last_date': False}
 
-            chatbot_object.ner(user_msg)
+            X_msg, y_tag = chatbot_object.ner(user_msg)
+            n_tag = list(set(y_tag))
+            
+            if len(n_tag) > 1:
+                n_tag.remove('O')
+                for tag in n_tag:
+                    tag_idx = y_tag.index(tag)
+                    request.session['NER'][tag] = X_msg[tag_idx]
+
+            if request.session['NER']['first_date'] == True:
+                request.session['NER']['first_date'] = user_msg
+                print(request.session['NER']['first_date'] == True)
+            if request.session['NER']['last_date'] == True:
+                request.session['NER']['last_date'] = user_msg
+
+            
+            mission_completed = [bool(value) for value in request.session['NER'].values()]
+            if mission_completed == 5:
+                reply = f"您的行程如下：<br>{request.session['NER']['S-loc']}＞{request.session['NER']['S-loc']}<br>搭乘：{request.session['NER']['B-obj']}時間：{request.session['NER']['first_date']}＞{request.session['NER']['last_date']}<br>"
+
 
             user_name = User.objects.get(user_account=user_account).user_name
-            if not bool(request.session['NER']['S-loc']):
-                reply = f'{user_name}請問您要如何規劃行程'
-            else:
-                reply = 'Test'
+            if not bool(request.session['NER']['S-loc']) and not bool(request.session['NER']['D-loc']):
+                reply = f'{user_name}請問您想如何規劃行程'
+            elif not bool(request.session['NER']['S-loc']) and bool(request.session['NER']['D-loc']):
+                reply = f'請問您從哪出發'
+            elif bool(request.session['NER']['S-loc']) and not bool(request.session['NER']['D-loc']):
+                reply = f'請問您要前往何處'
+            elif not bool(request.session['NER']['B-obj']):
+                reply = f"請問您要如何從{request.session['NER']['S-loc']}前往{request.session['NER']['D-loc']}"
+            elif not bool(request.session['NER']['first_date']):
+                reply = f"您預計何時從{request.session['NER']['S-loc']}出發"
+                request.session['NER']['first_date'] = True
+            elif not bool(request.session['NER']['last_date']):
+                reply = f"您預計何時從{request.session['NER']['D-loc']}返回"
+                request.session['NER']['last_date'] = True
+            
             
             print(request.session['NER'])
         response = json.dumps({'reply': reply})

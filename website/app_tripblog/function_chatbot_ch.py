@@ -121,6 +121,6 @@ class ChatbotObject():
                 y_msg_pred = np.argmax(y_msg_pred, axis=-1)[0]
                 y_msg_tag = [self.idx2tag[pred] for pred in y_msg_pred]
                 print(f'{X_msg_pad_text}\n{y_msg_tag}')
-                return y_msg_tag
+                return X_msg_pad_text, y_msg_tag
 
         

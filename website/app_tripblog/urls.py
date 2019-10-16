@@ -13,6 +13,7 @@ urlpatterns = [
     path('<user_account>/new_article/', views.new_article, name='new_article'),
     path('<user_account>/edit_article/<article_id>/', views.edit_article, name='edit_article'),
     path('<user_account>/albums/', views.albums, name='albums'),
+    path('<user_account>/openpose/', views.openpose, name='openpose'),
 
     # function
     path('<user_account>/delete_article/', views.delete_article, name='delete_article'),
