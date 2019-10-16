@@ -44,6 +44,15 @@ def index(request, user_account=None):
             status = 'login'
         return render(request, 'tripblog/index.html', locals())
 
+def signup(request):
+    if request.method == 'GET':
+        return render(request, 'tripblog/signup.html', locals())
+    if request.method == 'POST':
+        user_name = request.POST['user_name']
+        user_account = request.POST['user_account']
+        user_password = request.POST['user_password']
+
+
 def login(request):
     # request.session['is_login'] = False
     if request.method == 'GET':
@@ -74,7 +83,7 @@ def logout(request, user_account=None):
     return redirect(f'/tripblog/{user_account}')
 
 def article(request, user_account=None, article_id=None):
-
+    status = ''
     user_name = check_useraccount_exist(user_account)
     if not bool(user_name):
         return HttpResponse(f'Page not found: user account "{user_account}" not exist')
@@ -83,6 +92,9 @@ def article(request, user_account=None, article_id=None):
     title = user_article.article_title
 
     if request.method == 'GET':
+        if 'is_login' in request.session:
+            login_user = request.session['login_user']
+            status = 'login'
         return render(request, 'tripblog/article.html', locals())
 
 def new_article(request, user_account=None):

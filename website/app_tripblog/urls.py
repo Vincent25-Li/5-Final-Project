@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     # templates
     path('base/', views.base, name='base'), # show base template
+    path('signup/', views.signup, name='signup'),
     path('login/', views.login, name='login'),
     path('<user_account>/logout/', views.logout, name='logout'),
     path('<user_account>/', views.index, name='blog_index'),
