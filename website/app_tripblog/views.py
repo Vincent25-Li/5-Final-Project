@@ -335,9 +335,18 @@ def delete_article(request, user_account=None):
         response['reply'] = 'success'
         return HttpResponse('')
 
-def add_album(request):
+def new_album(request, user_account=None):
     if request.method == 'POST' and request.is_ajax():
         album_title = request.POST.get('album_title')
+
+        # user_id = User.objects.only('id').get(user_account=user_account)
+        # user_album = UserAlbums.objects.create(user_account=user_id, album_title=album_title)
+        # user_album.save()
+        response = {}
+        response['redirect'] = f'/tripblog/{ user_account }/albums/'
+        response['response'] = f'"{album_title}"新增成功'
+        return JsonResponse(response)
+
         
 
 
