@@ -17,9 +17,10 @@ class UserArticles(models.Model):
     def __str__(self):
         return f'{self.user_account.user_account}: {self.article_title}'
 
-class Dog(models.Model):
-    name = models.CharField(max_length=200)
-    data = JSONField()
+class UserAlbums(models.Model):
+    user_account = models.ForeignKey(User, on_delete=models.CASCADE)
+    cover_picture = models.CharField(max_length=20, blank=True)
+    album_title = models.CharField(max_length=40)
 
 class ChatbotCategory(models.Model):
     chatbot_category = models.CharField(max_length=40, unique=True)

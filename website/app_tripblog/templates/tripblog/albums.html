@@ -1,7 +1,7 @@
 {% extends 'tripblog/base.html' %}
-{% load customed_filter %}
-{% block css %}
 {% load static %}
+{% block css %}
+
 
 <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
@@ -39,23 +39,25 @@
 
 {% block content %}
 <div class="fornav"></div>
-<div class="addalbum"><a href="#">新增相簿</a></div>
+<div class="addalbum"><span id='add_album'>新增相簿</span></div>
 <div class="normaldesc"></div>
 
+{% for user_album in user_albums %}
 <div class="albumDiv">
   <div class="picDiv">
-
-    <a href="/tripblog/{{ user_account }}/albums/album1/"><img src="{% static "tripblog/images/robot.png" %}" width="200" height="200"
+    <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/"><img src="{% static "tripblog/images/robot.png" %}" width="200" height="200"
         border="0" /></a>
-
   </div>
+
   <div class="albuminfo">
-    <a href="/tripblog/{{ user_account }}/albums/album1/">album1</a><br/>
+    <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/">{{ user_album.album_title }}</a><br/>
     <span class="smalltext"></span><br>
-    <a href="/tripblog/{{ user_account }}/albums/album1/" class="smalltext"
+    
+    <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/" class="smalltext"
       onClick="confirmLink('您確定要刪除這本相簿嗎？'); return document.returnValue">(刪除相簿)</a><br>
   </div>
 </div>
+{% endfor %}
 
 {% endblock %}
 
@@ -66,4 +68,58 @@
     document.returnValue = confirm(message);
   }
 </script>
+
+<script>
+      $(document).ready(() => {
+
+          {% comment %} ajax to add new album {% endcomment %}
+          $("#add_album").click(event => {
+              let album_title = prompt("請輸入相簿名稱：")
+
+              $.ajax({
+                  url: "/tripblog/{{ user_account }}/add_album/",
+                  type: "POST",
+                  data: {
+                      "album_title": album_title,
+                  },
+                  datatype: "json", 
+                  success: data => {
+                      alert(album_title, '新增成功')
+                  },
+              });
+          });
+
+          // csrf code
+          function getCookie(name) {
+              var cookieValue = null;
+              if (document.cookie && document.cookie !== '') {
+                  var cookies = document.cookie.split(';');
+                  for (var i = 0; i < cookies.length; i++) {
+                      var cookie = cookies[i].trim();
+                      // Does this cookie string begin with the name we want?
+                      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                          break;
+                      }
+                  }
+              }
+              return cookieValue;
+          }
+          var csrftoken = getCookie('csrftoken');
+      
+          function csrfSafeMethod(method) {
+              // these HTTP methods do not require CSRF protection
+              return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+          }
+          $.ajaxSetup({
+              beforeSend: function(xhr, settings) {
+                  if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                      xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                  }
+              }
+          });
+      });
+  </script>
+
+
 {% endblock %}
