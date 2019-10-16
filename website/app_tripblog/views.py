@@ -199,36 +199,13 @@ def chatbot(request, user_account=None):
         raise Http404
 
 def show_photos(request, user_account=None, albums='albums', album=None):
-    print('get success')
     title = 'Gallery'
     user = User.objects.get(user_account=user_account)
     user_name = user.user_name
     album_path = os.path.join(settings.MEDIA_ROOT, user_account, albums, album)
     relative_path2cat = os.path.join('/media', user_account, albums, album)
     if request.method == 'GET':
-    #     return render(request, 'tripblog/gallery.html', locals())
-    # elif request.method == 'POST':
-        # model_file = os.path.join(settings.MEDIA_ROOT, 
-        #                         'models_weights', 'image_classifier', 'output_graph.pb')
-        # label_file = os.path.join(settings.MEDIA_ROOT, 
-        #                         'models_weights', 'image_classifier', 'output_labels.txt')
-        # img_classifier = Image_Classifier(model_file, label_file, user_account, album)
-
-        # duplicate_imgs = []
         display_imgs = []
-        # for img in request.FILES.getlist('upload_imgs'):
-        #     img_fp = os.path.join(settings.MEDIA_ROOT, img.name) # img file path
-        #     with open(img_fp, 'wb+') as f:
-        #         for chunk in img.chunks():
-        #             f.write(chunk)
-            
-        #     predict_result = img_classifier.predict(img_fp)
-        #     des = os.path.join(album_path, predict_result)
-        #     duplicate_img = img_classifier.photo2category(img_fp, des)
-        #     if duplicate_img != None: # 判斷重複
-        #         duplicate_imgs.append(duplicate_img)
-        
-        # print(f'duplicate_imgs: {duplicate_imgs}') #暫時不寫
         for category in os.listdir(album_path):
             if category == '.DS_Store':
                 continue
@@ -243,13 +220,11 @@ def show_photos(request, user_account=None, albums='albums', album=None):
 
         return render(request, 'tripblog/gallery.html', locals())
     elif request.method == 'POST':
-        print('post success')
         model_file = os.path.join(settings.MEDIA_ROOT, 
                                 'models_weights', 'image_classifier', 'output_graph.pb')
         label_file = os.path.join(settings.MEDIA_ROOT, 
                                 'models_weights', 'image_classifier', 'output_labels.txt')
         img_classifier = Image_Classifier(model_file, label_file, user_account, album)
-        print(request.FILES.getlist('upload_imgs'))
         duplicate_imgs = []
         display_imgs = []
         for img in request.FILES.getlist('upload_imgs'):
