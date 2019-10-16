@@ -37,7 +37,13 @@
         <option value="other">Other</option>
     </select>
 </form>
-<img src="{% static "tripblog/images/plus.png" %}" class="imginputplus"/>
+
+<form action="" id="upload_photo_form" method='POST' enctype='multipart/form-data' style='display:none'>
+    {% csrf_token %}
+    <input type="file" name='upload_imgs' accept=".png, .jpg, .jpeg" multiple id='upload_imgs'>
+</form>
+<label for="upload_imgs"><img src="{% static "tripblog/images/plus.png" %}" class="imginputplus"/></label>
+
 
 <ul class="row first">
     {% for photo in display_imgs %}
@@ -86,6 +92,9 @@
                     });
                 }
             });
+        });
+        $('#upload_imgs').change(function (){
+            $('#upload_photo_form').submit()
         });
     });
 </script>
