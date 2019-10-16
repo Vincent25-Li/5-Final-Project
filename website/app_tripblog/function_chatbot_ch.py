@@ -1,19 +1,25 @@
 import os
 import pickle
 import re
+import json
 
 import pandas as pd
 import numpy as np
-
 import jieba
-jieba.set_dictionary('dict.txt')
-
 from collections import Counter
 from sklearn.metrics.pairwise import cosine_similarity
+from scipy import sparse
+from keras.preprocessing.sequence import pad_sequences
+from keras.models import load_model
+import tensorflow as tf
 
 from app_tripblog.models import ChatbotQA_ch
 from django.conf import settings
 
+dict_path = os.path.join(settings.MEDIA_ROOT, 'models_weights', 'chatbot', 'dict.txt')
+jieba.set_dictionary(dict_path)
+
+tf.reset_default_graph()
 
 class ChatbotObject():
     def __init__ (self):
@@ -31,11 +37,19 @@ class ChatbotObject():
         
         self.questions['vector'] = self.questions['chatbot_question'].apply(self.tfidf)
         
-        
-        # print(len(self.Idf_vector))
-        # print(len(self.termindex))
-        # print(self.termindex[:10])
-        # print(self.Idf_vector[:10])
+        '''load parameters and model for NER'''
+        self.word2idx = self.read_json(os.path.join(settings.MEDIA_ROOT, 'models_weights', 'chatbot', 'dict_trip.json'))
+        self.idx2word = {i: w for w, i in self.word2idx.items()}
+        self.tag2idx = self.read_json(os.path.join(settings.MEDIA_ROOT, 'models_weights', 'chatbot', 'tag_trip.json'))
+        self.idx2tag = {i: t for t, i in self.tag2idx.items()}
+        self.embeddings = sparse.load_npz(os.path.join(settings.MEDIA_ROOT, 'models_weights', 'chatbot', 'embeddings.npz'))
+
+        self.ner_graph = tf.Graph()
+        with self.ner_graph.as_default():
+            self.ner_session = tf.Session()
+            with self.ner_session.as_default():
+                self.ner_model = load_model(os.path.join(settings.MEDIA_ROOT, 'models_weights', 'chatbot', 'ner_w_embedding.h5'))
+        # self.ner_graph = tf.compat.v1.get_default_graph()
         
             
     def jiebacut_all(self,item):
@@ -55,7 +69,6 @@ class ChatbotObject():
             self.Idf_vector.append(idf)
         
         
-    
     def tfidf(self,terms):
         vector = np.zeros_like(self.termindex, dtype=np.float32)
         for term, count in Counter(terms).items():
@@ -67,30 +80,47 @@ class ChatbotObject():
         # 計算tfidf，element-wise的將vector與Idf_vector相乘
         vector = vector * self.Idf_vector
         return vector
+
+    def read_json(self, path):
+        with open(path) as f:
+            file = json.load(f)
+        return file
+
     
-    def reply(self, user_msg):
-        pattern = r"[x][;]\'\>(.*)\<\/[s]"
-        x = re.search(pattern, user_msg)
-        user_msg_str = x.group(1)
+    def get_index(self, user_msg):
+        # pattern = r"[x][;]\'\>(.*)\<\/[s]"
+        # x = re.search(pattern, user_msg)
+        # user_msg_str = x.group(1)
         
         PK_question = self.qa_index.reshape(-1, 1)
         y_category = self.category_id.reshape(-1, 1)
         x_train = self.questions['vector'].to_numpy()
         x_train = np.vstack(x_train)
-        user_msg_processed = self.jiebacut_all(user_msg_str)
+        user_msg_processed = self.jiebacut_all(user_msg)
         user_msg_vectorized = self.tfidf(user_msg_processed)
         user_vectorize_reshape = user_msg_vectorized.reshape(1, -1)
 
         similarity = cosine_similarity(x_train, user_vectorize_reshape)
         reply_index = PK_question[np.argmax(similarity)]
+        return reply_index
+    
+    def chat_reply(self, reply_index):
+        reply = ChatbotQA_ch.objects.values_list('chatbot_answer').get(id=reply_index)
+        return reply
+
+    def ner(self, user_msg):
+        with self.ner_graph.as_default():
+            with self.ner_session.as_default():
+                max_len = 10
+                user_msg_cut = list(jieba.cut(user_msg))
+                X_msg = [self.word2idx[word] if word in self.word2idx else self.word2idx['UNK'] for word in user_msg_cut]
+                X_msg_pad = pad_sequences(maxlen=max_len, sequences=[X_msg], padding='post', value=self.word2idx['ENDPAD'])
+                X_msg_embed = np.array(self.embeddings[X_msg_pad[0]].toarray())[np.newaxis]
+                X_msg_pad_text = [self.idx2word[idx] for idx in X_msg_pad[0]]
+                y_msg_pred = self.ner_model.predict(X_msg_embed)
+                y_msg_pred = np.argmax(y_msg_pred, axis=-1)[0]
+                y_msg_tag = [self.idx2tag[pred] for pred in y_msg_pred]
+                print(f'{X_msg_pad_text}\n{y_msg_tag}')
+                return y_msg_tag
+
         
-        print(reply_index)
-        
-        if y_category[np.argmax(similarity)].tolist()[0] == 2:
-            print('跳轉到編輯功能')
-        else:
-            reply = ChatbotQA_ch.objects.values_list('chatbot_answer').get(id=reply_index)
-            return reply
-        
-        #reply = ChatbotQA.objects.values_list('chatbot_answer').get(id=reply_index)
-        #return reply

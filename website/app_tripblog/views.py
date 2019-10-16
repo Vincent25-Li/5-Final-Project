@@ -35,7 +35,7 @@ def index(request, user_account=None):
         return HttpResponse(f'Page not found: user account "{user_account}" not exist')
 
     user_articles = reversed(UserArticles.objects.filter(user_account__user_account=user_account))
-    print(f"login status {request.session['is_login']}")
+    # print(f"login status {request.session['is_login']}")
     if request.method == 'GET':
         return render(request, 'tripblog/index.html', locals())
 
@@ -164,9 +164,26 @@ def headshot_upload(request, user_account=None):
 def chatbot(request, user_account=None):
     if request.method =='POST' and request.is_ajax():
         user_msg = request.POST.get('user_msg')
-        reply = chatbot_object.reply(user_msg)
-        data = json.dumps({'reply': reply})
-        return HttpResponse(data, content_type='application/json')
+        reply_index = chatbot_object.get_index(user_msg)
+
+        if chatbot_object.category_id[reply_index][0] == 1 and 'NER' not in request.session:
+            reply = chatbot_object.chat_reply(reply_index)
+
+        elif chatbot_object.category_id[reply_index][0] == 2 or 'NER' in request.session:
+            if 'NER' not in request.session:
+                request.session['NER'] = {'S-loc': False, 'D-loc': False, 'B-obj': False, 'first_date': False, 'last-date': False}
+
+            chatbot_object.ner(user_msg)
+
+            user_name = User.objects.get(user_account=user_account).user_name
+            if not bool(request.session['NER']['S-loc']):
+                reply = f'{user_name}請問您要如何規劃行程'
+            else:
+                reply = 'Test'
+            
+            print(request.session['NER'])
+        response = json.dumps({'reply': reply})
+        return HttpResponse(response, content_type='application/json')
     else:
         raise Http404
 
@@ -276,6 +293,6 @@ def check_useraccount_exist(user_account):
         return user_name
     else:
         return None
-        
+
 def cyclegan(request):
     pass
