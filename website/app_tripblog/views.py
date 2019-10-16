@@ -12,7 +12,7 @@ from django.template import loader
 from django.http import JsonResponse
 from django.http import HttpResponseRedirect
 
-from app_tripblog.models import User, UserArticles
+from app_tripblog.models import User, UserArticles, UserAlbums
 from app_tripblog.function_chatbot_ch import ChatbotObject
 from app_tripblog.fn_image_classifier import Image_Classifier
 
@@ -39,7 +39,6 @@ def index(request, user_account=None):
 
     user_articles = reversed(UserArticles.objects.filter(user_account__user_account=user_account))
     if request.method == 'GET':
-
         if 'is_login' in request.session:
             login_user = request.session['login_user']
             status = 'login'
@@ -167,9 +166,17 @@ def edit_article(request, user_account=None, article_id=None):
 
 def albums(request, user_account=None):
     title = "albums"
-    user = User.objects.get(user_account=user_account)
-    user_name = user.user_name
-    return render(request, 'tripblog/albums.html', locals())
+    user_name = check_useraccount_exist(user_account)
+    if not bool(user_name):
+        return HttpResponse(f'Page not found: user account "{user_account}" not exist')
+    
+    user_albums = reversed(UserAlbums.objects.filter(user_account__user_account=user_account))
+    if request.method == 'GET':
+        if 'is_login' in request.session:
+            login_user = request.session['login_user']
+            status = 'login'
+        return render(request, 'tripblog/albums.html', locals())
+    
 
 ''' functions '''
 
@@ -322,6 +329,11 @@ def delete_article(request, user_account=None):
         response = {}
         response['reply'] = 'success'
         return HttpResponse('')
+
+def add_album(request):
+    if request.method == 'POST' and request.is_ajax():
+        album_title = request.POST.get('album_title')
+        
 
 
 '''internal functions'''
