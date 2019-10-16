@@ -84,7 +84,7 @@
                     url: "/tripblog/{{ user_account }}/chatbot/",
                     type: "POST",
                     data: {
-                        "user_msg": user_msg,
+                        "user_msg": $('#user_msg').val(),
                     },
                     datatype: "json", 
                     success: data => {
