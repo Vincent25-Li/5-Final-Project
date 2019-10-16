@@ -1,6 +1,6 @@
 ul[data-bsp-ul-index] {
           padding:0 0 0 0;
-          margin:0 0 40px 0;
+          margin:0 10vw 0 10vw;
  }
 ul[data-bsp-ul-index] li {
           list-style:none;
@@ -8,13 +8,15 @@ ul[data-bsp-ul-index] li {
 } 
 
 
-#bsPhotoGalleryModal .modal-content {
+
+#bsPhotoGalleryModal .modal-content { /* 彈出照片外圈 */
     border-radius:0;
+    border: 0.5px solid gray;
 }
-#bsPhotoGalleryModal .modal-dialog img {
+#bsPhotoGalleryModal .modal-dialog img { /*彈出照片內圈*/
     text-align:center;
-    margin:0 auto;
-    width:100%;
+    margin:1% auto;
+    width:98%;
 }
 #bsPhotoGalleryModal .modal-body {
     padding:0px !important;
@@ -22,7 +24,7 @@ ul[data-bsp-ul-index] li {
 }
 #bsPhotoGalleryModal .bsp-text-container {
   text-align:left;
-  padding-top:10px;
+  padding-top:25px;
 }
 
 #bsPhotoGalleryModal .bsp-close {
@@ -118,7 +120,7 @@ a.bsp-controls:hover {
 
 .bspImgWrapper {
   overflow: hidden;
-  height: 100px;
+  height: 150px;
   background-position-x: center !important;
   background-position-y: center !important;
   background-size: cover !important;
@@ -132,6 +134,6 @@ a.bsp-controls:hover {
 
 @media screen and (max-width: 575px){
   .bspImgWrapper {
-    height: 150px;
+    height: 200px;
   }
 }
