@@ -217,6 +217,7 @@ def chatbot(request, user_account=None):
 
 def show_photos(request, user_account=None, albums='albums', album=None):
     title = 'Gallery'
+    status = ''
     user = User.objects.get(user_account=user_account)
     user_name = user.user_name
     album_path = os.path.join(settings.MEDIA_ROOT, user_account, albums, album)
@@ -235,17 +236,16 @@ def show_photos(request, user_account=None, albums='albums', album=None):
                     image_path = image_path.replace('\\', '/')
                 display_imgs.append(image_path)
 
+        if 'is_login' in request.session:
+            login_user = request.session['login_user']
+            status = 'login'
         return render(request, 'tripblog/gallery.html', locals())
     elif request.method == 'POST':
-        model_file = os.path.join(settings.MEDIA_ROOT, 
-                                'models_weights', 'image_classifier', 'output_graph.pb')
-        label_file = os.path.join(settings.MEDIA_ROOT, 
-                                'models_weights', 'image_classifier', 'output_labels.txt')
-        img_classifier = Image_Classifier(model_file, label_file, user_account, album)
+       
+        img_classifier = Image_Classifier()
         duplicate_imgs = []
         display_imgs = []
         for img in request.FILES.getlist('upload_imgs'):
-            print(img.name)
             img_fp = os.path.join(settings.MEDIA_ROOT, img.name) # img file path
             with open(img_fp, 'wb+') as f:
                 for chunk in img.chunks():
@@ -269,6 +269,9 @@ def show_photos(request, user_account=None, albums='albums', album=None):
                 if settings.MEDIA_ROOT.startswith('C:'): # for windows
                     image_path = image_path.replace('\\', '/')
                 display_imgs.append(image_path)
+        if 'is_login' in request.session:
+            login_user = request.session['login_user']
+            status = 'login'
         return render(request, 'tripblog/gallery.html', locals())
 
 def ajax_show_photos(request, user_account=None, albums='albums', album=None, category=None):
