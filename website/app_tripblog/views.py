@@ -60,6 +60,10 @@ def signup(request):
             message = user.username + "帳號已存在，請嘗試其他帳號！"
             return render(request, 'tripblog/signup.html', locals())
         else:
+            user_folder = os.path.join(settings.MEDIA_ROOT, user_account)
+            albums_folder = os.path.join(user_folder, 'albums')
+            os.makedirs(user_folder)
+            os.makedirs(albums_folder)
             user = User.objects.create(user_name=user_name, user_account=user_account, password=user_password)
             user.save()
             return redirect(f'/tripblog/{user_account}')
