@@ -5,12 +5,15 @@ from django.conf import settings
 
 
 class Image_Classifier:
-    def __init__(self, model_file, label_file, username, album, top_ranking=None):
-        self.model_file = model_file
-        self.label_file = label_file
-        self.username = username
-        self.album = album
-        self.top_ranking = top_ranking
+    # def __init__(self, username, album, top_ranking=None):
+    def __init__(self):
+        self.model_file = model_file = os.path.join(settings.MEDIA_ROOT, 
+                                'models_weights', 'image_classifier', 'output_graph.pb')
+        self.label_file = label_file = os.path.join(settings.MEDIA_ROOT, 
+                                'models_weights', 'image_classifier', 'output_labels.txt')
+        # self.username = username
+        # self.album = album
+        # self.top_ranking = top_ranking
 
     def load_graph(self): # load model and weights
         graph = tf.Graph()
@@ -56,12 +59,10 @@ class Image_Classifier:
     def load_labels(self):
         label = []
     
-        #'n' bytes of the file (or whole file) in bytes mode or 'n' bytes of the string if in string (regular) mode.
         proto_as_ascii_lines = tf.gfile.GFile(self.label_file).readlines() 
         for l in proto_as_ascii_lines:
             label.append(l.rstrip())
         return label
-
 
     def predict(self, img_fp):
         input_height = 224
