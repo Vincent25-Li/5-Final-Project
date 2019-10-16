@@ -1,6 +1,7 @@
 import numpy as np
 import tensorflow as tf
 import os, shutil
+from django.conf import settings
 
 
 class Image_Classifier:

@@ -10,6 +10,7 @@ from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.template import loader
 from django.http import JsonResponse
+from django.http import HttpResponseRedirect
 
 from app_tripblog.models import User, UserArticles
 from app_tripblog.function_chatbot_ch import ChatbotObject
@@ -19,6 +20,7 @@ from app_tripblog.fn_image_classifier import Image_Classifier
 chatbot_object = ChatbotObject()
 
 ''' templates '''
+
 
 # base template
 def base(request):
@@ -30,18 +32,44 @@ def base(request):
 
 def index(request, user_account=None):
     title = 'homepage'
+    status = ''
     user_name = check_useraccount_exist(user_account)
     if not bool(user_name):
         return HttpResponse(f'Page not found: user account "{user_account}" not exist')
 
     user_articles = reversed(UserArticles.objects.filter(user_account__user_account=user_account))
-    # print(f"login status {request.session['is_login']}")
     if request.method == 'GET':
+
+        if 'is_login' in request.session:
+            login_user = request.session['login_user']
+            status = 'login'
         return render(request, 'tripblog/index.html', locals())
 
-def login(request):
+def signup(request):
     if request.method == 'GET':
-        request.session['is_login'] = False
+        return render(request, 'tripblog/signup.html', locals())
+    if request.method == 'POST':
+        user_name = request.POST['user_name']
+        user_account = request.POST['user_account']
+        user_password = request.POST['user_password']
+        try:
+            user = User.objects.get(user_account=user_account)
+        except:
+            user = None
+        if user!=None:
+            message = user.username + "帳號已存在，請嘗試其他帳號！"
+            return render(request, 'tripblog/signup.html', locals())
+        else:
+            user = User.objects.create(user_name=user_name, user_account=user_account, password=user_password)
+            user.save()
+            return redirect(f'/tripblog/{user_account}')
+
+
+def login(request):
+    # request.session['is_login'] = False
+    title='Login'
+    if request.method == 'GET':
+        request.session['referer'] = request.META.get('HTTP_REFERER')
         return render(request, "tripblog/login.html", locals())
 
     elif request.method == 'POST':
@@ -53,27 +81,24 @@ def login(request):
             if user.password == user_password:
                 user_name = user.user_name
                 user_articles = reversed(UserArticles.objects.filter(user_account__user_account=user_account))
-                # return render(request, "tripblog/index.html", locals())
-                request.session['user_account'] = user_account
+                request.session['login_user'] = user_account
                 request.session['is_login'] = True
-                return redirect(f'/tripblog/{user_account}/')
+                return redirect(request.session['referer'])
+            else:
+                message = '帳號或密碼錯誤，請重新輸入！'
         except: 
-            errormessage = '帳號或密碼錯誤，請重新輸入！'
+            message = '帳號或密碼錯誤，請重新輸入！'
         
         return render(request, "tripblog/login.html", locals())
-		# if user is not None:
-		# 	if user.is_active:
-		# 		auth.login(request,user)
-		# 		return redirect('/index/')
-		# 		message = '登入成功！'
-		# 	else:
-		# 		message = '帳號尚未啟用！'
-		# else:
-		# 	message = '登入失敗！'
-	# return render(request, "tripblog/login.html", locals())
+
+def logout(request, user_account=None):
+    del request.session['login_user']
+    del request.session['is_login']
+    # print(request.META.get('HTTP_REFERER'))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def article(request, user_account=None, article_id=None):
-
+    status = ''
     user_name = check_useraccount_exist(user_account)
     if not bool(user_name):
         return HttpResponse(f'Page not found: user account "{user_account}" not exist')
@@ -82,6 +107,9 @@ def article(request, user_account=None, article_id=None):
     title = user_article.article_title
 
     if request.method == 'GET':
+        if 'is_login' in request.session:
+            login_user = request.session['login_user']
+            status = 'login'
         return render(request, 'tripblog/article.html', locals())
 
 def new_article(request, user_account=None):
@@ -194,17 +222,30 @@ def show_photos(request, user_account=None, albums='albums', album=None):
     album_path = os.path.join(settings.MEDIA_ROOT, user_account, albums, album)
     relative_path2cat = os.path.join('/media', user_account, albums, album)
     if request.method == 'GET':
-        # return render(request, 'tripblog/gallery.html', locals())
-    # elif request.method == 'POST':
+        display_imgs = []
+        for category in os.listdir(album_path):
+            if category == '.DS_Store':
+                continue
+            for image in os.listdir(os.path.join(album_path, category)):
+                if image == '.DS_Store':
+                    continue
+                image_path = os.path.join(relative_path2cat, category, image)
+
+                if settings.MEDIA_ROOT.startswith('C:'): # for windows
+                    image_path = image_path.replace('\\', '/')
+                display_imgs.append(image_path)
+
+        return render(request, 'tripblog/gallery.html', locals())
+    elif request.method == 'POST':
         model_file = os.path.join(settings.MEDIA_ROOT, 
                                 'models_weights', 'image_classifier', 'output_graph.pb')
         label_file = os.path.join(settings.MEDIA_ROOT, 
                                 'models_weights', 'image_classifier', 'output_labels.txt')
         img_classifier = Image_Classifier(model_file, label_file, user_account, album)
-
         duplicate_imgs = []
         display_imgs = []
         for img in request.FILES.getlist('upload_imgs'):
+            print(img.name)
             img_fp = os.path.join(settings.MEDIA_ROOT, img.name) # img file path
             with open(img_fp, 'wb+') as f:
                 for chunk in img.chunks():
@@ -228,7 +269,6 @@ def show_photos(request, user_account=None, albums='albums', album=None):
                 if settings.MEDIA_ROOT.startswith('C:'): # for windows
                     image_path = image_path.replace('\\', '/')
                 display_imgs.append(image_path)
-
         return render(request, 'tripblog/gallery.html', locals())
 
 def ajax_show_photos(request, user_account=None, albums='albums', album=None, category=None):

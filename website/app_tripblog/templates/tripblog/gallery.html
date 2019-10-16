@@ -5,22 +5,31 @@
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href={% static "tripblog/css/jquery.bsPhotoGallery.css" %} />
-
 <style>
-    @import url(https://fonts.googleapis.com/css?family=Bree+Serif);
-
-    body {
-        color: red;
+    .cateselect {
+        margin-left: 10vw;
+        margin-bottom: 3vh;
+        width: 200px;
     }
+    .imginputplus{
+        position: fixed;
+        top:10vh;
+        right:10vw;
+        width: 25px;
+        height: 25px;
+    }
+    .imginputplus:hover {
+        cursor: pointer;
+    }
+    
+
 </style>
-
-
 {% endblock %}
 
 {% block content %}
-<br><br><br><br><br><br>
-<form action="/">
-    <select name="" id="select_cat">
+<div style="height:10vh"></div>
+<form  action="/">
+    <select class="cateselect" name="" id="select_cat">
         <option value="all">All</option>
         <option value="people">People</option>
         <option value="food">Food</option>
@@ -29,7 +38,14 @@
         <option value="other">Other</option>
     </select>
 </form>
-<ul class="row first">
+
+<form action="" id="upload_photo_form" method='POST' enctype='multipart/form-data' style='display:none'>
+    {% csrf_token %}
+    <input type="file" name='upload_imgs' accept=".png, .jpg, .jpeg" multiple id='upload_imgs'>
+</form>
+<label for="upload_imgs"><img src="{% static "tripblog/images/plus.png" %}" class="imginputplus"/></label>
+
+<ul  class="row first">
     {% for photo in display_imgs %}
     <li><img src={{photo}}></li>
     {% endfor %}
@@ -49,7 +65,7 @@
 <script>
     $(document).ready(function () {
         $('ul.first').bsPhotoGallery({
-            "classes": "col-xl-3 col-lg-2 col-md-4 col-sm-4",
+            "classes": "col-xl-2 col-lg-3 col-md-4 col-sm-4",
             "hasModal": true,
             "shortText": false
         });
@@ -70,12 +86,15 @@
                     }
 
                     $('ul.first').bsPhotoGallery({
-                        "classes": "col-xl-3 col-lg-2 col-md-4 col-sm-4",
+                        "classes": "col-xl-3 col-lg-4 col-md-4 col-sm-4",
                         "hasModal": true,
                         "shortText": false
                     });
                 }
             });
+        });
+        $('#upload_imgs').change(function (){
+            $('#upload_photo_form').submit()
         });
     });
 </script>

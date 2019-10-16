@@ -13,7 +13,9 @@
             </label>
         <form method="POST" id='headshot_upload' class="form-container" enctype="multipart/form-data", style='display:none'>
             {% csrf_token %}
+            {% if status and login_user == user_account %}
             <input type="file" id="headshot" name='headshot'>
+            {% endif %}
         </form>
     </div>
 </section>
@@ -24,8 +26,10 @@
     <div class="wrapper_BH">
         {% for user_article in user_articles %}
         <div id='article_{{user_article.id}}' class="slide_BH one_BH">
+        {% if status and login_user == user_account %}
             <p class='delete_article' id='delete_{{user_article.id}}'>[X]</p>
             <p class='edit_picture' id='edit_{{user_article.id}}'>換圖片</p>
+        {% endif %}
             <a href="/tripblog/{{ user_account }}/article/{{ user_article.id }}">
             <img src= "/media/{{ user_account }}/articles/{{ user_article.id }}/cover.jpg" alt=""/>{{ user_article.article_title }}</a>
         </div>
