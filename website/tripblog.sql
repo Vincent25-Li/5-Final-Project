@@ -124,31 +124,6 @@ INSERT INTO `app_tripblog_chatbotqa_ch` VALUES (1,'test','抱歉，我不懂你�
 UNLOCK TABLES;
 
 --
--- Table structure for table `app_tripblog_dog`
---
-
-DROP TABLE IF EXISTS `app_tripblog_dog`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `app_tripblog_dog` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(200) NOT NULL,
-  `data` json NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `app_tripblog_dog`
---
-
-LOCK TABLES `app_tripblog_dog` WRITE;
-/*!40000 ALTER TABLE `app_tripblog_dog` DISABLE KEYS */;
-INSERT INTO `app_tripblog_dog` VALUES (1,'Howard','{\"num\": [1, 2, 3], \"date\": \"2018-3-12\"}'),(2,'Marry','{\"num\": [5, 1, 3], \"date\": \"2019-2-12\", \"page\": 3}');
-/*!40000 ALTER TABLE `app_tripblog_dog` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `app_tripblog_user`
 --
 
@@ -173,6 +148,33 @@ LOCK TABLES `app_tripblog_user` WRITE;
 /*!40000 ALTER TABLE `app_tripblog_user` DISABLE KEYS */;
 INSERT INTO `app_tripblog_user` VALUES (1,'Jessie','jessie','jessie');
 /*!40000 ALTER TABLE `app_tripblog_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `app_tripblog_useralbums`
+--
+
+DROP TABLE IF EXISTS `app_tripblog_useralbums`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `app_tripblog_useralbums` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cover_picture` varchar(20) NOT NULL,
+  `album_title` varchar(40) NOT NULL,
+  `user_account_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `app_tripblog_useralb_user_account_id_5c257a2d_fk_app_tripb` (`user_account_id`),
+  CONSTRAINT `app_tripblog_useralb_user_account_id_5c257a2d_fk_app_tripb` FOREIGN KEY (`user_account_id`) REFERENCES `app_tripblog_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `app_tripblog_useralbums`
+--
+
+LOCK TABLES `app_tripblog_useralbums` WRITE;
+/*!40000 ALTER TABLE `app_tripblog_useralbums` DISABLE KEYS */;
+/*!40000 ALTER TABLE `app_tripblog_useralbums` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -271,7 +273,7 @@ CREATE TABLE `auth_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
   CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -280,7 +282,7 @@ CREATE TABLE `auth_permission` (
 
 LOCK TABLES `auth_permission` WRITE;
 /*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
-INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can view log entry',1,'view_logentry'),(5,'Can add permission',2,'add_permission'),(6,'Can change permission',2,'change_permission'),(7,'Can delete permission',2,'delete_permission'),(8,'Can view permission',2,'view_permission'),(9,'Can add group',3,'add_group'),(10,'Can change group',3,'change_group'),(11,'Can delete group',3,'delete_group'),(12,'Can view group',3,'view_group'),(13,'Can add user',4,'add_user'),(14,'Can change user',4,'change_user'),(15,'Can delete user',4,'delete_user'),(16,'Can view user',4,'view_user'),(17,'Can add content type',5,'add_contenttype'),(18,'Can change content type',5,'change_contenttype'),(19,'Can delete content type',5,'delete_contenttype'),(20,'Can view content type',5,'view_contenttype'),(21,'Can add session',6,'add_session'),(22,'Can change session',6,'change_session'),(23,'Can delete session',6,'delete_session'),(24,'Can view session',6,'view_session'),(25,'Can add user',7,'add_user'),(26,'Can change user',7,'change_user'),(27,'Can delete user',7,'delete_user'),(28,'Can view user',7,'view_user'),(29,'Can add chatbot category',8,'add_chatbotcategory'),(30,'Can change chatbot category',8,'change_chatbotcategory'),(31,'Can delete chatbot category',8,'delete_chatbotcategory'),(32,'Can view chatbot category',8,'view_chatbotcategory'),(33,'Can add chatbot qa',9,'add_chatbotqa'),(34,'Can change chatbot qa',9,'change_chatbotqa'),(35,'Can delete chatbot qa',9,'delete_chatbotqa'),(36,'Can view chatbot qa',9,'view_chatbotqa'),(37,'Can add chatbot category_ch',10,'add_chatbotcategory_ch'),(38,'Can change chatbot category_ch',10,'change_chatbotcategory_ch'),(39,'Can delete chatbot category_ch',10,'delete_chatbotcategory_ch'),(40,'Can view chatbot category_ch',10,'view_chatbotcategory_ch'),(41,'Can add chatbot q a_ch',11,'add_chatbotqa_ch'),(42,'Can change chatbot q a_ch',11,'change_chatbotqa_ch'),(43,'Can delete chatbot q a_ch',11,'delete_chatbotqa_ch'),(44,'Can view chatbot q a_ch',11,'view_chatbotqa_ch'),(45,'Can add dog',12,'add_dog'),(46,'Can change dog',12,'change_dog'),(47,'Can delete dog',12,'delete_dog'),(48,'Can view dog',12,'view_dog'),(49,'Can add user blogs',13,'add_userblogs'),(50,'Can change user blogs',13,'change_userblogs'),(51,'Can delete user blogs',13,'delete_userblogs'),(52,'Can view user blogs',13,'view_userblogs'),(53,'Can add user articles',13,'add_userarticles'),(54,'Can change user articles',13,'change_userarticles'),(55,'Can delete user articles',13,'delete_userarticles'),(56,'Can view user articles',13,'view_userarticles');
+INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can view log entry',1,'view_logentry'),(5,'Can add permission',2,'add_permission'),(6,'Can change permission',2,'change_permission'),(7,'Can delete permission',2,'delete_permission'),(8,'Can view permission',2,'view_permission'),(9,'Can add group',3,'add_group'),(10,'Can change group',3,'change_group'),(11,'Can delete group',3,'delete_group'),(12,'Can view group',3,'view_group'),(13,'Can add user',4,'add_user'),(14,'Can change user',4,'change_user'),(15,'Can delete user',4,'delete_user'),(16,'Can view user',4,'view_user'),(17,'Can add content type',5,'add_contenttype'),(18,'Can change content type',5,'change_contenttype'),(19,'Can delete content type',5,'delete_contenttype'),(20,'Can view content type',5,'view_contenttype'),(21,'Can add session',6,'add_session'),(22,'Can change session',6,'change_session'),(23,'Can delete session',6,'delete_session'),(24,'Can view session',6,'view_session'),(25,'Can add user',7,'add_user'),(26,'Can change user',7,'change_user'),(27,'Can delete user',7,'delete_user'),(28,'Can view user',7,'view_user'),(29,'Can add chatbot category',8,'add_chatbotcategory'),(30,'Can change chatbot category',8,'change_chatbotcategory'),(31,'Can delete chatbot category',8,'delete_chatbotcategory'),(32,'Can view chatbot category',8,'view_chatbotcategory'),(33,'Can add chatbot qa',9,'add_chatbotqa'),(34,'Can change chatbot qa',9,'change_chatbotqa'),(35,'Can delete chatbot qa',9,'delete_chatbotqa'),(36,'Can view chatbot qa',9,'view_chatbotqa'),(37,'Can add chatbot category_ch',10,'add_chatbotcategory_ch'),(38,'Can change chatbot category_ch',10,'change_chatbotcategory_ch'),(39,'Can delete chatbot category_ch',10,'delete_chatbotcategory_ch'),(40,'Can view chatbot category_ch',10,'view_chatbotcategory_ch'),(41,'Can add chatbot q a_ch',11,'add_chatbotqa_ch'),(42,'Can change chatbot q a_ch',11,'change_chatbotqa_ch'),(43,'Can delete chatbot q a_ch',11,'delete_chatbotqa_ch'),(44,'Can view chatbot q a_ch',11,'view_chatbotqa_ch'),(45,'Can add dog',12,'add_dog'),(46,'Can change dog',12,'change_dog'),(47,'Can delete dog',12,'delete_dog'),(48,'Can view dog',12,'view_dog'),(49,'Can add user blogs',13,'add_userblogs'),(50,'Can change user blogs',13,'change_userblogs'),(51,'Can delete user blogs',13,'delete_userblogs'),(52,'Can view user blogs',13,'view_userblogs'),(53,'Can add user articles',13,'add_userarticles'),(54,'Can change user articles',13,'change_userarticles'),(55,'Can delete user articles',13,'delete_userarticles'),(56,'Can view user articles',13,'view_userarticles'),(57,'Can add user albums',14,'add_useralbums'),(58,'Can change user albums',14,'change_useralbums'),(59,'Can delete user albums',14,'delete_useralbums'),(60,'Can view user albums',14,'view_useralbums');
 /*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -421,7 +423,7 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -430,7 +432,7 @@ CREATE TABLE `django_content_type` (
 
 LOCK TABLES `django_content_type` WRITE;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(8,'app_tripblog','chatbotcategory'),(10,'app_tripblog','chatbotcategory_ch'),(9,'app_tripblog','chatbotqa'),(11,'app_tripblog','chatbotqa_ch'),(12,'app_tripblog','dog'),(7,'app_tripblog','user'),(13,'app_tripblog','userarticles'),(3,'auth','group'),(2,'auth','permission'),(4,'auth','user'),(5,'contenttypes','contenttype'),(6,'sessions','session');
+INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(8,'app_tripblog','chatbotcategory'),(10,'app_tripblog','chatbotcategory_ch'),(9,'app_tripblog','chatbotqa'),(11,'app_tripblog','chatbotqa_ch'),(12,'app_tripblog','dog'),(7,'app_tripblog','user'),(14,'app_tripblog','useralbums'),(13,'app_tripblog','userarticles'),(3,'auth','group'),(2,'auth','permission'),(4,'auth','user'),(5,'contenttypes','contenttype'),(6,'sessions','session');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -447,7 +449,7 @@ CREATE TABLE `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -456,7 +458,7 @@ CREATE TABLE `django_migrations` (
 
 LOCK TABLES `django_migrations` WRITE;
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2019-09-21 15:52:31.170157'),(2,'auth','0001_initial','2019-09-21 15:52:31.279940'),(3,'admin','0001_initial','2019-09-21 15:52:31.550321'),(4,'admin','0002_logentry_remove_auto_add','2019-09-21 15:52:31.611172'),(5,'admin','0003_logentry_add_action_flag_choices','2019-09-21 15:52:31.620352'),(6,'contenttypes','0002_remove_content_type_name','2019-09-21 15:52:31.676011'),(7,'auth','0002_alter_permission_name_max_length','2019-09-21 15:52:31.704631'),(8,'auth','0003_alter_user_email_max_length','2019-09-21 15:52:31.726117'),(9,'auth','0004_alter_user_username_opts','2019-09-21 15:52:31.734683'),(10,'auth','0005_alter_user_last_login_null','2019-09-21 15:52:31.769683'),(11,'auth','0006_require_contenttypes_0002','2019-09-21 15:52:31.772383'),(12,'auth','0007_alter_validators_add_error_messages','2019-09-21 15:52:31.780359'),(13,'auth','0008_alter_user_username_max_length','2019-09-21 15:52:31.822403'),(14,'auth','0009_alter_user_last_name_max_length','2019-09-21 15:52:31.868813'),(15,'auth','0010_alter_group_name_max_length','2019-09-21 15:52:31.887446'),(16,'auth','0011_update_proxy_permissions','2019-09-21 15:52:31.895622'),(17,'sessions','0001_initial','2019-09-21 15:52:31.908109'),(18,'app_tripblog','0001_initial','2019-09-22 04:54:39.348868'),(19,'app_tripblog','0002_chatbotcategory_chatbotqa','2019-09-25 03:01:37.092795'),(20,'app_tripblog','0003_chatbotcategory_ch_chatbotqa_ch','2019-10-07 16:07:04.786434'),(21,'app_tripblog','0004_auto_20191008_1701','2019-10-08 09:06:02.219699'),(22,'app_tripblog','0005_userblogs','2019-10-08 09:07:03.558972'),(23,'app_tripblog','0004_auto_20191008_1920','2019-10-08 12:09:33.805355'),(24,'app_tripblog','0006_merge_20191008_2009','2019-10-08 12:09:33.808664'),(25,'app_tripblog','0006_merge_20191008_2003','2019-10-09 02:25:32.823515'),(26,'app_tripblog','0007_merge_20191009_1025','2019-10-09 02:25:32.855171'),(27,'app_tripblog','0008_auto_20191009_1633','2019-10-09 08:34:34.563608'),(28,'app_tripblog','0009_auto_20191009_1637','2019-10-09 08:38:08.467284');
+INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2019-09-21 15:52:31.170157'),(2,'auth','0001_initial','2019-09-21 15:52:31.279940'),(3,'admin','0001_initial','2019-09-21 15:52:31.550321'),(4,'admin','0002_logentry_remove_auto_add','2019-09-21 15:52:31.611172'),(5,'admin','0003_logentry_add_action_flag_choices','2019-09-21 15:52:31.620352'),(6,'contenttypes','0002_remove_content_type_name','2019-09-21 15:52:31.676011'),(7,'auth','0002_alter_permission_name_max_length','2019-09-21 15:52:31.704631'),(8,'auth','0003_alter_user_email_max_length','2019-09-21 15:52:31.726117'),(9,'auth','0004_alter_user_username_opts','2019-09-21 15:52:31.734683'),(10,'auth','0005_alter_user_last_login_null','2019-09-21 15:52:31.769683'),(11,'auth','0006_require_contenttypes_0002','2019-09-21 15:52:31.772383'),(12,'auth','0007_alter_validators_add_error_messages','2019-09-21 15:52:31.780359'),(13,'auth','0008_alter_user_username_max_length','2019-09-21 15:52:31.822403'),(14,'auth','0009_alter_user_last_name_max_length','2019-09-21 15:52:31.868813'),(15,'auth','0010_alter_group_name_max_length','2019-09-21 15:52:31.887446'),(16,'auth','0011_update_proxy_permissions','2019-09-21 15:52:31.895622'),(17,'sessions','0001_initial','2019-09-21 15:52:31.908109'),(18,'app_tripblog','0001_initial','2019-09-22 04:54:39.348868'),(19,'app_tripblog','0002_chatbotcategory_chatbotqa','2019-09-25 03:01:37.092795'),(20,'app_tripblog','0003_chatbotcategory_ch_chatbotqa_ch','2019-10-07 16:07:04.786434'),(21,'app_tripblog','0004_auto_20191008_1701','2019-10-08 09:06:02.219699'),(22,'app_tripblog','0005_userblogs','2019-10-08 09:07:03.558972'),(23,'app_tripblog','0004_auto_20191008_1920','2019-10-08 12:09:33.805355'),(24,'app_tripblog','0006_merge_20191008_2009','2019-10-08 12:09:33.808664'),(25,'app_tripblog','0006_merge_20191008_2003','2019-10-09 02:25:32.823515'),(26,'app_tripblog','0007_merge_20191009_1025','2019-10-09 02:25:32.855171'),(27,'app_tripblog','0008_auto_20191009_1633','2019-10-09 08:34:34.563608'),(28,'app_tripblog','0009_auto_20191009_1637','2019-10-09 08:38:08.467284'),(29,'app_tripblog','0010_auto_20191016_1549','2019-10-16 07:50:02.368915');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -482,7 +484,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('b3b7yxd0kbw0j4bbvxfvh4ceg1xdvgio','NTgxNjQyZjc0MTIyYWJkYmM3ZGIxZjZmNmI4MTA4NzM4MDgyN2E5NTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJjMzQwNjYxZjI4NTgzNmE1ZGJhYmQwYzcyZmRlZDU4ZDQ1ZjcwZmUzIn0=','2019-10-23 05:20:49.128674');
+INSERT INTO `django_session` VALUES ('6oj17dpz389t0y99at02gzzwgiyhxtsr','MGRiYTI3MmI2YzhlZjNhOTY5MTJlZjFhOGFlMmEyYzM3YmY1NTkzMjp7Ik5FUiI6e319','2019-10-29 15:41:19.250287'),('81upolgmbfkj7wfu3yplduov5ki78zju','YWJiMGM4NDg3YTE0NjVjOGExYTBiNDQ1MDdjNDFhOTg3YzQ4NDgyMDp7Ik5FUiI6eyJTLWxvYyI6ZmFsc2UsIkQtbG9jIjpmYWxzZSwiQi1vYmoiOmZhbHNlLCJmaXJzdF9kYXRlIjpmYWxzZSwibGFzdC1kYXRlIjpmYWxzZX19','2019-10-29 17:18:08.192430'),('awwfqj3vrtir937ufovvxw7fy66wibms','ZjI1NWFhNjNhMTQwY2YxMGY0YjdhNTVmNTc1YTI3ZjliNjRlNWMzMzp7ImlzX2xvZ2luIjp0cnVlLCJ1c2VyX2FjY291bnQiOiJqZXNzaWUifQ==','2019-10-30 07:09:18.758555'),('b3b7yxd0kbw0j4bbvxfvh4ceg1xdvgio','ZTQ4ZjE1YWM5ZGYxNmE5OWYzYmQ5OTU5ODA5Y2VhNmRhOWQ1ZTgwNTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJjMzQwNjYxZjI4NTgzNmE1ZGJhYmQwYzcyZmRlZDU4ZDQ1ZjcwZmUzIiwiaXNfbG9naW4iOmZhbHNlLCJ1c2VyX2FjY291bnQiOiJqZXNzaWUiLCJORVIiOnt9fQ==','2019-10-29 15:38:40.966163'),('kvxop60rqglhi70x3adouy30bdpbd401','YWJiMGM4NDg3YTE0NjVjOGExYTBiNDQ1MDdjNDFhOTg3YzQ4NDgyMDp7Ik5FUiI6eyJTLWxvYyI6ZmFsc2UsIkQtbG9jIjpmYWxzZSwiQi1vYmoiOmZhbHNlLCJmaXJzdF9kYXRlIjpmYWxzZSwibGFzdC1kYXRlIjpmYWxzZX19','2019-10-29 17:24:10.228698'),('xhrct3p7wxmow8sstl65c9zuq7hmye3q','YWJiMGM4NDg3YTE0NjVjOGExYTBiNDQ1MDdjNDFhOTg3YzQ4NDgyMDp7Ik5FUiI6eyJTLWxvYyI6ZmFsc2UsIkQtbG9jIjpmYWxzZSwiQi1vYmoiOmZhbHNlLCJmaXJzdF9kYXRlIjpmYWxzZSwibGFzdC1kYXRlIjpmYWxzZX19','2019-10-29 16:01:13.670006');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -495,4 +497,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-14 11:25:41
+-- Dump completed on 2019-10-16 19:15:20
