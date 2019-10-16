@@ -51,6 +51,17 @@ def signup(request):
         user_name = request.POST['user_name']
         user_account = request.POST['user_account']
         user_password = request.POST['user_password']
+        try:
+            user = User.objects.get(user_account=user_account)
+        except:
+            user = None
+        if user!=None:
+            message = user.username + "帳號已存在，請嘗試其他帳號！"
+            return render(request, 'tripblog/signup.html', locals())
+        else:
+            user = User.objects.create(user_name=user_name, user_account=user_account, password=user_password)
+            user.save()
+            return redirect(f'/tripblog/{user_account}')
 
 
 def login(request):

@@ -1,11 +1,11 @@
 <html>
 <form action="." method="POST" name="form1">
     {% csrf_token %}
-    <div>名稱：<input type="text" name="user_name" id="user_name"/></div>
     <div>帳號：<input type="text" name="user_account" id="user_account"/></div>
     <div>密碼：<input type="password" name="user_password" id="user_password"/></div>
+    <div>名稱：<input type="text" name="user_name" id="user_name"/></div>
     <div>
-    <input type="submit" name="button" id="button" value="登入" />
+    <input type="submit" name="button" id="button" value="註冊" />
     </div> 
     <span style="color:red">{{message}}</span>
 </form>
