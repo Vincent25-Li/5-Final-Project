@@ -68,6 +68,11 @@ def login(request):
         
         return render(request, "tripblog/login.html", locals())
 
+def logout(request, user_account=None):
+    del request.session['login_user']
+    del request.session['is_login']
+    return redirect(f'/tripblog/{user_account}')
+
 def article(request, user_account=None, article_id=None):
 
     user_name = check_useraccount_exist(user_account)

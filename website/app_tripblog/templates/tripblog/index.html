@@ -13,7 +13,9 @@
             </label>
         <form method="POST" id='headshot_upload' class="form-container" enctype="multipart/form-data", style='display:none'>
             {% csrf_token %}
+            {% if status and login_user == user_account %}
             <input type="file" id="headshot" name='headshot'>
+            {% endif %}
         </form>
     </div>
 </section>
