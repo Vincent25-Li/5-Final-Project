@@ -10,6 +10,7 @@ from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.template import loader
 from django.http import JsonResponse
+from django.http import HttpResponseRedirect
 
 from app_tripblog.models import User, UserArticles
 from app_tripblog.function_chatbot_ch import ChatbotObject
@@ -67,6 +68,7 @@ def signup(request):
 def login(request):
     # request.session['is_login'] = False
     if request.method == 'GET':
+        request.session['referer'] = request.META.get('HTTP_REFERER')
         return render(request, "tripblog/login.html", locals())
 
     elif request.method == 'POST':
@@ -80,7 +82,7 @@ def login(request):
                 user_articles = reversed(UserArticles.objects.filter(user_account__user_account=user_account))
                 request.session['login_user'] = user_account
                 request.session['is_login'] = True
-                return redirect(f'/tripblog/{user_account}/')
+                return redirect(request.session['referer'])
             else:
                 message = '帳號或密碼錯誤，請重新輸入！'
         except: 
@@ -91,7 +93,7 @@ def login(request):
 def logout(request, user_account=None):
     del request.session['login_user']
     del request.session['is_login']
-    return redirect(f'/tripblog/{user_account}')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def article(request, user_account=None, article_id=None):
     status = ''
