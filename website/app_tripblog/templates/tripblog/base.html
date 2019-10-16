@@ -18,7 +18,7 @@
             <a href="#menu"><span>Menu</span></a>
         </nav>
         <a href="/tripblog/{{ user_account }}" class="logo">{{ user_name }}'s Travel Blog</a>
-    </header>
+    </header>                                                                                  
 
     <!-- Menu -->
     <nav id="menu">
@@ -31,10 +31,10 @@
             
             
             {% if status %}
-            <button type="button" class="btn" onclick="location.href='/tripblog/{{ user_account }}/logout'"><span style="vertical-align: middle;">Logout</span></button>
+            <button type="button" onclick="location.href='/tripblog/{{ user_account }}/logout'"><span style="vertical-align: middle;">LOGOUT</span></button>
             {% else %}
-            <button type="button" class="btn" onclick="location.href='/tripblog/signup'"><span style="vertical-align: middle;">Sign up</span></button>
-            <button type="button" class="btn" onclick="location.href='/tripblog/login'"><span style="vertical-align: middle;">Login</span></button>
+            <button type="button" onclick="location.href='/tripblog/signup'"><span style="vertical-align: middle;">SIGH UP</span></button>
+            <button type="button" onclick="location.href='/tripblog/login'"><span style="vertical-align: middle;">LOGIN</span></button>
             {% endif %}
         </div>
     </nav>
@@ -52,8 +52,8 @@
 
             <textarea placeholder="Type message.." id="user_msg" name="user_msg" cols="20" wrap="hard" required></textarea>
 
-            <button type="button" id="chatbot_btn" class="btn"><span style="vertical-align: middle;">Send</span></button>
-            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+            <button type="button" id="chatbot_btn" class="butn"><span style="vertical-align: middle;">Send</span></button>
+            <button type="button" class="butn cancel" onclick="closeForm()">Close</button>
         </form>
     </div>
 

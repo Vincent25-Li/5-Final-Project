@@ -74,11 +74,11 @@ button,
 	color: #ffffff;
 	cursor: pointer;
 	display: inline-block;
-	font-family: "Montserrat", sans-serif;
-	height: 3.5em;
+	font-family: sans-serif;
+	height: 2em;
 	/* line-height: 3.5em; */
 	vertical-align: middle;
-	padding: 0 3.5em;
+	padding: 0 0.8em;
 	text-align: center;
 	text-decoration: none;
 	white-space: nowrap;
@@ -415,7 +415,7 @@ button,
 	.loginbutton {
 	position: absolute;
 	bottom: 5vh;
-	left: 5vh;
+	left: 3vh;
 	}
 /*scrollong*/
 		
@@ -544,17 +544,15 @@ button,
 }
 
 /* Set a style for the submit/send button */
-.form-container .btn {
+.form-container .butn {
 	position: relative;
 	background-color: #2bb3d7;
 	color: black;
-	padding: 16px 20px;
 	border: none;
 	cursor: pointer;
 	width: 100%;
 	margin-bottom: 10px;
 	opacity: 0.8;
-
 }
 
 /* Add a red background color to the cancel button */
@@ -563,7 +561,7 @@ button,
 }
 
 /* Add some hover effects to buttons */
-.form-container .btn:hover,
+.form-container .butn:hover,
 .open-button:hover {
 	opacity: 1;
 }
@@ -615,3 +613,4 @@ button,
 .edit_picture:hover {
 	cursor: pointer;
 }
+
