@@ -343,12 +343,21 @@ def new_album(request, user_account=None):
     if request.method == 'POST' and request.is_ajax():
         album_title = request.POST.get('album_title')
 
-        # user_id = User.objects.only('id').get(user_account=user_account)
-        # user_album = UserAlbums.objects.create(user_account=user_id, album_title=album_title)
-        # user_album.save()
+        user_id = User.objects.only('id').get(user_account=user_account)
+        user_album = UserAlbums.objects.create(user_account=user_id, album_title=album_title)
+        user_album.save()
+
+        # create new article directory
+        dir_path = os.path.join(settings.MEDIA_ROOT, user_account, 'albums', str(user_album.id))
+        try:
+            os.mkdir(dir_path)
+        except FileExistsError:
+            print(f"Directory {dir_path} already exists")
+
         response = {}
         response['redirect'] = f'/tripblog/{ user_account }/albums/'
         response['response'] = f'"{album_title}"新增成功'
+
         return JsonResponse(response)
 
         
