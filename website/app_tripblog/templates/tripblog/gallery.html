@@ -45,8 +45,6 @@
 </form>
 <label for="upload_imgs"><img src="{% static "tripblog/images/plus.png" %}" class="imginputplus"/></label>
 
-<img onclick="location.href=href='/tripblog/{{ user_account }}/albums/'" src="{% static "tripblog/images/plus.png" %}" class="imginputplus"/>
-
 <ul  class="row first">
     {% for photo in display_imgs %}
     <li><img src={{photo}}></li>
