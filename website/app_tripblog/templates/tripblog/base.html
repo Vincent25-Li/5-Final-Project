@@ -25,7 +25,7 @@
         <ul class="links">
             <li><a href="/tripblog/{{ user_account }}">Home</a></li>
             <li><a href="/tripblog/{{ user_account }}/new_article/">Add New Schedule</a></li>
-            <li><a href="/tripblog/{{ user_account }}/albums/">Album</a></li>
+            <li><a href="/tripblog/{{ user_account }}/albums/">Albums</a></li>
         </ul>
         <div class="loginbutton">
             
@@ -84,7 +84,7 @@
                     url: "/tripblog/{{ user_account }}/chatbot/",
                     type: "POST",
                     data: {
-                        "user_msg": user_msg,
+                        "user_msg": $('#user_msg').val(),
                     },
                     datatype: "json", 
                     success: data => {

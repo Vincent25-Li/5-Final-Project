@@ -1,15 +1,22 @@
 import numpy as np
 import tensorflow as tf
 import os, shutil
+from django.conf import settings
 
 
 class Image_Classifier:
-    def __init__(self, model_file, label_file, username, album, top_ranking=None):
-        self.model_file = model_file
-        self.label_file = label_file
-        self.username = username
-        self.album = album
-        self.top_ranking = top_ranking
+    def __init__(self):
+        self.model_file = os.path.join(settings.MEDIA_ROOT, 
+                                'models_weights', 'image_classifier', 'output_graph.pb')
+        self.label_file = os.path.join(settings.MEDIA_ROOT, 
+                                'models_weights', 'image_classifier', 'output_labels.txt')
+
+        self.graph = self.load_graph()
+        self.label = self.load_labels()
+        self.input_name = "import/Placeholder"
+        self.output_name = "import/final_result"
+        self.input_operation = self.graph.get_operation_by_name(self.input_name) 
+        self.output_operation = self.graph.get_operation_by_name(self.output_name)
 
     def load_graph(self): # load model and weights
         graph = tf.Graph()
@@ -21,6 +28,14 @@ class Image_Classifier:
             tf.import_graph_def(graph_def)
 
         return graph
+
+    def load_labels(self):
+        label = []
+    
+        proto_as_ascii_lines = tf.gfile.GFile(self.label_file).readlines() 
+        for l in proto_as_ascii_lines:
+            label.append(l.rstrip())
+        return label
 
     # decode, resize, normalize, return normalized image
     def read_tensor_from_image_file(self, img_fp,
@@ -51,41 +66,22 @@ class Image_Classifier:
 
         return result
 
-
-    def load_labels(self):
-        label = []
-    
-        #'n' bytes of the file (or whole file) in bytes mode or 'n' bytes of the string if in string (regular) mode.
-        proto_as_ascii_lines = tf.gfile.GFile(self.label_file).readlines() 
-        for l in proto_as_ascii_lines:
-            label.append(l.rstrip())
-        return label
-
-
     def predict(self, img_fp):
         input_height = 224
         input_width = 224
         input_mean = 0
         input_std = 255
-        input_layer = "Placeholder"
-        output_layer = "final_result"
 
-        graph = self.load_graph()
         t = self.read_tensor_from_image_file(
         img_fp,
         input_height=input_height,
         input_width=input_width,
         input_mean=input_mean,
-        input_std=input_std)
+        input_std=input_std) 
 
-        input_name = "import/" + input_layer
-        output_name = "import/" + output_layer
-        input_operation = graph.get_operation_by_name(input_name) # for tensorboard
-        output_operation = graph.get_operation_by_name(output_name)  
-
-        with tf.compat.v1.Session(graph=graph) as sess:
-            results = sess.run(output_operation.outputs[0], {
-            input_operation.outputs[0]: t
+        with tf.compat.v1.Session(graph=self.graph) as sess:
+            results = sess.run(self.output_operation.outputs[0], {
+            self.input_operation.outputs[0]: t
             })
             results = np.squeeze(results)
 

@@ -18,7 +18,7 @@ from app_tripblog.fn_image_classifier import Image_Classifier
 
 
 chatbot_object = ChatbotObject()
-
+img_classifier = Image_Classifier()
 ''' templates '''
 
 
@@ -94,6 +94,7 @@ def login(request):
 def logout(request, user_account=None):
     del request.session['login_user']
     del request.session['is_login']
+    # print(request.META.get('HTTP_REFERER'))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def article(request, user_account=None, article_id=None):
@@ -198,20 +199,37 @@ def chatbot(request, user_account=None):
         raise Http404
 
 def show_photos(request, user_account=None, albums='albums', album=None):
+    status = ''
     title = 'Gallery'
     user = User.objects.get(user_account=user_account)
     user_name = user.user_name
     album_path = os.path.join(settings.MEDIA_ROOT, user_account, albums, album)
     relative_path2cat = os.path.join('/media', user_account, albums, album)
     if request.method == 'GET':
-        # return render(request, 'tripblog/gallery.html', locals())
-    # elif request.method == 'POST':
-        model_file = os.path.join(settings.MEDIA_ROOT, 
-                                'models_weights', 'image_classifier', 'output_graph.pb')
-        label_file = os.path.join(settings.MEDIA_ROOT, 
-                                'models_weights', 'image_classifier', 'output_labels.txt')
-        img_classifier = Image_Classifier(model_file, label_file, user_account, album)
+        display_imgs = []
+        for category in os.listdir(album_path):
+            if category == '.DS_Store':
+                continue
+            for image in os.listdir(os.path.join(album_path, category)):
+                if image == '.DS_Store':
+                    continue
+                image_path = os.path.join(relative_path2cat, category, image)
 
+                if settings.MEDIA_ROOT.startswith('C:'): # for windows
+                    image_path = image_path.replace('\\', '/')
+                display_imgs.append(image_path)
+
+        if 'is_login' in request.session:
+            login_user = request.session['login_user']
+            status = 'login'
+
+        return render(request, 'tripblog/gallery.html', locals())
+    elif request.method == 'POST':
+        # model_file = os.path.join(settings.MEDIA_ROOT, 
+        #                         'models_weights', 'image_classifier', 'output_graph.pb')
+        # label_file = os.path.join(settings.MEDIA_ROOT, 
+        #                         'models_weights', 'image_classifier', 'output_labels.txt')
+        # img_classifier = Image_Classifier()
         duplicate_imgs = []
         display_imgs = []
         for img in request.FILES.getlist('upload_imgs'):
@@ -238,7 +256,10 @@ def show_photos(request, user_account=None, albums='albums', album=None):
                 if settings.MEDIA_ROOT.startswith('C:'): # for windows
                     image_path = image_path.replace('\\', '/')
                 display_imgs.append(image_path)
-
+        
+        if 'is_login' in request.session:
+            login_user = request.session['login_user']
+            status = 'login'
         return render(request, 'tripblog/gallery.html', locals())
 
 def ajax_show_photos(request, user_account=None, albums='albums', album=None, category=None):
