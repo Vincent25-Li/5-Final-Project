@@ -67,6 +67,7 @@ def signup(request):
 
 def login(request):
     # request.session['is_login'] = False
+    title='Login'
     if request.method == 'GET':
         request.session['referer'] = request.META.get('HTTP_REFERER')
         return render(request, "tripblog/login.html", locals())

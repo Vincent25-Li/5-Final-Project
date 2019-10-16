@@ -7,27 +7,28 @@
 <link rel="stylesheet" href={% static "tripblog/css/jquery.bsPhotoGallery.css" %} />
 <style>
     .cateselect {
-        margin-left: 2vw;
+        margin-left: 10vw;
         margin-bottom: 3vh;
         width: 200px;
     }
     .imginputplus{
         position: fixed;
         top:10vh;
-        right:2vw;
+        right:10vw;
         width: 25px;
         height: 25px;
     }
     .imginputplus:hover {
         cursor: pointer;
     }
+    
 
 </style>
 {% endblock %}
 
 {% block content %}
 <div style="height:10vh"></div>
-<form action="/">
+<form  action="/">
     <select class="cateselect" name="" id="select_cat">
         <option value="all">All</option>
         <option value="people">People</option>
@@ -44,8 +45,9 @@
 </form>
 <label for="upload_imgs"><img src="{% static "tripblog/images/plus.png" %}" class="imginputplus"/></label>
 
+<img onclick="location.href=href='/tripblog/{{ user_account }}/albums/'" src="{% static "tripblog/images/plus.png" %}" class="imginputplus"/>
 
-<ul class="row first">
+<ul  class="row first">
     {% for photo in display_imgs %}
     <li><img src={{photo}}></li>
     {% endfor %}
@@ -65,7 +67,7 @@
 <script>
     $(document).ready(function () {
         $('ul.first').bsPhotoGallery({
-            "classes": "col-xl-3 col-lg-2 col-md-4 col-sm-4",
+            "classes": "col-xl-2 col-lg-3 col-md-4 col-sm-4",
             "hasModal": true,
             "shortText": false
         });
@@ -86,7 +88,7 @@
                     }
 
                     $('ul.first').bsPhotoGallery({
-                        "classes": "col-xl-3 col-lg-2 col-md-4 col-sm-4",
+                        "classes": "col-xl-3 col-lg-4 col-md-4 col-sm-4",
                         "hasModal": true,
                         "shortText": false
                     });
