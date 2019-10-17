@@ -413,9 +413,9 @@ def new_album(request, user_account=None):
         data = serializers.serialize('json', user_albums)
 
         response = {}
-        response['redirect'] = f'/tripblog/{ user_account }/albums/'
-        response['response'] = f'"{album_title}"新增成功'
-        response['albums'] = data
+        # response['redirect'] = f'/tripblog/{ user_account }/albums/'
+        response['response'] = f'相簿"{album_title}"新增成功'
+        # response['albums'] = data
 
         return JsonResponse(response, safe=False)
 

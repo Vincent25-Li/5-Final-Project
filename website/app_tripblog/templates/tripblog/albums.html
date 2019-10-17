@@ -87,7 +87,8 @@
                         "album_title": album_title,
                     },
                     dataType: 'json',
-                    success: () => {
+                    success: (data) => {
+                        alert(data['response']);
                         window.location.replace(".");    
                     },
                 });
