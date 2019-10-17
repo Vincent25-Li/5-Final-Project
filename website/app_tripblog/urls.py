@@ -23,5 +23,5 @@ urlpatterns = [
     # path('<user>/blog_image_upload/', views.blog_image_upload), #in order to indicate to fxn by url
     path('<user_account>/chatbot/', views.chatbot, name='chatbot'),
     path('<user_account>/<albums>/<album>/', views.show_photos, name='show_photos'),
-    # path('<user_account>/<albums>/<album>/<category>/', views.ajax_show_photos), hihihihi
+    path('<user_account>/<albums>/<album>/<category>/', views.ajax_show_photos),
 ]
