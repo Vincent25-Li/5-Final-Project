@@ -1,45 +1,51 @@
-<html>
+{% extends 'tripblog/base.html' %}
 
-<head>
-    {% load static %}
-    <title>{{ title }}</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href={% static "tripblog/css/main.css" %} />
-    {% comment %} put css file here for each page {% endcomment %}
-    {% block css %}
-    <style>
-        .loginform {
-            position: fixed;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
-    {% endblock %}
-</head>
+{% block css %}
+<style>
+    #video_container {
+        margin: 0px auto;
+        width: 500px;
+        height: 375px;
+        border: 10px #333 solid;
+    }
+    #video_element {
+        width: 500px;
+        height: 375px;
+        background-color: #666;
+    }
+</style>
+{% endblock %}
 
-<body>
-    <!-- Header -->
-    <header id="header">
-        <a href="/tripblog/login/" class="logo">Tridition</a>
-    </header>
-
-    {% block content %}
-    <div>
-        <form class="loginform" action="." method="POST" name="form1">
-            {% csrf_token %}
-            <div>上傳範例照片：<input type="text" name="user_account" id="user_account" /></div>
-            <div>鏡頭：<input type="password" name="user_password" id="user_password" /></div>
-            <div>
-                <input type="submit" name="button" id="button" value="拍照" />
-            </div>
-            <span style="color:red">{{message}}</span>
-        </form>
+{% block content %}
+<div>
+    <form class="loginform" action="." method="POST" name="form1">
+        {% csrf_token %}
+        <div>上傳範例照片：<input type="text" name="user_account" id="user_account" /></div>
+        <div>鏡頭：<input type="password" name="user_password" id="user_password" /></div>
+        <div>
+            <input type="submit" name="button" id="button" value="拍照" />
+        </div>
+    </form>
+    <div id="video_container">
+        <video autoplay="true" id="video_element"></video>
     </div>
-    {% endblock %}
+</div>
+{% endblock %}
 
-</html>
+{% block script %}
+
+<script>
+    var video = document.querySelector("#video_element");
+
+    if (navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
+        video.srcObject = stream;
+        })
+        .catch(function (err0r) {
+        console.log("Something went wrong!");
+        });
+    }
+</script>
+
+{% endblock %}
