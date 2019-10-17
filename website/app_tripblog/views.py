@@ -185,6 +185,9 @@ def albums(request, user_account=None):
 
 def openpose(request, user_account=None):
     title = 'OpenPose'
+    user_name = check_useraccount_exist(user_account)
+    if not bool(user_name):
+        return HttpResponse(f'Page not found: user account "{user_account}" not exist')
     return render(request, 'tripblog/openpose.html', locals())
 
 ''' functions '''
@@ -413,11 +416,21 @@ def new_album(request, user_account=None):
         data = serializers.serialize('json', user_albums)
 
         response = {}
-        response['redirect'] = f'/tripblog/{ user_account }/albums/'
-        response['response'] = f'"{album_title}"新增成功'
-        response['albums'] = data
+        # response['redirect'] = f'/tripblog/{ user_account }/albums/'
+        response['response'] = f'相簿"{album_title}"新增成功'
+        # response['albums'] = data
 
         return JsonResponse(response, safe=False)
+
+def delete_album(self, user_account=None, user_album_id=None):
+    categories = ['architecture', 'food', 'nature', 'other', 'people']
+    user = User.objects.get(user_account=user_account)
+    UserAlbums.objects.filter(user_account_id=user.id, id=user_album_id).delete()
+    dir_path = os.path.join(settings.MEDIA_ROOT, user_account, 'albums', user_album_id)
+    shutil.rmtree(dir_path, ignore_errors=True)
+
+    return redirect(f'/tripblog/{user_account}/albums/')
+
 
         
 
