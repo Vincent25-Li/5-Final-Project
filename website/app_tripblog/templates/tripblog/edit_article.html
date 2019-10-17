@@ -171,7 +171,6 @@
 {% comment %} pack input infomation and send back {% endcomment %}
 <script>
     $(document).ready(() => {
-
         {% comment %} ajax to upload headshot {% endcomment %}
         $("input[type=submit]").click(event => {
             
@@ -208,7 +207,7 @@
 				post[i] = post_input[i].innerHTML
 			}
 			article_content['post'] = post
-            $.ajax({
+             $.ajax({
                 url: "/tripblog/{{ user_article.user_account }}/edit_article/{{ user_article.id }}/",
                 type: "POST",
                 data: {
@@ -219,9 +218,17 @@
                 success: response => {
                     window.location.href = response.redirect;
                 },
-            });
+            }); 
         });
 
+		let posts = {{ user_article.article_content.post | safe }}
+
+		for (i = 0; i < $('div.fr-element').length; i++){
+			$('div.fr-element').eq(i).find('p').remove();
+			$('span.fr-placeholder').eq(0).remove();
+			$('div.fr-element').eq(i).append(posts[i]);
+		};
+		
         // csrf code
         function getCookie(name) {
             var cookieValue = null;
