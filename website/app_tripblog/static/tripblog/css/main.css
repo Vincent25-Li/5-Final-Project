@@ -431,23 +431,23 @@ button,
 }
 /*以下是各相片顏色*/
 .photo_1 {
-	background-color: #efdefe;
-	transform: rotate(-1deg);
+	background-color: #8ddbff;
+	transform: rotate(-0.5deg);
 	transform-origin: top left;
 	text-decoration: none;
 }
 .photo_2 {
 	background-color: #a3f3d3;
-	transform: rotate(+1deg);
+	transform: rotate(+0.5deg);
     transform-origin: top left;
 }
 .photo_3 {
-	background-color: #0bbaa0;
+	background-color: #ffa3ff;
 	transform: rotate(-1deg);
     transform-origin: top left;
 }
 .photo_4 {
-	background-color: #00dfdf;
+	background-color: #ffb579;
 	transform: rotate(+1deg);
     transform-origin: top left;
 }
