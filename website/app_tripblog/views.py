@@ -185,6 +185,9 @@ def albums(request, user_account=None):
 
 def openpose(request, user_account=None):
     title = 'OpenPose'
+    user_name = check_useraccount_exist(user_account)
+    if not bool(user_name):
+        return HttpResponse(f'Page not found: user account "{user_account}" not exist')
     return render(request, 'tripblog/openpose.html', locals())
 
 ''' functions '''
