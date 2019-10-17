@@ -419,6 +419,16 @@ def new_album(request, user_account=None):
 
         return JsonResponse(response, safe=False)
 
+def delete_album(self, user_account=None, user_album_id=None):
+    categories = ['architecture', 'food', 'nature', 'other', 'people']
+    user = User.objects.get(user_account=user_account)
+    UserAlbums.objects.filter(user_account_id=user.id, id=user_album_id).delete()
+    dir_path = os.path.join(settings.MEDIA_ROOT, user_account, 'albums', user_album_id)
+    shutil.rmtree(dir_path, ignore_errors=True)
+
+    return redirect(f'/tripblog/{user_account}/albums/')
+
+
         
 
 

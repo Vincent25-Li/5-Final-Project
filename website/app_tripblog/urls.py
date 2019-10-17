@@ -13,6 +13,7 @@ urlpatterns = [
     path('<user_account>/new_article/', views.new_article, name='new_article'),
     path('<user_account>/edit_article/<article_id>/', views.edit_article, name='edit_article'),
     path('<user_account>/albums/', views.albums, name='albums'),
+    path('<user_account>/albums/<user_album_id>/delete/', views.delete_album, name='delete_album'),
     path('<user_account>/new_album/', views.new_album, name='new_album'),
     path('<user_account>/openpose/', views.openpose, name='openpose'),
 
