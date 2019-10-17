@@ -152,7 +152,10 @@ def edit_article(request, user_account=None, article_id=None):
         return HttpResponse(f'Page not found: user account "{user_account}" not exist')
 
     user_article = UserArticles.objects.get(id=article_id)
-
+    # print(user_article.article_content)
+    response = {}
+    response['user_article'] = user_article
+    response['article_content'] = user_article.article_content
     if request.method == 'GET':
         return render(request, 'tripblog/edit_article.html', locals())
     elif request.method == 'POST' and request.is_ajax():

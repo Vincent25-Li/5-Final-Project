@@ -171,7 +171,8 @@
 {% comment %} pack input infomation and send back {% endcomment %}
 <script>
     $(document).ready(() => {
-
+		let x = {{ user_article.article_content.post | safe }}
+		console.log(x[0])
         {% comment %} ajax to upload headshot {% endcomment %}
         $("input[type=submit]").click(event => {
             
@@ -208,7 +209,7 @@
 				post[i] = post_input[i].innerHTML
 			}
 			article_content['post'] = post
-            $.ajax({
+             $.ajax({
                 url: "/tripblog/{{ user_article.user_account }}/edit_article/{{ user_article.id }}/",
                 type: "POST",
                 data: {
@@ -219,9 +220,18 @@
                 success: response => {
                     window.location.href = response.redirect;
                 },
-            });
+            }); 
         });
 
+		let posts = {{ user_article.article_content.post | safe }}
+		//$('div.fr-element').each().append(posts)
+		console.log('before')
+		var i;
+		for (i = 0; i < $('div.fr-element').length; i++){
+			$('div.fr-element')[i].find('p').remove();
+			$('div.fr-element')[i].append(posts[i]);
+		}
+		console.log('after')
         // csrf code
         function getCookie(name) {
             var cookieValue = null;
