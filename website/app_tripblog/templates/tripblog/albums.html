@@ -5,11 +5,9 @@
 
 <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-<link rel="stylesheet" href={% static "tripblog/css/edit_article2.css" %}>
+<link rel="stylesheet" href={% static "tripblog/css/main.css" %}>
 <style>
-  .fornav {
-    margin-top: 8vh;
-  }
+
   .picDiv {
     padding: 10px;
     background-color: #CCCCCC;
@@ -23,11 +21,13 @@
   .addalbum {
     padding: 5px;
     margin: 10px;
-    
+  }
+  .add_album:hover {
+  cursor: pointer;
   }
   .albumDiv {
     float: left;
-    height: 250px;
+    height: 300px;
     width: 250px;
     text-align: center;
     margin-right: 10px;
@@ -39,12 +39,12 @@
 
 {% block content %}
 <div class="fornav"></div>
-<div class="addalbum"><span id='add_album'>新增相簿</span></div>
+<div class="addalbum"><span class="add_album" id='add_album'>新增相簿</span></div>
 <div class="normaldesc"></div>
 
-
-<div class="albumDiv">
 {% for user_album in user_albums %}
+<div class="albumDiv">
+
   <div class="picDiv">
     <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/">
     <img src="/media/{{ user_account }}/albums/{{ user_album.id }}/album_cover.jpg" width="200" height="200"
@@ -53,14 +53,14 @@
 
   <div class="albuminfo">
     <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/">{{ user_album.album_title }}</a><br/>
-    <span class="smalltext"></span><br>
+    <span></span><br>
     
-    <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/" class="smalltext"
+    <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/" 
       onClick="confirmLink('您確定要刪除這本相簿嗎？'); return document.returnValue">(刪除相簿)</a><br>
   </div>
-{% endfor %}
-</div>
 
+</div>
+{% endfor %}
 
 {% endblock %}
 
