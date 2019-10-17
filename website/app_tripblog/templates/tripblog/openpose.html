@@ -17,35 +17,103 @@
 {% endblock %}
 
 {% block content %}
-<div>
-    <form class="loginform" action="." method="POST" name="form1">
-        {% csrf_token %}
-        <div>上傳範例照片：<input type="text" name="user_account" id="user_account" /></div>
-        <div>鏡頭：<input type="password" name="user_password" id="user_password" /></div>
-        <div>
-            <input type="submit" name="button" id="button" value="拍照" />
-        </div>
-    </form>
-    <div id="video_container">
-        <video autoplay="true" id="video_element"></video>
-    </div>
+
+<form class="loginform" action="." method="POST" name="form1">
+    {% csrf_token %}
+    <div>上傳範例照片：<input type="text" name="user_account" id="user_account" /></div>
+    <div>鏡頭：<input type="password" name="user_password" id="user_password" /></div>
+</form>
+
+<div id="video_container">
+    <video autoplay="true" id="video_element"></video>
 </div>
+<div>
+    <button onclick='playPause()' name="playbutton">Play/Pause</button>
+    <button id="snap">Capture</button>
+</div>
+
+<canvas id="canvas" width='240' height='180'></canvas>
+
 {% endblock %}
 
 {% block script %}
 
 <script>
-    var video = document.querySelector("#video_element");
+    const video = document.getElementById("video_element");
+    const snap = document.getElementById('snap');
+    const canvas = document.getElementById('canvas');
 
+    function playPause(){
+        if (video.paused){
+            video.play();
+        }
+        else{
+            video.pause();
+        }
+    }
     if (navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices.getUserMedia({ video: true })
+        navigator.mediaDevices.getUserMedia({ video: true })
         .then(function (stream) {
         video.srcObject = stream;
         })
         .catch(function (err0r) {
         console.log("Something went wrong!");
         });
+    };
+
+    const context = canvas.getContext('2d');
+    snap.addEventListener('click', ()=>{
+        let cw = canvas.clientWidth;
+        let ch = canvas.clientHeight;
+        context.drawImage(video, 0, 0, cw, ch);
+        let image = context.getImageData(0, 0, cw, ch);
+        let image_pixel = image.data;
+        console.log(JSON.stringify(image_pixel))
+        $.ajax({
+            url: "/tripblog/{{ user_account }}/pose_analysis/",
+            type: "POST",
+            data: {
+                'image': JSON.stringify(image_pixel),
+            },
+            datatype: "json", 
+            success: response => {
+                console.log(response['response'])
+            },
+        });
+    });
+
+    // csrf code
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
     }
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
 </script>
 
 {% endblock %}
+
+{% comment %} let image = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
+        window.location.href = image; {% endcomment %}

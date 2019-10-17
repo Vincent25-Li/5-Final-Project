@@ -431,7 +431,15 @@ def delete_album(self, user_account=None, user_album_id=None):
 
     return redirect(f'/tripblog/{user_account}/albums/')
 
-
+def pose_analysis(request, user_account=None):
+    if request.method == 'POST' and request.is_ajax():
+        image = request.POST.get('image')
+        image = list(json.loads(image).values())
+        image = np.array(image).reshape(180, 240, -1)
+        
+        response = {}
+        response['response'] = 'good'
+        return JsonResponse(response)
         
 
 
