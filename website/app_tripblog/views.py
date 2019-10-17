@@ -11,6 +11,7 @@ from django.http import HttpResponse, Http404
 from django.template import loader
 from django.http import JsonResponse
 from django.http import HttpResponseRedirect
+from django.core import serializers
 
 from app_tripblog.models import User, UserArticles, UserAlbums
 from app_tripblog.function_chatbot_ch import ChatbotObject
@@ -167,19 +168,6 @@ def edit_article(request, user_account=None, article_id=None):
         response = {}
         response['redirect'] = f'/tripblog/{ user_account }/article/{ article_id }/'
         return JsonResponse(response)
-
-def albums(request, user_account=None):
-    title = "albums"
-    user_name = check_useraccount_exist(user_account)
-    if not bool(user_name):
-        return HttpResponse(f'Page not found: user account "{user_account}" not exist')
-    
-    user_albums = reversed(UserAlbums.objects.filter(user_account__user_account=user_account))
-    if request.method == 'GET':
-        if 'is_login' in request.session:
-            login_user = request.session['login_user']
-            status = 'login'
-        return render(request, 'tripblog/albums.html', locals())
     
 
 ''' functions '''
@@ -339,26 +327,49 @@ def delete_article(request, user_account=None):
         response['reply'] = 'success'
         return HttpResponse('')
 
+def albums(request, user_account=None):
+    title = "albums"
+    user_name = check_useraccount_exist(user_account)
+    if not bool(user_name):
+        return HttpResponse(f'Page not found: user account "{user_account}" not exist')
+    
+    user_albums = reversed(UserAlbums.objects.filter(user_account__user_account=user_account))
+    if request.method == 'GET':
+        if 'is_login' in request.session:
+            login_user = request.session['login_user']
+            status = 'login'
+        return render(request, 'tripblog/albums.html', locals())
+
 def new_album(request, user_account=None):
+    categories = ['architecture', 'food', 'nature', 'other', 'people']
     if request.method == 'POST' and request.is_ajax():
         album_title = request.POST.get('album_title')
+        user = User.objects.get(user_account=user_account)
 
-        user_id = User.objects.only('id').get(user_account=user_account)
-        user_album = UserAlbums.objects.create(user_account=user_id, album_title=album_title)
-        user_album.save()
+        try: 
+            user_albums = UserAlbums.objects.get(user_account_id=user.id, album_title=album_title)
 
-        # create new article directory
-        dir_path = os.path.join(settings.MEDIA_ROOT, user_account, 'albums', str(user_album.id))
-        try:
+        except UserAlbums.DoesNotExist:
+            user_album = UserAlbums.objects.create(user_account_id=user.id, album_title=album_title)
+            user_album.save()
+            
+            dir_path = os.path.join(settings.MEDIA_ROOT, user_account, 'albums', str(user_album.id))
             os.mkdir(dir_path)
-        except FileExistsError:
-            print(f"Directory {dir_path} already exists")
+        
+        # create subfolders for each category
+        for cat in categories:
+            os.mkdir(os.path.join(dir_path, cat))
+
+        # retrieve albums 
+        user_albums = UserAlbums.objects.filter(user_account_id=user.id)
+        data = serializers.serialize('json', user_albums)
 
         response = {}
         response['redirect'] = f'/tripblog/{ user_account }/albums/'
         response['response'] = f'"{album_title}"新增成功'
+        response['albums'] = data
 
-        return JsonResponse(response)
+        return JsonResponse(response, safe=False)
 
         
 

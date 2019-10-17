@@ -46,7 +46,8 @@
 <div class="albumDiv">
 {% for user_album in user_albums %}
   <div class="picDiv">
-    <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/"><img src="/media/{{ user_account }}/albums/{{ user_album.id }}/album_cover.jpg" width="200" height="200"
+    <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/">
+    <img src="/media/{{ user_account }}/albums/{{ user_album.id }}/album_cover.jpg" width="200" height="200"
         border="0" /></a>
   </div>
 
@@ -85,12 +86,9 @@
                     data: {
                         "album_title": album_title,
                     },
-                    datatype: "json", 
-                    success: data => {
-                        alert(data['response'])
-                    },
-                    complete: () =>{
-                      window.location.href = response.redirect;
+                    dataType: 'json',
+                    success: () => {
+                        window.location.replace(".");    
                     },
                 });
               };
