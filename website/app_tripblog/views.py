@@ -3,6 +3,7 @@ import json
 import shutil
 
 import numpy as np
+import random
 from matplotlib import pyplot as plt
 
 from django.shortcuts import render, redirect
@@ -34,6 +35,7 @@ def base(request):
 def index(request, user_account=None):
     title = 'homepage'
     status = ''
+    no = ['1','2','3','4']
     user_name = check_useraccount_exist(user_account)
     if not bool(user_name):
         return HttpResponse(f'Page not found: user account "{user_account}" not exist')

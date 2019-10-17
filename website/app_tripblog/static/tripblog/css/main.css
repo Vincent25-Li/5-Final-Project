@@ -419,7 +419,7 @@ button,
 	}
 /*scrollong*/
 		
-.slide_BH {/*相片的長寬高位置*/
+.articlephoto {/*相片的長寬高位置*/
 	position: relative;
 	top: 10vh;
 	padding:1.5vh;
@@ -430,23 +430,23 @@ button,
 	
 }
 /*以下是各相片顏色*/
-.one_BH {
+.photo_1 {
 	background-color: #efdefe;
 	transform: rotate(-1deg);
 	transform-origin: top left;
 	text-decoration: none;
 }
-.two_BH {
+.photo_2 {
 	background-color: #a3f3d3;
 	transform: rotate(+1deg);
     transform-origin: top left;
 }
-.three_BH {
+.photo_3 {
 	background-color: #0bbaa0;
 	transform: rotate(-1deg);
     transform-origin: top left;
 }
-.four_BH {
+.photo_4 {
 	background-color: #00dfdf;
 	transform: rotate(+1deg);
     transform-origin: top left;

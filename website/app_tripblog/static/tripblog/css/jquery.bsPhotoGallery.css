@@ -17,6 +17,7 @@ ul[data-bsp-ul-index] li {
     text-align:center;
     margin:1% auto;
     width:98%;
+    
 }
 #bsPhotoGalleryModal .modal-body {
     padding:0px !important;

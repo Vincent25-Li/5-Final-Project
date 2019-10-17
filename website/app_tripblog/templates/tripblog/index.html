@@ -25,7 +25,7 @@
 <div class="outer-wrapper_BH">
     <div class="wrapper_BH">
         {% for user_article in user_articles %}
-        <div id='article_{{user_article.id}}' class="slide_BH one_BH">
+        <div id='article_{{user_article.id}}' class="articlephoto photo_{{ no|random }}">
         {% if status and login_user == user_account %}
             <p class='delete_article' id='delete_{{user_article.id}}'>[X]</p>
             <p class='edit_picture' id='edit_{{user_article.id}}'>換圖片</p>
