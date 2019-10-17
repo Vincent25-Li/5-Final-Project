@@ -46,7 +46,8 @@
 <div class="albumDiv">
 {% for user_album in user_albums %}
   <div class="picDiv">
-    <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/"><img src="/media/{{ user_account }}/albums/{{ user_album.id }}/album_cover.jpg" width="200" height="200"
+    <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/">
+    <img src="/media/{{ user_account }}/albums/{{ user_album.id }}/album_cover.jpg" width="200" height="200"
         border="0" /></a>
   </div>
 
@@ -54,7 +55,7 @@
     <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/">{{ user_album.album_title }}</a><br/>
     <span class="smalltext"></span><br>
     
-    <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/" class="smalltext"
+    <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/delete/" class="smalltext"
       onClick="confirmLink('您確定要刪除這本相簿嗎？'); return document.returnValue">(刪除相簿)</a><br>
   </div>
 {% endfor %}
@@ -85,12 +86,10 @@
                     data: {
                         "album_title": album_title,
                     },
-                    datatype: "json", 
-                    success: data => {
-                        alert(data['response'])
-                    },
-                    complete: () =>{
-                      window.location.href = response.redirect;
+                    dataType: 'json',
+                    success: (data) => {
+                        alert(data['response']);
+                        window.location.replace(".");    
                     },
                 });
               };
