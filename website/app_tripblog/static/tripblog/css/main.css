@@ -419,7 +419,7 @@ button,
 	}
 /*scrollong*/
 		
-.slide_BH {/*相片的長寬高位置*/
+.articlephoto {/*相片的長寬高位置*/
 	position: relative;
 	top: 10vh;
 	padding:1.5vh;
@@ -430,24 +430,24 @@ button,
 	
 }
 /*以下是各相片顏色*/
-.one_BH {
-	background-color: #efdefe;
-	transform: rotate(-1deg);
+.photo_1 {
+	background-color: #8ddbff;
+	transform: rotate(-0.5deg);
 	transform-origin: top left;
 	text-decoration: none;
 }
-.two_BH {
+.photo_2 {
 	background-color: #a3f3d3;
-	transform: rotate(+1deg);
+	transform: rotate(+0.5deg);
     transform-origin: top left;
 }
-.three_BH {
-	background-color: #0bbaa0;
+.photo_3 {
+	background-color: #ffa3ff;
 	transform: rotate(-1deg);
     transform-origin: top left;
 }
-.four_BH {
-	background-color: #00dfdf;
+.photo_4 {
+	background-color: #ffb579;
 	transform: rotate(+1deg);
     transform-origin: top left;
 }
@@ -615,3 +615,6 @@ button,
 	cursor: pointer;
 }
 
+.fornav {
+    margin-top: 8vh;
+}
