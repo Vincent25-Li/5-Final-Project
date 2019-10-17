@@ -1,15 +1,13 @@
-CREATE DATABASE  IF NOT EXISTS `tripblog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `tripblog`;
--- MySQL dump 10.13  Distrib 8.0.16, for macos10.14 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.17, for macos10.14 (x86_64)
 --
 -- Host: 127.0.0.1    Database: tripblog
 -- ------------------------------------------------------
--- Server version	8.0.16
+-- Server version	8.0.17
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
- SET NAMES utf8 ;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -18,12 +16,39 @@ USE `tripblog`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `app_tripblog_albummodel`
+--
+
+DROP TABLE IF EXISTS `app_tripblog_albummodel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `app_tripblog_albummodel` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `adate` datetime(6) NOT NULL,
+  `alocation` varchar(200) NOT NULL,
+  `atitle` varchar(100) NOT NULL,
+  `adesc` longtext NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `app_tripblog_albummodel`
+--
+
+LOCK TABLES `app_tripblog_albummodel` WRITE;
+/*!40000 ALTER TABLE `app_tripblog_albummodel` DISABLE KEYS */;
+INSERT INTO `app_tripblog_albummodel` VALUES (1,'2019-09-21 07:54:23.965741','Taipei','Having fun in Taipei','3D2N in Taipei'),(2,'2019-09-21 07:55:08.889709','Kaohsiung','Kaohsiung 168','Korea Fish');
+/*!40000 ALTER TABLE `app_tripblog_albummodel` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `app_tripblog_chatbotcategory`
 --
 
 DROP TABLE IF EXISTS `app_tripblog_chatbotcategory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `app_tripblog_chatbotcategory` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `chatbot_category` varchar(40) NOT NULL,
@@ -48,7 +73,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `app_tripblog_chatbotcategory_ch`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `app_tripblog_chatbotcategory_ch` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `chatbot_category` varchar(40) NOT NULL,
@@ -73,7 +98,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `app_tripblog_chatbotqa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `app_tripblog_chatbotqa` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `chatbot_question` varchar(255) NOT NULL,
@@ -101,7 +126,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `app_tripblog_chatbotqa_ch`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `app_tripblog_chatbotqa_ch` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `chatbot_question` varchar(255) NOT NULL,
@@ -124,12 +149,42 @@ INSERT INTO `app_tripblog_chatbotqa_ch` VALUES (1,'test','抱歉，我不懂你�
 UNLOCK TABLES;
 
 --
+-- Table structure for table `app_tripblog_photomodel`
+--
+
+DROP TABLE IF EXISTS `app_tripblog_photomodel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `app_tripblog_photomodel` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `psubject` varchar(100) NOT NULL,
+  `pdate` datetime(6) NOT NULL,
+  `purl` varchar(100) NOT NULL,
+  `phit` int(11) NOT NULL,
+  `palbum_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `app_tripblog_photomo_palbum_id_b725dbd4_fk_app_tripb` (`palbum_id`),
+  CONSTRAINT `app_tripblog_photomo_palbum_id_b725dbd4_fk_app_tripb` FOREIGN KEY (`palbum_id`) REFERENCES `app_tripblog_albummodel` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `app_tripblog_photomodel`
+--
+
+LOCK TABLES `app_tripblog_photomodel` WRITE;
+/*!40000 ALTER TABLE `app_tripblog_photomodel` DISABLE KEYS */;
+INSERT INTO `app_tripblog_photomodel` VALUES (1,'Taipei1','2019-09-21 07:58:57.100283','Taipei1.jpg',0,1),(3,'Taipei2','2019-09-21 08:49:43.327517','Taipei2.jpg',0,1);
+/*!40000 ALTER TABLE `app_tripblog_photomodel` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `app_tripblog_user`
 --
 
 DROP TABLE IF EXISTS `app_tripblog_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `app_tripblog_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_name` varchar(20) NOT NULL,
@@ -156,7 +211,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `app_tripblog_useralbums`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `app_tripblog_useralbums` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `cover_picture` varchar(20) NOT NULL,
@@ -165,7 +220,7 @@ CREATE TABLE `app_tripblog_useralbums` (
   PRIMARY KEY (`id`),
   KEY `app_tripblog_useralb_user_account_id_5c257a2d_fk_app_tripb` (`user_account_id`),
   CONSTRAINT `app_tripblog_useralb_user_account_id_5c257a2d_fk_app_tripb` FOREIGN KEY (`user_account_id`) REFERENCES `app_tripblog_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -174,6 +229,7 @@ CREATE TABLE `app_tripblog_useralbums` (
 
 LOCK TABLES `app_tripblog_useralbums` WRITE;
 /*!40000 ALTER TABLE `app_tripblog_useralbums` DISABLE KEYS */;
+INSERT INTO `app_tripblog_useralbums` VALUES (62,'','test1',1),(63,'','test5',1),(65,'','test6',1);
 /*!40000 ALTER TABLE `app_tripblog_useralbums` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -183,7 +239,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `app_tripblog_userarticles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `app_tripblog_userarticles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `cover_picture` varchar(20) NOT NULL,
@@ -193,7 +249,7 @@ CREATE TABLE `app_tripblog_userarticles` (
   PRIMARY KEY (`id`),
   KEY `app_tripblog_userblo_user_account_id_963be6b7_fk_app_tripb` (`user_account_id`),
   CONSTRAINT `app_tripblog_userblo_user_account_id_963be6b7_fk_app_tripb` FOREIGN KEY (`user_account_id`) REFERENCES `app_tripblog_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -202,7 +258,7 @@ CREATE TABLE `app_tripblog_userarticles` (
 
 LOCK TABLES `app_tripblog_userarticles` WRITE;
 /*!40000 ALTER TABLE `app_tripblog_userarticles` DISABLE KEYS */;
-INSERT INTO `app_tripblog_userarticles` VALUES (1,'','photo one',1,'{\"post\": {\"0\": \"<p>vvvvv</p>\"}, \"schedule\": {\"0\": {\"spot\": [\"wwww\", \"......\"], \"time\": [\"9:00\", \"12:00\"]}}, \"last_date\": \"20191105\", \"first_date\": \"20191101\", \"transportation\": \"高鐵\"}'),(7,'','phototwo',1,'{\"post\": {\"0\": \"<p>dwqdqwd</p>\", \"1\": \"<p>ddddd</p>\"}, \"schedule\": {\"0\": {\"spot\": [\"\"], \"time\": [\"\"]}, \"1\": {\"spot\": [\"\"], \"time\": [\"\"]}}, \"last_date\": \"\", \"first_date\": \"20191202\", \"transportation\": \"飛機\"}'),(8,'','photo three',1,'{\"schedule\": {\"0\": {\"spot\": [\"KKKK\"], \"time\": [\"eeee\"]}}, \"last_date\": \"\", \"first_date\": \"\", \"transportation\": \"\"}'),(14,'','ｆｗｅｆ',1,'{\"post\": {\"0\": \"<p><br></p>\", \"1\": \"<p><br></p>\"}, \"schedule\": {\"0\": {\"spot\": [\"\", \"ffff\"], \"time\": [\"12:00\", \"1\"]}, \"1\": {\"spot\": [\"\"], \"time\": [\"\"]}}, \"last_date\": \"\", \"first_date\": \"\", \"transportation\": \"ｆｆｆｆ\"}');
+INSERT INTO `app_tripblog_userarticles` VALUES (1,'','photo one',1,'{\"post\": {\"0\": \"<p>vvvvv</p>\"}, \"schedule\": {\"0\": {\"spot\": [\"wwww\", \"......\"], \"time\": [\"9:00\", \"12:00\"]}}, \"last_date\": \"20191105\", \"first_date\": \"20191101\", \"transportation\": \"高鐵\"}'),(7,'','phototwo',1,'{\"post\": {\"0\": \"<p>dwqdqwd</p>\", \"1\": \"<p>ddddd</p>\"}, \"schedule\": {\"0\": {\"spot\": [\"\"], \"time\": [\"\"]}, \"1\": {\"spot\": [\"\"], \"time\": [\"\"]}}, \"last_date\": \"\", \"first_date\": \"20191202\", \"transportation\": \"飛機\"}'),(8,'','photo three',1,'{\"schedule\": {\"0\": {\"spot\": [\"KKKK\"], \"time\": [\"eeee\"]}}, \"last_date\": \"\", \"first_date\": \"\", \"transportation\": \"\"}');
 /*!40000 ALTER TABLE `app_tripblog_userarticles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -212,7 +268,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_group`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(150) NOT NULL,
@@ -236,7 +292,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_group_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_group_permissions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_id` int(11) NOT NULL,
@@ -264,7 +320,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_permission` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -292,7 +348,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `password` varchar(128) NOT NULL,
@@ -326,7 +382,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_user_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_user_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -354,7 +410,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_user_user_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_user_user_permissions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -382,7 +438,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `django_admin_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `django_admin_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `action_time` datetime(6) NOT NULL,
@@ -416,7 +472,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `django_content_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `django_content_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `app_label` varchar(100) NOT NULL,
@@ -442,7 +498,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `django_migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `django_migrations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `app` varchar(255) NOT NULL,
@@ -468,7 +524,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `django_session`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `django_session` (
   `session_key` varchar(40) NOT NULL,
   `session_data` longtext NOT NULL,
@@ -484,7 +540,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('6oj17dpz389t0y99at02gzzwgiyhxtsr','MGRiYTI3MmI2YzhlZjNhOTY5MTJlZjFhOGFlMmEyYzM3YmY1NTkzMjp7Ik5FUiI6e319','2019-10-29 15:41:19.250287'),('81upolgmbfkj7wfu3yplduov5ki78zju','YWJiMGM4NDg3YTE0NjVjOGExYTBiNDQ1MDdjNDFhOTg3YzQ4NDgyMDp7Ik5FUiI6eyJTLWxvYyI6ZmFsc2UsIkQtbG9jIjpmYWxzZSwiQi1vYmoiOmZhbHNlLCJmaXJzdF9kYXRlIjpmYWxzZSwibGFzdC1kYXRlIjpmYWxzZX19','2019-10-29 17:18:08.192430'),('awwfqj3vrtir937ufovvxw7fy66wibms','ZjI1NWFhNjNhMTQwY2YxMGY0YjdhNTVmNTc1YTI3ZjliNjRlNWMzMzp7ImlzX2xvZ2luIjp0cnVlLCJ1c2VyX2FjY291bnQiOiJqZXNzaWUifQ==','2019-10-30 07:09:18.758555'),('b3b7yxd0kbw0j4bbvxfvh4ceg1xdvgio','ZTQ4ZjE1YWM5ZGYxNmE5OWYzYmQ5OTU5ODA5Y2VhNmRhOWQ1ZTgwNTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJjMzQwNjYxZjI4NTgzNmE1ZGJhYmQwYzcyZmRlZDU4ZDQ1ZjcwZmUzIiwiaXNfbG9naW4iOmZhbHNlLCJ1c2VyX2FjY291bnQiOiJqZXNzaWUiLCJORVIiOnt9fQ==','2019-10-29 15:38:40.966163'),('kvxop60rqglhi70x3adouy30bdpbd401','YWJiMGM4NDg3YTE0NjVjOGExYTBiNDQ1MDdjNDFhOTg3YzQ4NDgyMDp7Ik5FUiI6eyJTLWxvYyI6ZmFsc2UsIkQtbG9jIjpmYWxzZSwiQi1vYmoiOmZhbHNlLCJmaXJzdF9kYXRlIjpmYWxzZSwibGFzdC1kYXRlIjpmYWxzZX19','2019-10-29 17:24:10.228698'),('xhrct3p7wxmow8sstl65c9zuq7hmye3q','YWJiMGM4NDg3YTE0NjVjOGExYTBiNDQ1MDdjNDFhOTg3YzQ4NDgyMDp7Ik5FUiI6eyJTLWxvYyI6ZmFsc2UsIkQtbG9jIjpmYWxzZSwiQi1vYmoiOmZhbHNlLCJmaXJzdF9kYXRlIjpmYWxzZSwibGFzdC1kYXRlIjpmYWxzZX19','2019-10-29 16:01:13.670006');
+INSERT INTO `django_session` VALUES ('2ojtjpe0pbs1dr2c2lasyd46f5q413hw','ODZmMjNmNDU0ZjBiZTcxY2FiNmFlMjY5YjY0NWY0ZDk3ZTA5YmI5ZTp7InJlZmVyZXIiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvdHJpcGJsb2cvamVzc2llL2FsYnVtcy82Mi8iLCJsb2dpbl91c2VyIjoiamVzc2llIiwiaXNfbG9naW4iOnRydWV9','2019-10-17 03:16:00.207028'),('6oj17dpz389t0y99at02gzzwgiyhxtsr','MGRiYTI3MmI2YzhlZjNhOTY5MTJlZjFhOGFlMmEyYzM3YmY1NTkzMjp7Ik5FUiI6e319','2019-10-29 15:41:19.250287'),('81upolgmbfkj7wfu3yplduov5ki78zju','YWJiMGM4NDg3YTE0NjVjOGExYTBiNDQ1MDdjNDFhOTg3YzQ4NDgyMDp7Ik5FUiI6eyJTLWxvYyI6ZmFsc2UsIkQtbG9jIjpmYWxzZSwiQi1vYmoiOmZhbHNlLCJmaXJzdF9kYXRlIjpmYWxzZSwibGFzdC1kYXRlIjpmYWxzZX19','2019-10-29 17:18:08.192430'),('awwfqj3vrtir937ufovvxw7fy66wibms','ZjI1NWFhNjNhMTQwY2YxMGY0YjdhNTVmNTc1YTI3ZjliNjRlNWMzMzp7ImlzX2xvZ2luIjp0cnVlLCJ1c2VyX2FjY291bnQiOiJqZXNzaWUifQ==','2019-10-30 07:09:18.758555'),('b3b7yxd0kbw0j4bbvxfvh4ceg1xdvgio','ZTQ4ZjE1YWM5ZGYxNmE5OWYzYmQ5OTU5ODA5Y2VhNmRhOWQ1ZTgwNTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJjMzQwNjYxZjI4NTgzNmE1ZGJhYmQwYzcyZmRlZDU4ZDQ1ZjcwZmUzIiwiaXNfbG9naW4iOmZhbHNlLCJ1c2VyX2FjY291bnQiOiJqZXNzaWUiLCJORVIiOnt9fQ==','2019-10-29 15:38:40.966163'),('kvxop60rqglhi70x3adouy30bdpbd401','YWJiMGM4NDg3YTE0NjVjOGExYTBiNDQ1MDdjNDFhOTg3YzQ4NDgyMDp7Ik5FUiI6eyJTLWxvYyI6ZmFsc2UsIkQtbG9jIjpmYWxzZSwiQi1vYmoiOmZhbHNlLCJmaXJzdF9kYXRlIjpmYWxzZSwibGFzdC1kYXRlIjpmYWxzZX19','2019-10-29 17:24:10.228698'),('lgnu91asv7kuj89yx4wichxwhtzldma8','YmZlODIyMzAxOTZiYzI4N2JiOWYyYmMyNGM5OGJjNTlhNmU3NTQwODp7InJlZmVyZXIiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvdHJpcGJsb2cvamVzc2llLyIsImxvZ2luX3VzZXIiOiJqZXNzaWUiLCJpc19sb2dpbiI6dHJ1ZX0=','2019-10-16 11:39:52.973309'),('qew6hn222pwlj72xe3m9ih5qi6n8zcde','OThjOWUyMTk4ZTZkMjhkZTJmOWNjY2ZlZDBiZjU2YTM1OTBlMmU5NTp7Ik5FUiI6eyJTLWxvYyI6ZmFsc2UsIkQtbG9jIjpmYWxzZSwiQi1vYmoiOmZhbHNlLCJmaXJzdF9kYXRlIjpmYWxzZSwibGFzdC1kYXRlIjpmYWxzZX0sInJlZmVyZXIiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvdHJpcGJsb2cvamVzc2llLyIsImxvZ2luX3VzZXIiOiJqZXNzaWUiLCJpc19sb2dpbiI6dHJ1ZX0=','2019-10-16 11:35:47.347688'),('tvixc1vl7cxb9echmmntdnhzxshaimlr','ZDViMTYwMjEzNGNhYzNjMDZjYWRjMmQ3ZWJkNjVhNDgyNmMxZjI3Mzp7InJlZmVyZXIiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvdHJpcGJsb2cvamVzc2llL2FsYnVtcy8yLyIsImxvZ2luX3VzZXIiOiJqZXNzaWUiLCJpc19sb2dpbiI6dHJ1ZX0=','2019-10-16 12:16:49.034992'),('xhrct3p7wxmow8sstl65c9zuq7hmye3q','YWJiMGM4NDg3YTE0NjVjOGExYTBiNDQ1MDdjNDFhOTg3YzQ4NDgyMDp7Ik5FUiI6eyJTLWxvYyI6ZmFsc2UsIkQtbG9jIjpmYWxzZSwiQi1vYmoiOmZhbHNlLCJmaXJzdF9kYXRlIjpmYWxzZSwibGFzdC1kYXRlIjpmYWxzZX19','2019-10-29 16:01:13.670006');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -497,4 +553,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-16 19:15:20
+-- Dump completed on 2019-10-17 11:21:02
