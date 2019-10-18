@@ -437,14 +437,28 @@ def delete_album(self, user_account=None, user_album_id=None):
 
     return redirect(f'/tripblog/{user_account}/albums/')
 
+def get_model_image(request, user_account=None):
+    if request.method == 'POST' and request.is_ajax():
+        image = request.POST.get('image')
+        width = int(request.POST.get('w'))
+        height = int(request.POST.get('h'))
+        image = list(json.loads(image).values())
+        image = np.array(image).reshape(height, width, -1)
+        print(image.shape)
+        response = {}
+        response['response'] = 'OK'
+        return JsonResponse(response)
+
 def pose_analysis(request, user_account=None):
     if request.method == 'POST' and request.is_ajax():
         image = request.POST.get('image')
+        width = int(request.POST.get('w'))
+        height = int(request.POST.get('h'))
         image = list(json.loads(image).values())
-        image = np.array(image).reshape(180, 320, -1)
+        image = np.array(image).reshape(height, width, -1)
         
         response = {}
-        response['response'] = 'good'
+        response['response'] = 'OK'
         return JsonResponse(response)
         
 

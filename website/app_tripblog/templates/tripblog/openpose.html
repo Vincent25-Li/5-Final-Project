@@ -31,6 +31,7 @@
     <button type="button">分析</button>
     <div id="empty_photo"></div>
 </div>
+<img id='model_img'>
 
 
 <div id="video_container">
@@ -47,6 +48,44 @@
 {% block script %}
 
 <script>
+    {% comment %} upload picture shown on page and pass img to server {% endcomment %}
+    $('#upload_imgs').change(event => {
+        if(event.target.files && event.target.files[0]){
+            let reader = new FileReader();
+            reader.onload = function(){
+                const dataURL = reader.result;
+                const width = 320;
+                const height = 180;
+                $('#model_img').attr('src', dataURL).width(width).height(height);
+            };
+            reader.readAsDataURL(event.target.files[0]);
+
+            {% comment %} pass img to server {% endcomment %}
+            let img = document.getElementById('model_img')
+            let canvas = document.createElement('canvas')
+            const width = 320;
+            const height = 180;
+            const model = canvas.getContext('2d');
+            model.drawImage(img, 0, 0)
+            model_img = model.getImageData(0, 0, width, height).data
+
+            $.ajax({
+                url: "/tripblog/{{ user_account }}/model_pose/",
+                type: "POST",
+                data: {
+                    'image': JSON.stringify(model_img),
+                    'w': width,
+                    'h': height,
+                },
+                datatype: "json", 
+                success: response => {
+                    console.log(response['response'])
+                },
+            });
+        };
+    });
+
+    {% comment %} get video pixels {% endcomment %}
     const video = document.getElementById("video_element");
     const snap = document.getElementById('snap');
     const canvas = document.getElementById('canvas');
@@ -82,6 +121,8 @@
             type: "POST",
             data: {
                 'image': JSON.stringify(image_pixel),
+                'w': cw,
+                'h': ch
             },
             datatype: "json", 
             success: response => {

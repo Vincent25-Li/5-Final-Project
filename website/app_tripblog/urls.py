@@ -18,6 +18,7 @@ urlpatterns = [
     path('<user_account>/openpose/', views.openpose, name='openpose'),
 
     # function
+    path('<user_account>/model_pose/', views.get_model_image, name='get_model_image'),
     path('<user_account>/pose_analysis/', views.pose_analysis, name='pose_analysis'),
     path('<user_account>/delete_article/', views.delete_article, name='delete_article'),
     path('<user_account>/headshot_upload/', views.headshot_upload),
