@@ -17,6 +17,7 @@ from django.core import serializers
 from app_tripblog.models import User, UserArticles, UserAlbums
 from app_tripblog.function_chatbot_ch import ChatbotObject
 from app_tripblog.fn_image_classifier import Image_Classifier
+from app_tripblog.cyclegan import CycleGAN ###load cyclegan
 
 
 chatbot_object = ChatbotObject()
@@ -461,5 +462,30 @@ def check_useraccount_exist(user_account):
     else:
         return None
         
-def cyclegan(request):
-    pass
+def blog_image_upload(request, user_account=None, article_id=None):
+    if request.method == 'POST' and request.is_ajax():
+        blog_image = request.FILES['blog_image'] # retrieve post image
+
+        user = User.objects.get(user_account=user_account)
+        print(user,'====================================')
+        user_article = UserArticles.objects.get(id=article_id)
+        print(user_article,'====================================')
+
+        # define stored media path
+        blog_image_path = os.path.join(settings.MEDIA_ROOT, user_account,'articles', str(user_article.id) ,'original','blog_image.jpg')
+        # store image at local side
+        with open(blog_image_path, 'wb+') as destination:
+            for chunk in blog_image.chunks():
+                destination.write(chunk)
+
+        # ###===
+        # #img process w/ our model
+        # GAN = CycleGAN(image_folder=blog_image_path) #物件實體化,指定img_forder的argument
+        # GAN.load_model_and_weights(GAN.G_B2A)
+        # GAN.load_model_and_generate_synthetic_images()
+        # ###===
+        # # return JsonResponse({'blog_image_src': f'/media/{user}/blogs/original/blog_image.jpg'}) #return original img 
+        # return JsonResponse({'blog_image_src': f'/media/{user_account}/articles/16/transfer/blog_image.j_synthetic.png'}) # return cyclegan img
+
+    else:
+        raise Http404
