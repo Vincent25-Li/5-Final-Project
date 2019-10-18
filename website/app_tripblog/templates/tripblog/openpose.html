@@ -25,7 +25,7 @@
 <div class="upload_photo">
     <form action="" id="upload_photo_form" method='POST' enctype='multipart/form-data' style='display:none'>
         {% csrf_token %}
-        <input type="file" name='upload_imgs' accept=".png, .jpg, .jpeg" multiple id='upload_imgs'>
+        <input type="file" name='upload_imgs' accept=".png, .jpg, .jpeg" enctype="multipart/form-data", id='upload_imgs'>
     </form>
     <label for="upload_imgs"><button type="button">上傳圖片</button></label>
     <button type="button">分析</button>
