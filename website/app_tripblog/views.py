@@ -478,6 +478,9 @@ def blog_image_upload(request, user_account=None, article_id=None):
             for chunk in blog_image.chunks():
                 destination.write(chunk)
 
+    else:
+        raise Http404
+    
         # ###===
         # #img process w/ our model
         # GAN = CycleGAN(image_folder=blog_image_path) #物件實體化,指定img_forder的argument
@@ -487,5 +490,4 @@ def blog_image_upload(request, user_account=None, article_id=None):
         # # return JsonResponse({'blog_image_src': f'/media/{user}/blogs/original/blog_image.jpg'}) #return original img 
         # return JsonResponse({'blog_image_src': f'/media/{user_account}/articles/16/transfer/blog_image.j_synthetic.png'}) # return cyclegan img
 
-    else:
-        raise Http404
+    
