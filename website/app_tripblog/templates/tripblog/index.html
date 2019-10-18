@@ -35,18 +35,21 @@
             <img src= "/media/{{ user_account }}/articles/{{ user_article.id }}/cover.jpg" alt=""/>{{ user_article.article_title }}</a>
         </div>
         {% endfor %}
+
+
+        <div class="articlephoto photo_1">
+            <!-- show img => catch ajax return result-->
+            <label for="blog_image">
+                    <img id='blog_image_shown' src="/media/{{ user_account }}/articles/original/blog_image.jpg"/>
+            </label>
+            <!-- to catch upload img information -->
+            <form method="POST" id='blog_image_upload' class="form-container" enctype="multipart/form-data">
+                <input type="file" id="blog_image" name='blog_image'> <!--upload botton -->
+            </form>
+        </div>
     </div>
     <!-- Oliver fxn test -->
-    <div class="slide_BH four_BH">photo four
-        <!-- show img => catch ajax return result-->
-        <label for="blog_image">
-                <img id='blog_image_shown' src="/media/{{ user_account }}/articles/{{ user_article.id }}/original/blog_image.jpg?test=3"/>
-        </label>
-        <!-- to catch upload img information -->
-        <form method="POST" id='blog_image_upload' class="form-container" enctype="multipart/form-data">
-            <input type="file" id="blog_image" name='blog_image'> <!--upload botton -->
-        </form>
-    </div>
+    
     <!-- Oliver fxn test -->
 </div>
 {% endblock %}
@@ -80,7 +83,7 @@
                 let data = new FormData($('#blog_image_upload').get(0));
                 
                 $.ajax({
-                    url: "/tripblog/{{user_account}}/blog_image_upload/16/", 
+                    url: "/tripblog/{{user_account}}/blog_image_upload/16/",
                     {% comment %} introduce to view by the url {% endcomment %}
                     type: "POST",
                     data: data,
@@ -91,7 +94,7 @@
                         $('#blog_image_shown').attr('src', data['blog_image_src']+'?test='+Math.floor(Math.random()*100+1));
                     },
                 });
-                $("#blog_image").val('');    
+                $("#blog_image").val('');
             });
 
         {% comment %} ajax to delete article {% endcomment %}
