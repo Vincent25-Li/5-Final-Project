@@ -21,6 +21,8 @@
   .addalbum {
     padding: 5px;
     margin: 10px;
+    width: 50px;
+    height: 50px;
   }
   .add_album:hover {
   cursor: pointer;
@@ -28,9 +30,9 @@
   .albumDiv {
     float: left;
     height: 300px;
-    width: 250px;
+    width: 220px;
     text-align: center;
-    margin-right: 10px;
+    margin-right: 30px;
     margin-bottom: 5px;
   }
   .allalbums {
@@ -46,18 +48,14 @@
 
 <div class="allalbums">
   
-  <div class="addalbum"><span class="add_album" id='add_album'>新增相簿</span></div>
+  <div class="addalbum"><img class="add_album" id='add_album' src="{% static "tripblog/images/plus.png" %}" /></div>
   
   {% for user_album in user_albums %}
   <div class="albumDiv">
-    <div class="picDiv">
-      <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/">
-      <img src="/media/{{ user_account }}/albums/{{ user_album.id }}/album_cover.jpg" width="200" height="200"
-          border="0" /></a>
-    </div>
-    <div class="albuminfo">
-      <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/">{{ user_album.album_title }}</a><br/>
-      <span></span><br>
+    
+    <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/"><img src="{% static "tripblog/images/folder-icon.png" %}"/></a>
+    <div>
+      <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/">{{ user_album.album_title }}</a><br>
       <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/delete/"
         onClick="confirmLink('您確定要刪除這本相簿嗎？'); return document.returnValue">(刪除相簿)</a><br>
     </div>
@@ -79,7 +77,7 @@
 
           {% comment %} ajax to add new album {% endcomment %}
           $("#add_album").click(event => {
-              let album_title = prompt("請輸入相簿名稱：")
+              let album_title = prompt("請輸入新增的相簿名稱：")
             
               if (album_title !== null){
                 $.ajax({
