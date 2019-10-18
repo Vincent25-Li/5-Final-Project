@@ -29,7 +29,7 @@
         var modal = '';
         modal += '<div class="modal fade" id="bsPhotoGalleryModal" tabindex="-1" role="dialog" style="margin-top:10vh;"';
         modal += 'aria-labelledby="myModalLabel" aria-hidden="true">';
-        modal += '<div class="modal-dialog modal-lg"><div class="modal-content">';
+        modal += '<div class="modal-dialog modal-md"><div class="modal-content">';
         modal += '<div class="modal-body"></div></div></div></div>';
         $('body').append(modal);
       }
