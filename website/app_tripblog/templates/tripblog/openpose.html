@@ -3,36 +3,44 @@
 {% block css %}
 <style>
     #video_container {
-        margin: 0px auto;
-        width: 500px;
-        height: 375px;
-        border: 10px #333 solid;
+        width: 640px;
+        position: fixed;
+        right: 5vw;
+        top: 15vh;
     }
     #video_element {
-        width: 500px;
-        height: 375px;
+        width: 640px;
+        height: 360px;
         background-color: #666;
+    }
+    .upload_photo {
+        margin-top: 15vh;
+        margin-left: 5vw;
     }
 </style>
 {% endblock %}
 
 {% block content %}
 
-<form class="loginform" action="." method="POST" name="form1">
-    {% csrf_token %}
-    <div>上傳範例照片：<input type="text" name="user_account" id="user_account" /></div>
-    <div>鏡頭：<input type="password" name="user_password" id="user_password" /></div>
-</form>
+<div class="upload_photo">
+    <form action="" id="upload_photo_form" method='POST' enctype='multipart/form-data' style='display:none'>
+        {% csrf_token %}
+        <input type="file" name='upload_imgs' accept=".png, .jpg, .jpeg" multiple id='upload_imgs'>
+    </form>
+    <label for="upload_imgs"><button type="button">上傳圖片</button></label>
+    <button type="button">分析</button>
+    <div id="empty_photo"></div>
+</div>
+
 
 <div id="video_container">
     <video autoplay="true" id="video_element"></video>
+    <button onclick='playPause()' name="playbutton">播放/暫停</button>
+    <button id="snap">擷取</button>
+    <div>
+        <canvas id="canvas" width='320' height='180'></canvas>
+    </div>
 </div>
-<div>
-    <button onclick='playPause()' name="playbutton">Play/Pause</button>
-    <button id="snap">Capture</button>
-</div>
-
-<canvas id="canvas" width='240' height='180'></canvas>
 
 {% endblock %}
 

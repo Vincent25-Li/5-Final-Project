@@ -440,7 +440,7 @@ def pose_analysis(request, user_account=None):
     if request.method == 'POST' and request.is_ajax():
         image = request.POST.get('image')
         image = list(json.loads(image).values())
-        image = np.array(image).reshape(180, 240, -1)
+        image = np.array(image).reshape(180, 320, -1)
         
         response = {}
         response['response'] = 'good'
