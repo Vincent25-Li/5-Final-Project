@@ -35,7 +35,7 @@
 
 
 <div id="video_container">
-    <video autoplay="true" id="video_element"></video>
+    <video id="video_element"></video>
     <button onclick='playPause()' name="playbutton">播放/暫停</button>
     <button id="snap">擷取</button>
     <div>
@@ -93,8 +93,10 @@
     function playPause(){
         if (video.paused){
             video.play();
+            var take_image = setInterval(get_pose, 10000)
         }
         else{
+            clearInterval(take_image);
             video.pause();
         }
     }
@@ -108,8 +110,10 @@
         });
     };
 
-    const context = canvas.getContext('2d');
-    snap.addEventListener('click', ()=>{
+    snap.addEventListener('click', get_pose);
+
+    function get_pose(){
+        const context = canvas.getContext('2d');
         let cw = canvas.clientWidth;
         let ch = canvas.clientHeight;
         context.drawImage(video, 0, 0, cw, ch);
@@ -129,7 +133,7 @@
                 console.log(response['response'])
             },
         });
-    });
+    };
 
     // csrf code
     function getCookie(name) {

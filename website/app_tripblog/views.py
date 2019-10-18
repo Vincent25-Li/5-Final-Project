@@ -444,7 +444,7 @@ def get_model_image(request, user_account=None):
         height = int(request.POST.get('h'))
         image = list(json.loads(image).values())
         image = np.array(image).reshape(height, width, -1)
-        print(image.shape)
+
         response = {}
         response['response'] = 'OK'
         return JsonResponse(response)
@@ -456,7 +456,7 @@ def pose_analysis(request, user_account=None):
         height = int(request.POST.get('h'))
         image = list(json.loads(image).values())
         image = np.array(image).reshape(height, width, -1)
-        
+
         response = {}
         response['response'] = 'OK'
         return JsonResponse(response)
