@@ -35,6 +35,18 @@
         </div>
         {% endfor %}
     </div>
+    <!-- Oliver fxn test -->
+    <div class="slide_BH four_BH">photo four
+        <!-- show img => catch ajax return result-->
+        <label for="blog_image">
+                <img id='blog_image_shown' src="/media/{{ user_account }}/articles/{{ user_article.id }}/original/blog_image.jpg?test=3"/>
+        </label>
+        <!-- to catch upload img information -->
+        <form method="POST" id='blog_image_upload' class="form-container" enctype="multipart/form-data">
+            <input type="file" id="blog_image" name='blog_image'> <!--upload botton -->
+        </form>
+    </div>
+    <!-- Oliver fxn test -->
 </div>
 {% endblock %}
 
@@ -60,7 +72,27 @@
             });
             $("#headshot").val('');
         });
-        
+
+        {% comment %} Oliver fxn testing   {% endcomment %}
+            $("#blog_image").change(event => {
+                
+                let data = new FormData($('#blog_image_upload').get(0));
+                
+                $.ajax({
+                    url: "/tripblog/{{user_account}}/blog_image_upload/16/", 
+                    {% comment %} introduce to view by the url {% endcomment %}
+                    type: "POST",
+                    data: data,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: data => {
+                        $('#blog_image_shown').attr('src', data['blog_image_src']+'?test='+Math.floor(Math.random()*100+1));
+                    },
+                });
+                $("#blog_image").val('');    
+            });
+
         {% comment %} ajax to delete article {% endcomment %}
         $('p.delete_article').click(event=>{
             let id = event.target.id.split('_')[1];
