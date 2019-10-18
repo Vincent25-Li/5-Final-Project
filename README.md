@@ -25,3 +25,8 @@ git commit -m "message"
 git push (no other info required)
 
 
+2019/10/18 please use bellow command for Oliver's package
+
+git clone https://www.github.com/keras-team/keras-contrib.git
+cd keras-contrib
+python setup.py install
