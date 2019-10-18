@@ -433,23 +433,28 @@ button,
 .photo_1 {
 	background-color: #8ddbff;
 	transform: rotate(-0.5deg);
-	transform-origin: top left;
+	transform-origin: top;
 	text-decoration: none;
 }
 .photo_2 {
 	background-color: #a3f3d3;
 	transform: rotate(+0.5deg);
-    transform-origin: top left;
+    transform-origin: top;
 }
 .photo_3 {
 	background-color: #ffa3ff;
 	transform: rotate(-1deg);
-    transform-origin: top left;
+    transform-origin: top;
 }
 .photo_4 {
 	background-color: #ffb579;
 	transform: rotate(+1deg);
-    transform-origin: top left;
+    transform-origin: top;
+}
+.photo_5 {
+	background-color: #ff7979;
+	transform: rotate(+0deg);
+    transform-origin: top;
 }
 /*相片牆翻轉*/
 .outer-wrapper_BH {/*外div，讓滾輪上下與左右互換*/
@@ -607,11 +612,21 @@ button,
 .edit_picture {
 	position: absolute;
 	top: 13px;
+	right: 5%;
 	background-color: #a7d9e7;
 	
 }
-
 .edit_picture:hover {
+	cursor: pointer;
+}
+
+.style_picture {
+	position: absolute;
+	top: 33px;
+	background-color: #a7d9e7;
+	right: 5%;
+}
+.style_picture:hover {
 	cursor: pointer;
 }
 

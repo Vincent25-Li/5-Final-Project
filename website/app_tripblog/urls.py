@@ -18,6 +18,7 @@ urlpatterns = [
     path('<user_account>/openpose/', views.openpose, name='openpose'),
 
     # function
+    path('<user_account>/pose_analysis/', views.pose_analysis, name='pose_analysis'),
     path('<user_account>/delete_article/', views.delete_article, name='delete_article'),
     path('<user_account>/headshot_upload/', views.headshot_upload),
     path('<user_account>/blog_image_upload/<article_id>/', views.blog_image_upload), #in order to indicate to fxn by url

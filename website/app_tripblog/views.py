@@ -36,7 +36,7 @@ def base(request):
 def index(request, user_account=None):
     title = 'homepage'
     status = ''
-    no = ['1','2','3','4']
+    no = ['1','2','3','4','5']
     user_name = check_useraccount_exist(user_account)
     if not bool(user_name):
         return HttpResponse(f'Page not found: user account "{user_account}" not exist')
@@ -155,7 +155,10 @@ def edit_article(request, user_account=None, article_id=None):
         return HttpResponse(f'Page not found: user account "{user_account}" not exist')
 
     user_article = UserArticles.objects.get(id=article_id)
-
+    # print(user_article.article_content)
+    response = {}
+    response['user_article'] = user_article
+    response['article_content'] = user_article.article_content
     if request.method == 'GET':
         return render(request, 'tripblog/edit_article.html', locals())
     elif request.method == 'POST' and request.is_ajax():
@@ -434,7 +437,15 @@ def delete_album(self, user_account=None, user_album_id=None):
 
     return redirect(f'/tripblog/{user_account}/albums/')
 
-
+def pose_analysis(request, user_account=None):
+    if request.method == 'POST' and request.is_ajax():
+        image = request.POST.get('image')
+        image = list(json.loads(image).values())
+        image = np.array(image).reshape(180, 320, -1)
+        
+        response = {}
+        response['response'] = 'good'
+        return JsonResponse(response)
         
 
 

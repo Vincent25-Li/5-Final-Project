@@ -54,7 +54,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-SESSION_COOKIE_AGE = 180
+SESSION_COOKIE_AGE = 1800
 
 ROOT_URLCONF = 'website.urls'
 
@@ -144,3 +144,5 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880 # the maximum size in bytes when accessing request.body or request.POST is 5MB
