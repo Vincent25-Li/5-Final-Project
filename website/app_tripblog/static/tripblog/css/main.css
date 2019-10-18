@@ -612,11 +612,21 @@ button,
 .edit_picture {
 	position: absolute;
 	top: 13px;
+	right: 5%;
 	background-color: #a7d9e7;
 	
 }
-
 .edit_picture:hover {
+	cursor: pointer;
+}
+
+.style_picture {
+	position: absolute;
+	top: 33px;
+	background-color: #a7d9e7;
+	right: 5%;
+}
+.style_picture:hover {
 	cursor: pointer;
 }
 
