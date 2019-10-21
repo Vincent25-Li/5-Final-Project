@@ -6,6 +6,7 @@ import json
 import pandas as pd
 import numpy as np
 import jieba
+import nltk
 from collections import Counter
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy import sparse
@@ -18,8 +19,6 @@ from django.conf import settings
 
 dict_path = os.path.join(settings.MEDIA_ROOT, 'models_weights', 'chatbot', 'dict.txt')
 jieba.set_dictionary(dict_path)
-
-tf.reset_default_graph()
 
 class ChatbotObject():
     def __init__ (self):
@@ -37,19 +36,9 @@ class ChatbotObject():
         
         self.questions['vector'] = self.questions['chatbot_question'].apply(self.tfidf)
         
-        '''load parameters and model for NER'''
-        self.word2idx = self.read_json(os.path.join(settings.MEDIA_ROOT, 'models_weights', 'chatbot', 'dict_trip.json'))
-        self.idx2word = {i: w for w, i in self.word2idx.items()}
-        self.tag2idx = self.read_json(os.path.join(settings.MEDIA_ROOT, 'models_weights', 'chatbot', 'tag_trip.json'))
-        self.idx2tag = {i: t for t, i in self.tag2idx.items()}
-        self.embeddings = sparse.load_npz(os.path.join(settings.MEDIA_ROOT, 'models_weights', 'chatbot', 'embeddings.npz'))
-
-        self.ner_graph = tf.Graph()
-        with self.ner_graph.as_default():
-            self.ner_session = tf.Session()
-            with self.ner_session.as_default():
-                self.ner_model = load_model(os.path.join(settings.MEDIA_ROOT, 'models_weights', 'chatbot', 'ner_w_embedding.h5'))
-        # self.ner_graph = tf.compat.v1.get_default_graph()
+        '''load model for NER'''
+        chatbot_clf_path = os.path.join(settings.MEDIA_ROOT, 'models_weights','chatbot', 'ner_crf_nltk.pkl')
+        self.ner_model_crf = pickle.load(open(chatbot_clf_path, 'rb'))
         
             
     def jiebacut_all(self,item):
@@ -109,18 +98,58 @@ class ChatbotObject():
         return reply
 
     def ner(self, user_msg):
-        with self.ner_graph.as_default():
-            with self.ner_session.as_default():
-                max_len = 10
-                user_msg_cut = list(jieba.cut(user_msg))
-                X_msg = [self.word2idx[word] if word in self.word2idx else self.word2idx['UNK'] for word in user_msg_cut]
-                X_msg_pad = pad_sequences(maxlen=max_len, sequences=[X_msg], padding='post', value=self.word2idx['ENDPAD'])
-                X_msg_embed = np.array(self.embeddings[X_msg_pad[0]].toarray())[np.newaxis]
-                X_msg_pad_text = [self.idx2word[idx] for idx in X_msg_pad[0]]
-                y_msg_pred = self.ner_model.predict(X_msg_embed)
-                y_msg_pred = np.argmax(y_msg_pred, axis=-1)[0]
-                y_msg_tag = [self.idx2tag[pred] for pred in y_msg_pred]
-                print(f'{X_msg_pad_text}\n{y_msg_tag}')
-                return X_msg_pad_text, y_msg_tag
+        user_msg_cut = list(jieba.cut(user_msg))
+        user_msg_wp = nltk.pos_tag(user_msg_cut)
+        X_msg = sent2features(user_msg_wp)
+        y_msg_pred = self.ner_model_crf.predict([X_msg])
+        print(f'{user_msg_cut}\n{y_msg_pred}')
+        return user_msg_cut, y_msg_pred[0]
+
+def word2features(sent, i):
+    word = sent[i][0]
+    postag = sent[i][1]
+
+    features = {
+        'bias': 1.0,
+        'word.lower()': word.lower(),
+        'word[-3:]': word[-3:],
+        'word[-2:]': word[-2:],
+        'word.isupper()': word.isupper(),
+        'word.istitle()': word.istitle(),
+        'word.isdigit()': word.isdigit(),
+        'postag': postag,
+        'postag[:2]': postag[:2],
+    }
+    if i > 0:
+        word1 = sent[i-1][0]
+        postag1 = sent[i-1][1]
+        features.update({
+            '-1:word.lower()': word1.lower(),
+            '-1:word.istitle()': word1.istitle(),
+            '-1:word.isupper()': word1.isupper(),
+            '-1:postag': postag1,
+            '-1:postag[:2]': postag1[:2],
+        })
+    else:
+        features['BOS'] = True
+
+    if i < len(sent)-1:
+        word1 = sent[i+1][0]
+        postag1 = sent[i+1][1]
+        features.update({
+            '+1:word.lower()': word1.lower(),
+            '+1:word.istitle()': word1.istitle(),
+            '+1:word.isupper()': word1.isupper(),
+            '+1:postag': postag1,
+            '+1:postag[:2]': postag1[:2],
+        })
+    else:
+        features['EOS'] = True
+
+    return features
+
+
+def sent2features(sent):
+    return [word2features(sent, i) for i in range(len(sent))]
 
         

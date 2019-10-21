@@ -79,62 +79,7 @@
             document.getElementById("myForm").style.display = "none";
         }
     </script>
-    <script>
-        $(document).ready(() => {
-
-            {% comment %} ajax for chatbot to deal user message {% endcomment %}
-            $("#chatbot_btn").click(event => {
-                let user_msg = "<div style='text-align:right;margin-bottom:10px;'><span style='background-color: #009FCC;line-height: 22px;padding: 3px;border-radius: 10px;'>" + $('#user_msg').val() + "</span></div>";
-                $("#chat_window_V").append(user_msg)
-                $.ajax({
-                    url: "/tripblog/{{ user_account }}/chatbot/",
-                    type: "POST",
-                    data: {
-                        "user_msg": $('#user_msg').val(),
-                    },
-                    datatype: "json", 
-                    success: data => {
-                        reply = "<div style='margin-bottom:10px;'><span style='background-color: #FFDD55;line-height: 22px;padding: 3px;border-radius: 10px;'>" + data['reply'] + "</span></div>";
-                        $("#chat_window_V").append(reply);
-                    },
-					complete: function(){
-						$('#chat_window_V').scrollTop(9999999);
-					}
-                });
-                $("#user_msg").val('');
-            });
-
-            // csrf code
-            function getCookie(name) {
-                var cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    var cookies = document.cookie.split(';');
-                    for (var i = 0; i < cookies.length; i++) {
-                        var cookie = cookies[i].trim();
-                        // Does this cookie string begin with the name we want?
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
-            }
-            var csrftoken = getCookie('csrftoken');
-        
-            function csrfSafeMethod(method) {
-                // these HTTP methods do not require CSRF protection
-                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-            }
-            $.ajaxSetup({
-                beforeSend: function(xhr, settings) {
-                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                    }
-                }
-            });
-        });
-    </script>
+    
     {% comment %} put js file here for each page {% endcomment %}
     {% block script %}
     {% endblock %}
