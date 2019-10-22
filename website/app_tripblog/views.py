@@ -61,7 +61,7 @@ def signup(request):
         except:
             user = None
         if user!=None:
-            message = user.username + "帳號已存在，請嘗試其他帳號！"
+            message = request.POST['user_account'] + "帳號已存在，請嘗試其他帳號！"
             return render(request, 'tripblog/signup.html', locals())
         else:
             user_folder = os.path.join(settings.MEDIA_ROOT, user_account)
