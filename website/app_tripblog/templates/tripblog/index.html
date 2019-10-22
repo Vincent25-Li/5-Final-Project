@@ -28,29 +28,21 @@
         <div id='article_{{user_article.id}}' class="articlephoto photo_{{ no|random }}">
         {% if status and login_user == user_account %}
             <p class='delete_article' id='delete_{{user_article.id}}'>[X]</p>
-            <p class='edit_picture' id='edit_{{user_article.id}}'>換圖片</p>
-            <p class='style_picture' id='style_{{user_article.id}}'>換風格</p>
+            <label for="article_cover_{{user_article.id}}">
+                <p class='edit_picture' id='edit_{{user_article.id}}'>換圖片</p>
+            </label>
+            <form method="POST" id='article_cover_upload' class="form-container" enctype="multipart/form-data", style='display:none'>   
+                <input type="file" class='upload_article_cover' id="article_cover_{{user_article.id}}" name='article_cover', style='display:none'> 
+            </form>         
+            <label for="article_cover_change">
+                <p class='style_picture' id='style_{{user_article.id}}'>換風格</p>
+            </label>
         {% endif %}
             <a href="/tripblog/{{ user_account }}/article/{{ user_article.id }}">
-            <img src= "/media/{{ user_account }}/articles/{{ user_article.id }}/cover.jpg" alt=""/>{{ user_article.article_title }}</a>
+            <img id='article_cover_shown'src= "/media/{{ user_account }}/articles/{{ user_article.id }}/original/cover.jpg?*cachebuster*" alt=""/>{{ user_article.article_title }}</a>
         </div>
         {% endfor %}
 
-
-        <!-- <div class="articlephoto photo_1">
-            
-            <label for="blog_image">
-                    <img id='blog_image_shown' src="/media/{{ user_account }}/articles/original/blog_image.jpg"/>
-            </label>
-            
-            <form method="POST" id='blog_image_upload' class="form-container" enctype="multipart/form-data">
-                <input type="file" id="blog_image" name='blog_image'> 
-            </form>
-        </div> -->
-    </div>
-    <!-- Oliver fxn test -->
-    
-    <!-- Oliver fxn test -->
 </div>
 {% endblock %}
 
@@ -78,12 +70,13 @@
         });
 
         {% comment %} Oliver fxn testing   {% endcomment %}
-            $("#blog_image").change(event => {
+            $(".upload_article_cover").change(event => {
                 
-                let data = new FormData($('#blog_image_upload').get(0));
-                
+                let data = new FormData($('#article_cover_upload').get(0));
+                let id = event.target.id.split('_')[2];
+                console.log(id)
                 $.ajax({
-                    url: "/tripblog/{{user_account}}/blog_image_upload/16/",
+                    url: "/tripblog/{{user_account}}/article_cover_upload/"+id+"/",
                     {% comment %} introduce to view by the url {% endcomment %}
                     type: "POST",
                     data: data,
@@ -91,10 +84,10 @@
                     processData: false,
                     contentType: false,
                     success: data => {
-                        $('#blog_image_shown').attr('src', data['blog_image_src']+'?test='+Math.floor(Math.random()*100+1));
+                        $('#article_cover_shown').attr('src', data['article_cover_src']+'?test='+Math.floor(Math.random()*100+1));
                     },
                 });
-                $("#blog_image").val('');
+                $("#article_cover").val('');
             });
 
         {% comment %} ajax to delete article {% endcomment %}
@@ -115,6 +108,7 @@
             };
         })
 
+        
         // csrf code
         function getCookie(name) {
             var cookieValue = null;

@@ -22,8 +22,8 @@ from app_tripblog.cyclegan import CycleGAN ###load cyclegan
 
 chatbot_object = ChatbotObject()
 img_classifier = Image_Classifier()
+# GAN = CycleGAN()
 ''' templates '''
-
 
 # base template
 def base(request):
@@ -476,32 +476,38 @@ def check_useraccount_exist(user_account):
     else:
         return None
         
-def blog_image_upload(request, user_account=None, article_id=None):
+def article_cover_upload(request, user_account=None, article_id=None):
     if request.method == 'POST' and request.is_ajax():
-        blog_image = request.FILES['blog_image'] # retrieve post image
+        article_cover = request.FILES['article_cover'] # retrieve post image
 
         user = User.objects.get(user_account=user_account)
-        print(user,'====================================')
+        # print('user is :', user,'====================================') #jessie
         user_article = UserArticles.objects.get(id=article_id)
-        print(user_article,'====================================')
+        # print('user_article is :', user_article ,'====###======') #jessie:TEST
+        # print('user_article.article_title is :', user_article.article_title ,'====###======') #TEST
+        # print('user_article.id is :', user_article.id ,'====###======') #16
+        user_article_id = str(user_article.id)
 
         # define stored media path
-        blog_image_path = os.path.join(settings.MEDIA_ROOT, user_account,'articles', str(user_article.id) ,'original','blog_image.jpg')
+        article_cover_path = os.path.join(settings.MEDIA_ROOT, user_account,'articles', user_article_id ,'original','cover.jpg')
         # store image at local side
-        with open(blog_image_path, 'wb+') as destination:
-            for chunk in blog_image.chunks():
+        with open(article_cover_path, 'wb+') as destination:
+            for chunk in article_cover.chunks():
                 destination.write(chunk)
+        #img process w/ our model
+        GAN = CycleGAN(image_folder=article_cover_path, user_account = user_account, user_article_id = user_article_id ) #物件實體化,指定img_forder的argument
+        # print('user_account :', user_account, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
+        # print('user_article_id :', user_article_id, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&') 
+        GAN.load_model_and_weights(GAN.G_B2A)
+        GAN.load_model_and_generate_synthetic_images()   
+
+        #return JsonResponse({'article_cover_src': f'/media/{user_account}/articles/{user_article.id}/transfer/cover.j_synthetic.png'}) 
+        # return cyclegan img
+
+        return JsonResponse({'article_cover_src': f'/media/{user_account}/articles/{user_article.id}/original/cover.jpg'})
 
     else:
         raise Http404
     
-        # ###===
-        # #img process w/ our model
-        # GAN = CycleGAN(image_folder=blog_image_path) #物件實體化,指定img_forder的argument
-        # GAN.load_model_and_weights(GAN.G_B2A)
-        # GAN.load_model_and_generate_synthetic_images()
-        # ###===
-        # # return JsonResponse({'blog_image_src': f'/media/{user}/blogs/original/blog_image.jpg'}) #return original img 
-        # return JsonResponse({'blog_image_src': f'/media/{user_account}/articles/16/transfer/blog_image.j_synthetic.png'}) # return cyclegan img
 
     

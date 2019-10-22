@@ -36,6 +36,8 @@ from django.template import loader # from class #test
 # from studentsapp.models import student
 # from studentsapp.forms import PostForm
 from app_tripblog import load_data
+from app_tripblog.models import User, UserArticles, UserAlbums
+
 
 
 np.random.seed(seed=12345)
@@ -57,7 +59,7 @@ np.random.seed(seed=12345)
 # ###cycle gan class###
 class CycleGAN():
     def __init__(self, lr_D=2e-4, lr_G=2e-4, image_shape=(256*1, 256*1, 3),
-                 date_time_string_addition='_test', image_folder='summer2winter_yosemite'):
+                 date_time_string_addition='_test', image_folder='summer2winter_yosemite', user_account='jessie', user_article_id='1'):
         self.img_shape = image_shape
         self.channels = self.img_shape[-1]
         self.normalization = InstanceNormalization
@@ -75,6 +77,11 @@ class CycleGAN():
         self.epochs = 51  ### choose multiples of 25 since the models are save each 25th epoch
         self.save_interval = 1
         self.synthetic_pool_size = 50
+
+        #To load database
+
+        self.user_account = user_account
+        self.article_id = user_article_id
 
         # Linear decay of learning rate, for both discriminators and generators
         self.use_linear_decay = False
@@ -227,7 +234,9 @@ class CycleGAN():
                                    nr_B_train_imgs=nr_B_train_imgs,
                                    nr_A_test_imgs=nr_A_test_imgs,
                                    nr_B_test_imgs=nr_B_test_imgs,
-                                   subfolder=image_folder)
+                                   subfolder=image_folder,
+                                   user_account= self.user_account,   ###
+                                   article_id=self.article_id)     ###
 
         self.A_train = data["trainA_images"]
         self.B_train = data["trainB_images"]
@@ -272,7 +281,7 @@ class CycleGAN():
         ########################################
         
         ############測試時解除標註##############
-        self.load_model_and_generate_synthetic_images()
+        #self.load_model_and_generate_synthetic_images()
         #########################################
 #===============================================================================
 # Architecture functions
@@ -885,7 +894,7 @@ class CycleGAN():
                 print(f'name : {name}') #name : user_im_synthetic.png
                 if self.channels == 1:
                     image = image[:, :, 0]
-                toimage(image, cmin=-1, cmax=1).save(os.path.join(settings.MEDIA_ROOT, 'jessie','blogs','transfer', name))
+                toimage(image, cmin=-1, cmax=1).save(os.path.join(settings.MEDIA_ROOT, 'jessie','articles','16','transfer', name))
 
             # # Test A images
             # for i in range(len(synthetic_images_A)):

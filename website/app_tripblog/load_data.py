@@ -2,17 +2,19 @@ import os
 import numpy as np
 from PIL import Image
 from keras.utils import Sequence
+from app_tripblog.models import User, UserArticles, UserAlbums
+
 #from skimage.io import imread
 
 
 def load_data(nr_of_channels, batch_size=1, nr_A_train_imgs=None, nr_B_train_imgs=None,
               nr_A_test_imgs=None, nr_B_test_imgs=None, subfolder='',
-              generator=False, D_model=None, use_multiscale_discriminator=False, use_supervised_learning=False, REAL_LABEL=1.0):
+              generator=False, D_model=None, use_multiscale_discriminator=False, use_supervised_learning=False, REAL_LABEL=1.0, user_account='jessie', article_id='1'):
 
-    trainA_path = os.path.join('media', user_account ,'articles', user_article.id, 'trainA')
-    trainB_path = os.path.join('media', user_account ,'articles', user_article.id, 'trainB')
-    testA_path = os.path.join('media', user_account ,'articles', user_article.id, 'original')
-    testB_path = os.path.join('media', user_account ,'articles', user_article.id, 'transfer')
+    trainA_path = os.path.join('media', user_account,'articles', article_id , 'trainA')
+    trainB_path = os.path.join('media', user_account,'articles', article_id , 'trainB')
+    testA_path = os.path.join('media',  user_account,'articles', article_id , 'original')
+    testB_path = os.path.join('media', user_account,'articles', article_id , 'transfer')
 
     trainA_image_names = os.listdir(trainA_path)
     if nr_A_train_imgs != None:
