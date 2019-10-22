@@ -13,6 +13,7 @@ from django.template import loader
 from django.http import JsonResponse
 from django.http import HttpResponseRedirect
 from django.core import serializers
+from django.views.decorators.csrf import csrf_exempt
 
 from app_tripblog.models import User, UserArticles, UserAlbums
 from app_tripblog.function_chatbot_ch import ChatbotObject
@@ -99,10 +100,12 @@ def login(request):
         return render(request, "tripblog/login.html", locals())
 
 def logout(request, user_account=None):
+    temp_user = request.session['login_user']
     del request.session['login_user']
     del request.session['is_login']
     # print(request.META.get('HTTP_REFERER'))
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return redirect(f'/tripblog/{temp_user}/')
+    # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def article(request, user_account=None, article_id=None):
     status = ''
@@ -121,11 +124,15 @@ def article(request, user_account=None, article_id=None):
 
 def new_article(request, user_account=None):
     title = 'new_article'
+    status = ''
     user_name = check_useraccount_exist(user_account)
     if not bool(user_name):
         return HttpResponse(f'Page not found: user account "{user_account}" not exist')
     
     if request.method == 'GET':
+        if 'is_login' in request.session:
+            login_user = request.session['login_user']
+            status = 'login'
         return render(request, 'tripblog/new_article.html', locals())
     elif request.method == 'POST' and request.is_ajax():
         article_title = request.POST['article_title']
@@ -150,6 +157,7 @@ def new_article(request, user_account=None):
         
 def edit_article(request, user_account=None, article_id=None):
     title = 'article_edit'
+    status = ''
     user_name = check_useraccount_exist(user_account)
     if not bool(user_name):
         return HttpResponse(f'Page not found: user account "{user_account}" not exist')
@@ -160,6 +168,9 @@ def edit_article(request, user_account=None, article_id=None):
     response['user_article'] = user_article
     response['article_content'] = user_article.article_content
     if request.method == 'GET':
+        if 'is_login' in request.session:
+            login_user = request.session['login_user']
+            status = 'login'
         return render(request, 'tripblog/edit_article.html', locals())
     elif request.method == 'POST' and request.is_ajax():
         article_title = request.POST['article_title']
@@ -191,6 +202,11 @@ def albums(request, user_account=None):
 
 def openpose(request, user_account=None):
     title = 'OpenPose'
+    status = ''
+    if 'is_login' in request.session:
+            login_user = request.session['login_user']
+            status = 'login'
+    
     user_name = check_useraccount_exist(user_account)
     if not bool(user_name):
         return HttpResponse(f'Page not found: user account "{user_account}" not exist')
@@ -380,6 +396,7 @@ def show_photos(request, user_account=None, albums='albums', album=None):
             status = 'login'
         return render(request, 'tripblog/gallery.html', locals())
 
+@csrf_exempt
 def ajax_show_photos(request, user_account=None, albums='albums', album=None, category=None):
     if request.method =='POST' and request.is_ajax():
         display_imgs = []
