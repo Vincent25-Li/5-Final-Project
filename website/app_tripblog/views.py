@@ -288,7 +288,7 @@ def chatbot(request, user_account=None):
             confirmation = ['y', 'yes', '確認']
             cancellation = ['n', 'no', '取消', '我要取消']
             
-            if user_msg in confirmation and mission_completed==5:
+            if user_msg.lower() in confirmation and mission_completed==5:
                 user_id = User.objects.only('id').get(user_account=user_account)
                 article_title = f"{request.session['first_date']}~{request.session['last_date']}: {request.session['S-loc']}至{request.session['D-loc']}旅遊記"
                 article_content = {
@@ -303,7 +303,7 @@ def chatbot(request, user_account=None):
                 response['id'] = user_article.id
                 reply = '已安排您的行程於遊記裡'
                 del request.session['NER']
-            elif user_msg in cancellation and mission_completed==5:
+            elif user_msg.lower() in cancellation and mission_completed==5:
                 reply = f'{user_name}您的旅程已取消'
                 del request.session['NER']
             elif mission_completed == 5:
