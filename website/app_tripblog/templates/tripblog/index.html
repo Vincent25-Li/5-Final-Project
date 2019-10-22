@@ -115,38 +115,7 @@
             };
         })
 
-        {% comment %} ajax for chatbot to deal user message {% endcomment %}
-            $("#chatbot_btn").click(event => {
-                let user_msg = "<div style='text-align:right;margin-bottom:10px;'><span style='background-color: #009FCC;line-height: 22px;padding: 3px;border-radius: 10px;'>" + $('#user_msg').val() + "</span></div>";
-                $("#chat_window_V").append(user_msg)
-                $.ajax({
-                    url: "/tripblog/{{ user_account }}/chatbot/",
-                    type: "POST",
-                    data: {
-                        "user_msg": $('#user_msg').val(),
-                    },
-                    datatype: "json", 
-                    success: data => {
-                        reply = "<div style='margin-bottom:10px;'><span style='background-color: #FFDD55;line-height: 22px;padding: 3px;border-radius: 10px;'>" + data['response'] + "</span></div>";
-                        $("#chat_window_V").append(reply);
-                        if('title' in data){
-                            let article = "<div id='article_"+data['id']+"' class='articlephoto photo_{{ no|random }}'>"
-                            $('div.wrapper_BH').prepend(article)
-
-                            let article_id = '#article_'+data['id']
-                            $(article_id).append("<p class='delete_article' id='delete_"+data['id']+"'>[X]</p>")
-                            $(article_id).append("<p class='edit_picture' id='edit_"+data['id']+"'>換圖片</p>")
-                            $(article_id).append("<p class='style_picture' id='style_"+data['id']+"'>換風格</p>")
-                            $(article_id).append("<a href='/tripblog/{{ user_account }}/article/"+data['id']+"'>"+data['title']+"</a>")
-                        }
-                    },
-					complete: function(){
-						$('#chat_window_V').scrollTop(9999999);
-					}
-                });
-                $("#user_msg").val('');
-            });
-
+        
         // csrf code
         function getCookie(name) {
             var cookieValue = null;

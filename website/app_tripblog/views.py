@@ -236,10 +236,10 @@ def chatbot(request, user_account=None):
         reply_index = chatbot_object.get_index(user_msg)
 
         response = {}
-        if chatbot_object.category_id[reply_index][0] == 1 and 'NER' not in request.session:
+        if chatbot_object.category_id[reply_index-1][0] == 1 and 'NER' not in request.session:
             reply = chatbot_object.chat_reply(reply_index)
 
-        elif chatbot_object.category_id[reply_index][0] == 2 or 'NER' in request.session:
+        elif chatbot_object.category_id[reply_index-1][0] == 2 or 'NER' in request.session:
             
             if 'NER' not in request.session:
                 request.session['NER'] = True
