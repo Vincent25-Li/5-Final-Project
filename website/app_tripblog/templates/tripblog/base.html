@@ -23,13 +23,14 @@
     <!-- Menu -->
     <nav id="menu">
         <ul class="links">
-            {% if status %}
+            {% if status and login_user == user_account %}
             <li><a href="/tripblog/{{ user_account }}">Home</a></li>
             <li><a href="/tripblog/{{ user_account }}/albums/">Albums</a></li>
             <li><a href="/tripblog/{{ user_account }}/new_article/">Add New Schedule</a></li>
             <li><a href="/tripblog/{{ user_account }}/openpose/">Openpose</a></li>
             {% else %}
             <li><a href="/tripblog/{{ user_account }}">Home</a></li>
+            <li><a href="/tripblog/{{ user_account }}/albums/">Albums</a></li>
             <li><a href="/tripblog/{{ user_account }}/openpose/">Openpose</a></li>
             {% endif %}
         </ul>
