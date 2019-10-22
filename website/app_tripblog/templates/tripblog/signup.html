@@ -1,12 +1,46 @@
 <html>
-<form action="." method="POST" name="form1">
-    {% csrf_token %}
-    <div>帳號：<input type="text" name="user_account" id="user_account"/></div>
-    <div>密碼：<input type="password" name="user_password" id="user_password"/></div>
-    <div>名稱：<input type="text" name="user_name" id="user_name"/></div>
+
+<head>
+    {% load static %}
+    <title>{{ title }}</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href={% static "tripblog/css/main.css" %} />
+    {% comment %} put css file here for each page {% endcomment %}
+    {% block css %}
+    <style>
+        .loginform {
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    {% endblock %}
+</head>
+
+<body>
+    <!-- Header -->
+    <header id="header">
+        <a href="/tripblog/signup/" class="logo">Tridiction</a>
+    </header>
+
+    {% block content %}
     <div>
-    <input type="submit" name="button" id="button" value="註冊" />
+        <form action="." method="POST" name="form1" class="loginform">
+            {% csrf_token %}
+            <div>名稱：<input type="text" name="user_name" id="user_name"/></div>
+            <div>帳號：<input type="text" name="user_account" id="user_account"/></div>
+            <div>密碼：<input type="password" name="user_password" id="user_password"/></div>
+            <div>
+            <input type="submit" name="button" id="button" value="註冊" />
+            </div> 
+            <span style="color:red">{{message}}</span>
+        </form>
     </div> 
-    <span style="color:red">{{message}}</span>
-</form>
+    {% endblock %}
+
 </html>
