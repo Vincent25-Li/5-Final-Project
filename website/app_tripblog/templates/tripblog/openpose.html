@@ -4,7 +4,7 @@
 <style>
     #video_container {
         width: 640px;
-        position: fixed;
+        position: absolute;
         right: 5vw;
         top: 15vh;
     }
@@ -16,6 +16,10 @@
     .upload_photo {
         margin-top: 15vh;
         margin-left: 5vw;
+    }
+    .show_photo {
+        margin-left: 5vw;
+        width:480;
     }
 </style>
 {% endblock %}
@@ -31,8 +35,9 @@
     <button type="button">分析</button>
     <div id="empty_photo"></div>
 </div>
+<div class="show_photo">
 <img id='model_img'>
-
+</div>
 
 <div id="video_container">
     <video id="video_element"></video>
@@ -54,9 +59,9 @@
             let reader = new FileReader();
             reader.onload = function(){
                 const dataURL = reader.result;
-                const width = 320;
-                const height = 180;
-                $('#model_img').attr('src', dataURL).width(width).height(height);
+                const width = 480;
+
+                $('#model_img').attr('src', dataURL).width(width);
             };
             reader.readAsDataURL(event.target.files[0]);
 
