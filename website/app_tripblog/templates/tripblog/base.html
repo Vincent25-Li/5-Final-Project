@@ -48,6 +48,7 @@
     
     {% block content %}{% endblock %}
 
+    {% if status and login_user == user_account %}
     <!--  Popup Chatbot -->
 	<img class="open-button" onclick="openForm()" src="{% static "tripblog/images/robot.png" %}" alt="open form">
 
@@ -63,6 +64,7 @@
             <button type="button" class="butn cancel" onclick="closeForm()">Close</button>
         </form>
     </div>
+    {% endif %}
 
     
     <!-- Scripts -->
