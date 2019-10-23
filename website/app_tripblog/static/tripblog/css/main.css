@@ -451,10 +451,11 @@ button,
     transform-origin: top;
 }
 .photo_5 {
-	background-color: #ff7979;
+	
 	transform: rotate(+0deg);
     transform-origin: top;
 }
+
 /*相片牆翻轉*/
 .outer-wrapper_BH {/*外div，讓滾輪上下與左右互換*/
     position: fixed;
