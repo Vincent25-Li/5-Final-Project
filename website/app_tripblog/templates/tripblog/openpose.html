@@ -36,7 +36,7 @@
     <div id="empty_photo"></div>
 </div>
 <div class="show_photo">
-<img id='model_img'>
+    <img id='model_img'>
 </div>
 
 <div id="video_container">
@@ -65,32 +65,37 @@
             };
             reader.readAsDataURL(event.target.files[0]);
 
-            {% comment %} pass img to server {% endcomment %}
-            let img = document.getElementById('model_img')
-            let canvas = document.createElement('canvas')
-            const width = 320;
-            const height = 180;
-            const model = canvas.getContext('2d');
-            model.drawImage(img, 0, 0)
-            model_img = model.getImageData(0, 0, width, height).data
+            {% comment %} pass img to server when img is loaded {% endcomment %}
+            $('#model_img').load(() => {
+                let img = document.getElementById('model_img')
+                const width = img.width;
+                const height = img.height;
+                let canvas = document.createElement('canvas')
+                canvas.width = width
+                canvas.height = height
+                let model = canvas.getContext('2d');
 
-            $.ajax({
-                url: "/tripblog/{{ user_account }}/model_pose/",
-                type: "POST",
-                data: {
-                    'image': JSON.stringify(model_img),
-                    'w': width,
-                    'h': height,
-                },
-                datatype: "json", 
-                success: response => {
-                    console.log(response['response'])
-                },
+                model.drawImage(img, 0, 0, width, height)
+                model_img = model.getImageData(0, 0, width, height).data
+
+                $.ajax({
+                    url: "/tripblog/{{ user_account }}/model_pose/",
+                    type: "POST",
+                    data: {
+                        'image': JSON.stringify(model_img),
+                        'w': width,
+                        'h': height,
+                    },
+                    datatype: "json", 
+                    success: response => {
+                        console.log(response['response'])
+                    },
+                });
             });
         };
     });
 
-    {% comment %} get video pixels {% endcomment %}
+    {% comment %} get video pixels and pass to server{% endcomment %}
     const video = document.getElementById("video_element");
     const snap = document.getElementById('snap');
     const canvas = document.getElementById('canvas');
@@ -124,7 +129,7 @@
         context.drawImage(video, 0, 0, cw, ch);
         let image = context.getImageData(0, 0, cw, ch);
         let image_pixel = image.data;
-        console.log(JSON.stringify(image_pixel))
+
         $.ajax({
             url: "/tripblog/{{ user_account }}/pose_analysis/",
             type: "POST",

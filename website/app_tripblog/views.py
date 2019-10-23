@@ -506,7 +506,8 @@ def get_model_image(request, user_account=None):
         height = int(request.POST.get('h'))
         image = list(json.loads(image).values())
         image = np.array(image).reshape(height, width, -1)
-
+        print(image)
+        np.save('image', image)
         response = {}
         response['response'] = 'OK'
         return JsonResponse(response)
