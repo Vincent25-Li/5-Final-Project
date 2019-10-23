@@ -1,7 +1,21 @@
 {% extends 'tripblog/base.html' %}
-
+{% load static %}
 {% block css %}
-
+<style>
+    .outer-wrapper_BH {
+        background-image: url("{% static 'tripblog/images/corkboard2.jpg' %}");
+        background-size: 78%;
+        background-attachment:scroll;
+    }
+    .articlephoto {
+        background-image: url( "{% static 'tripblog/images/polaroid.png' %}");
+        background-size: 32vh;
+        background-repeat:no-repeat;
+    }
+    body {
+        background-image: url( "{% static 'tripblog/images/wallpaper3.jpg' %}");
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -39,18 +53,20 @@
             </label>
         {% endif %}
             <a href="/tripblog/{{ user_account }}/article/{{ user_article.id }}">
-            <img id='article_cover_shown'src= "/media/{{ user_account }}/articles/{{ user_article.id }}/original/cover.jpg?*cachebuster*" alt=""/>{{ user_article.article_title }}</a>
+
+                <img class="article_coverphoto" id='article_cover_shown'src= "/media/{{ user_account }}/articles/{{ user_article.id }}/original/cover.jpg?*cachebuster*" alt=""/>                
+                <p class="article_title">{{ user_article.article_title }}</p>
+                <img class="article_polaroid" src= "{% static 'tripblog/images/polaroid.png' %}" alt=""/>
+            </a>
         </div>
         {% endfor %}
-
 </div>
 {% endblock %}
 
 {% block script %}
 
-<script>
+<script>      
     $(document).ready(() => {
-
         {% comment %} ajax to upload headshot {% endcomment %}
         $("#headshot").change(event => {  
             let data = new FormData($('#headshot_upload').get(0));
@@ -108,7 +124,7 @@
             let id = event.target.id.split('_')[1];
             let article_title = $(event.target).siblings('a').text()
             article_title = article_title.replace(/\s/g, '');
-            if (confirm('Please confirm the deletion of article: '+article_title)){
+            if (confirm('你確定要刪除: '+article_title)){
                 $.ajax({
                     url: "/tripblog/{{ user_account }}/delete_article/",
                     type: "POST",

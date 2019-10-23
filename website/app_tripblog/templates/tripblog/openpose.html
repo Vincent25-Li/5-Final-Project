@@ -4,7 +4,7 @@
 <style>
     #video_container {
         width: 640px;
-        position: fixed;
+        position: absolute;
         right: 5vw;
         top: 15vh;
     }
@@ -17,6 +17,10 @@
         margin-top: 15vh;
         margin-left: 5vw;
     }
+    .show_photo {
+        margin-left: 5vw;
+        width:480;
+    }
 </style>
 {% endblock %}
 
@@ -27,12 +31,13 @@
         {% csrf_token %}
         <input type="file" name='upload_imgs' accept=".png, .jpg, .jpeg" enctype="multipart/form-data", id='upload_imgs'>
     </form>
-    <label for="upload_imgs"><span class="button">上傳圖片</span></label>
+    <label for="upload_imgs"><p class="button">上傳圖片</p></label>
     <button type="button">分析</button>
     <div id="empty_photo"></div>
 </div>
-<img id='model_img'>
-
+<div class="show_photo">
+    <img id='model_img'>
+</div>
 
 <div id="video_container">
     <video id="video_element"></video>
@@ -54,38 +59,43 @@
             let reader = new FileReader();
             reader.onload = function(){
                 const dataURL = reader.result;
-                const width = 320;
-                const height = 180;
-                $('#model_img').attr('src', dataURL).width(width).height(height);
+                const width = 480;
+
+                $('#model_img').attr('src', dataURL).width(width);
             };
             reader.readAsDataURL(event.target.files[0]);
 
-            {% comment %} pass img to server {% endcomment %}
-            let img = document.getElementById('model_img')
-            let canvas = document.createElement('canvas')
-            const width = 320;
-            const height = 180;
-            const model = canvas.getContext('2d');
-            model.drawImage(img, 0, 0)
-            model_img = model.getImageData(0, 0, width, height).data
+            {% comment %} pass img to server when img is loaded {% endcomment %}
+            $('#model_img').load(() => {
+                let img = document.getElementById('model_img')
+                const width = img.width;
+                const height = img.height;
+                let canvas = document.createElement('canvas')
+                canvas.width = width
+                canvas.height = height
+                let model = canvas.getContext('2d');
 
-            $.ajax({
-                url: "/tripblog/{{ user_account }}/model_pose/",
-                type: "POST",
-                data: {
-                    'image': JSON.stringify(model_img),
-                    'w': width,
-                    'h': height,
-                },
-                datatype: "json", 
-                success: response => {
-                    console.log(response['response'])
-                },
+                model.drawImage(img, 0, 0, width, height)
+                model_img = model.getImageData(0, 0, width, height).data
+
+                $.ajax({
+                    url: "/tripblog/{{ user_account }}/model_pose/",
+                    type: "POST",
+                    data: {
+                        'image': JSON.stringify(model_img),
+                        'w': width,
+                        'h': height,
+                    },
+                    datatype: "json", 
+                    success: response => {
+                        console.log(response['response'])
+                    },
+                });
             });
         };
     });
 
-    {% comment %} get video pixels {% endcomment %}
+    {% comment %} get video pixels and pass to server{% endcomment %}
     const video = document.getElementById("video_element");
     const snap = document.getElementById('snap');
     const canvas = document.getElementById('canvas');
@@ -119,7 +129,7 @@
         context.drawImage(video, 0, 0, cw, ch);
         let image = context.getImageData(0, 0, cw, ch);
         let image_pixel = image.data;
-        console.log(JSON.stringify(image_pixel))
+
         $.ajax({
             url: "/tripblog/{{ user_account }}/pose_analysis/",
             type: "POST",

@@ -46,7 +46,7 @@ section{
 /*图片的样式*/
 .contentDiv img{
 	width:100%;
-	min-height:100%;
+	object-fit: cover;
 	}
 
 div img{
@@ -75,13 +75,13 @@ button,
 	cursor: pointer;
 	display: inline-block;
 	font-family: sans-serif;
-	height: 2em;
 	vertical-align: middle;
-	padding: 0 0.8em;
+	padding: 0.3em 0.8em;
 	text-align: center;
 	text-decoration: none;
 	white-space: nowrap;
 	text-transform: uppercase;
+	font-size: 1em;
 }
 
 	input[type="submit"]:hover,
@@ -421,44 +421,104 @@ button,
 .articlephoto {/*相片的長寬高位置*/
 	position: relative;
 	top: 10vh;
-	padding:1.5vh;
     margin-right: 5vh;
     margin-left: 5vh;
-    width: 25vh;
-	height: 35vh;
-	
+	width: 32vh;
+	height: 40vh;
+	overflow: visible;
+    
 }
-/*以下是各相片顏色*/
+/*以下是各相片樣式*/
 .photo_1 {
-	background-color: #8ddbff;
+	
 	transform: rotate(-0.5deg);
 	transform-origin: top;
 	text-decoration: none;
 }
 .photo_2 {
-	background-color: #a3f3d3;
+	
 	transform: rotate(+0.5deg);
     transform-origin: top;
 }
 .photo_3 {
-	background-color: #ffa3ff;
+	
 	transform: rotate(-1deg);
     transform-origin: top;
 }
 .photo_4 {
-	background-color: #ffb579;
+	
 	transform: rotate(+1deg);
     transform-origin: top;
 }
 .photo_5 {
-	background-color: #ff7979;
+	
 	transform: rotate(+0deg);
     transform-origin: top;
 }
+
+.article_title {
+	position: absolute;
+	z-index: 3;
+	top: 31vh;
+	left: 3vh; 
+	
+}
+
+.article_coverphoto {
+	position: absolute; 
+	z-index: 1;
+	top:2.5vh;
+	left:2vh;
+	min-width: 90%;
+	min-height: 75%;
+	object-fit: cover;
+	max-width: 90%;
+	max-height: 75%;
+}
+
+.article_polaroid {
+	position: absolute; 
+	 z-index: 2;
+}
+
+.delete_article {
+	position: absolute;
+	top: 2.1vh;
+	right:1vh;
+	z-index: 9;
+}
+
+.delete_article:hover {
+	cursor: pointer;
+}
+
+.edit_picture {
+	position: absolute;
+	top: 5vh;
+	right: 2vh;
+	background-color: #a7d9e7;
+	z-index: 9;
+}
+.edit_picture:hover {
+	cursor: pointer;
+}
+
+.style_picture {
+	position: absolute;
+	top: 7.5vh;
+	background-color: #a7d9e7;
+	right: 2vh;
+	z-index: 9;
+}
+.style_picture:hover {
+	cursor: pointer;
+}
+
+
 /*相片牆翻轉*/
 .outer-wrapper_BH {/*外div，讓滾輪上下與左右互換*/
     position: fixed;
-    background-color: yellow;
+    background-color: rgb(226, 156, 65);
     top: 30%;/*0%貼頭、40%剛好碰底*/
     left: 0%;
     width: 60vh;/*相片牆高度為60%的網頁*/
@@ -469,6 +529,8 @@ button,
     overflow-x: hidden;
     scrollbar-width: none;
 	-ms-overflow-style: none;
+	border-left: rgb(151, 85, 9) solid 1vh;
+	border-right: rgb(151, 85, 9) solid 1vh;
 }
 .wrapper_BH {/*內div，把文字轉正*/
     position: absolute;
@@ -598,36 +660,6 @@ button,
 	float: left;
 }
 
-.delete_article {
-	position: absolute;
-	top: -8px;
-	right: 5px;
-}
-
-.delete_article:hover {
-	cursor: pointer;
-}
-
-.edit_picture {
-	position: absolute;
-	top: 13px;
-	right: 5%;
-	background-color: #a7d9e7;
-	
-}
-.edit_picture:hover {
-	cursor: pointer;
-}
-
-.style_picture {
-	position: absolute;
-	top: 33px;
-	background-color: #a7d9e7;
-	right: 5%;
-}
-.style_picture:hover {
-	cursor: pointer;
-}
 
 .fornav {
     margin-top: 8vh;

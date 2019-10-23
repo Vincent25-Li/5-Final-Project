@@ -7,33 +7,38 @@
 <link rel="stylesheet" href={% static "tripblog/css/jquery.bsPhotoGallery.css" %} />
 <link rel="stylesheet" href={% static "tripblog/css/main.css" %} />
 <style>
+    body {
+        background-image: url( "{% static 'tripblog/images/wallpaper3.jpg' %}");
+    }
+
     .cateselect {
         margin-left: 10vw;
         margin-bottom: 3vh;
         width: 200px;
     }
-    .imginputplus{
+
+    .imginputplus {
         position: fixed;
-        top:10vh;
-        right:10vw;
+        top: 10vh;
+        right: 10vw;
         width: 25px;
         height: 25px;
     }
+
     .imginputplus:hover {
         cursor: pointer;
     }
+
     .imgloading {
         height: 200vh;
         width: 100vw;
     }
-    
-
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="fornav imgloading"></div>
-<form  action="/">
+<form action="/">
     <select class="cateselect" name="" id="select_cat">
         <option value="all">All</option>
         <option value="people">People</option>
@@ -49,7 +54,7 @@
     {% csrf_token %}
     <input type="file" name='upload_imgs' accept=".png, .jpg, .jpeg" multiple id='upload_imgs'>
 </form>
-<label for="upload_imgs"><img src="{% static "tripblog/images/plus.png" %}" class="imginputplus"/></label>
+<label for="upload_imgs"><img src="{% static "tripblog/images/plus.png" %}" class="imginputplus" /></label>
 {% endif %}
 
 <ul class="row first">
@@ -71,7 +76,7 @@
 
 <script>
     $(document).ready(function () {
-        
+
         $('ul.first').bsPhotoGallery({
             "classes": "col-xl-2 col-lg-3 col-md-4 col-sm-4",
             "hasModal": true,
@@ -101,10 +106,10 @@
                 }
             });
         });
-        $('#upload_imgs').change(function (){
+        $('#upload_imgs').change(function () {
             $('#upload_photo_form').submit()
         });
-        $('div.fornav').css("height","0vh");
+        $('div.fornav').css("height", "0vh");
     });
 </script>
 {% endblock %}

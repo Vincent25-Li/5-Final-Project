@@ -7,7 +7,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 <link rel="stylesheet" href={% static "tripblog/css/main.css" %}>
 <style>
-
+  body {
+    background-image: url( "{% static 'tripblog/images/wallpaper3.jpg' %}");
+  }
   .picDiv {
     padding: 10px;
     background-color: #CCCCCC;
@@ -47,17 +49,19 @@
 <div class="fornav"></div>
 
 <div class="allalbums">
-  
+  {% if status and login_user == user_account %}
   <div class="addalbum"><img class="add_album" id='add_album' src="{% static "tripblog/images/plus.png" %}" /></div>
-  
+  {% endif %}
+
   {% for user_album in user_albums %}
   <div class="albumDiv">
-    
     <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/"><img src="{% static "tripblog/images/folder-icon.png" %}"/></a>
     <div>
       <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/">{{ user_album.album_title }}</a><br>
+      {% if status and login_user == user_account %}
       <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/delete/"
         onClick="confirmLink('您確定要刪除這本相簿嗎？'); return document.returnValue">(刪除相簿)</a><br>
+      {% endif %}
     </div>
   </div>
   {% endfor %}
