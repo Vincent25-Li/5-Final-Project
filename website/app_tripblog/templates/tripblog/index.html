@@ -1,7 +1,11 @@
 {% extends 'tripblog/base.html' %}
-
+{% load static %}
 {% block css %}
-
+<style>
+    .outer-wrapper_BH {
+        background-image: url( "{% static 'tripblog/images/corkboard2.jpg' %}");
+    }
+</style>
 {% endblock %}
 
 {% block content %}
