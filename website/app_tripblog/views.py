@@ -508,12 +508,9 @@ def get_model_image(request, user_account=None):
         width = int(request.POST.get('w'))
         height = int(request.POST.get('h'))
         image = list(json.loads(image).values())
-        image = np.array(image).reshape(height, width, -1)[:, :, :3]*255
-        image = image.astype(np.int8)
-        print(image.shape)
-        print(image)
-        openpose_object.load_model_img(image) 
+        image = np.array(image).reshape(height, width, -1)[:, :, :3]
 
+        openpose_object.load_model_img(image)
         response = {}
         response['response'] = 'OK'
         return JsonResponse(response)
