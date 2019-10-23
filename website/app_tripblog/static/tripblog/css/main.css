@@ -529,6 +529,8 @@ button,
     overflow-x: hidden;
     scrollbar-width: none;
 	-ms-overflow-style: none;
+	border-left: rgb(151, 85, 9) solid 1vh;
+	border-right: rgb(151, 85, 9) solid 1vh;
 }
 .wrapper_BH {/*內div，把文字轉正*/
     position: absolute;
