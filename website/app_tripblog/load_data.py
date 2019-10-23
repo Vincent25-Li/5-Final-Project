@@ -8,7 +8,7 @@ from app_tripblog.models import User, UserArticles, UserAlbums
 
 
 def load_data(nr_of_channels, batch_size=1, nr_A_train_imgs=None, nr_B_train_imgs=None,
-              nr_A_test_imgs=None, nr_B_test_imgs=None, subfolder='',
+              nr_A_test_imgs=None, nr_B_test_imgs=None,
               generator=False, D_model=None, use_multiscale_discriminator=False, use_supervised_learning=False, REAL_LABEL=1.0, user_account='jessie', article_id='1'):
 
     trainA_path = os.path.join('media', user_account,'articles', article_id , 'trainA')

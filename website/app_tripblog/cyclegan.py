@@ -59,7 +59,7 @@ np.random.seed(seed=12345)
 # ###cycle gan class###
 class CycleGAN():
     def __init__(self, lr_D=2e-4, lr_G=2e-4, image_shape=(256*1, 256*1, 3),
-                 date_time_string_addition='_test', image_folder='summer2winter_yosemite', user_account='jessie', user_article_id='1'):
+                 date_time_string_addition='_test', user_account='jessie', user_article_id='1'):
         self.img_shape = image_shape
         self.channels = self.img_shape[-1]
         self.normalization = InstanceNormalization
@@ -222,7 +222,7 @@ class CycleGAN():
 
         if self.use_data_generator:            
             self.data_generator = load_data.load_data(
-                nr_of_channels=self.channels, batch_size=self.batch_size, generator=True, subfolder=image_folder)
+                nr_of_channels=self.channels, batch_size=self.batch_size, generator=True)
 
             # Only store test images
             nr_A_train_imgs = 0
@@ -234,7 +234,6 @@ class CycleGAN():
                                    nr_B_train_imgs=nr_B_train_imgs,
                                    nr_A_test_imgs=nr_A_test_imgs,
                                    nr_B_test_imgs=nr_B_test_imgs,
-                                   subfolder=image_folder,
                                    user_account= self.user_account,   ###
                                    article_id=self.article_id)     ###
 

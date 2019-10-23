@@ -71,7 +71,6 @@
 
         {% comment %} Oliver fxn testing   {% endcomment %}
             $(".upload_article_cover").change(event => {
-                
                 let data = new FormData($('#article_cover_upload').get(0));
                 let id = event.target.id.split('_')[2];
                 console.log(id)
@@ -89,6 +88,20 @@
                 });
                 $("#article_cover").val('');
             });
+
+        {% comment %} to change cover img style {% endcomment %}
+        $('p.style_picture').click(event=>{
+            let id = event.target.id.split('_')[1];
+            if (confirm('Please confirm to transfer image style: ')){
+                $.ajax({
+                    url: "/tripblog/{{ user_account }}/article_cover_style_change/"+id+"/",
+                    type: "GET",
+                    success: function(data){
+                        $('#article_cover_shown').attr('src', data['article_cover_src']+'?test='+Math.floor(Math.random()*100+1));              
+                    },
+                });
+            };
+        })
 
         {% comment %} ajax to delete article {% endcomment %}
         $('p.delete_article').click(event=>{

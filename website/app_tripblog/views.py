@@ -488,26 +488,30 @@ def article_cover_upload(request, user_account=None, article_id=None):
         # print('user_article.id is :', user_article.id ,'====###======') #16
         user_article_id = str(user_article.id)
 
-        # define stored media path
-        article_cover_path = os.path.join(settings.MEDIA_ROOT, user_account,'articles', user_article_id ,'original','cover.jpg')
-        # store image at local side
-        with open(article_cover_path, 'wb+') as destination:
+        article_cover_path = os.path.join(settings.MEDIA_ROOT, user_account,'articles', 
+                                          user_article_id ,'original','cover.jpg')   # define stored media path
+        
+        with open(article_cover_path, 'wb+') as destination:# store image at local side
             for chunk in article_cover.chunks():
                 destination.write(chunk)
-        #img process w/ our model
-        GAN = CycleGAN(image_folder=article_cover_path, user_account = user_account, user_article_id = user_article_id ) #物件實體化,指定img_forder的argument
-        # print('user_account :', user_account, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
-        # print('user_article_id :', user_article_id, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&') 
-        GAN.load_model_and_weights(GAN.G_B2A)
-        GAN.load_model_and_generate_synthetic_images()   
 
-        #return JsonResponse({'article_cover_src': f'/media/{user_account}/articles/{user_article.id}/transfer/cover.j_synthetic.png'}) 
-        # return cyclegan img
+        def gan():    
+            GAN = CycleGAN(user_account = user_account, user_article_id = user_article_id )
+        # print('user_account :', user_account, '&&&&&&&&&&&&&&&&&')
+        # print('user_article_id :', user_article_id, '&&&&&&&&&&&') 
+            GAN.load_model_and_weights(GAN.G_B2A)
+            GAN.load_model_and_generate_synthetic_images()   
+        
+        gan()
 
         return JsonResponse({'article_cover_src': f'/media/{user_account}/articles/{user_article.id}/original/cover.jpg'})
 
     else:
         raise Http404
-    
 
+def article_cover_style_change(request, user_account=None, article_id=None):
+    user = User.objects.get(user_account=user_account)
+    user_article = UserArticles.objects.get(id=article_id)
+    user_article_id = str(user_article.id)
     
+    return JsonResponse({'article_cover_src': f'/media/{user_account}/articles/{user_article.id}/transfer/cover.j_synthetic.png'}) 
