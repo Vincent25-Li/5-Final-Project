@@ -550,8 +550,8 @@ button,
 
 /* Button used to open the chat form - fixed at the bottom of the page */
 .open-button {
-	background-color: #555;
-	color: white;
+	background-color: gray;
+	color: silver;
 	padding: 2px 2px;
 	border: none;
 	cursor: pointer;
