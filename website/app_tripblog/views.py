@@ -19,10 +19,13 @@ from app_tripblog.models import User, UserArticles, UserAlbums
 from app_tripblog.function_chatbot_ch import ChatbotObject
 from app_tripblog.fn_image_classifier import Image_Classifier
 from app_tripblog.cyclegan import CycleGAN ###load cyclegan
+from app_tripblog.fn_openpose import OpenposeObject
+
 
 
 chatbot_object = ChatbotObject()
 img_classifier = Image_Classifier()
+openpose_object = OpenposeObject()
 ''' templates '''
 
 
@@ -505,7 +508,11 @@ def get_model_image(request, user_account=None):
         width = int(request.POST.get('w'))
         height = int(request.POST.get('h'))
         image = list(json.loads(image).values())
-        image = np.array(image).reshape(height, width, -1)
+        image = np.array(image).reshape(height, width, -1)[:, :, :3]*255
+        image = image.astype(np.int8)
+        print(image.shape)
+        print(image)
+        openpose_object.load_model_img(image) 
 
         response = {}
         response['response'] = 'OK'
