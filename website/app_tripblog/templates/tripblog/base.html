@@ -46,7 +46,7 @@
         </div>
     </nav>
     
-    {% block content %}{% endblock %}
+    
 
     {% if status and login_user == user_account %}
     <!--  Popup Chatbot -->
@@ -66,6 +66,7 @@
     </div>
     {% endif %}
 
+    {% block content %}{% endblock %}
     
     <!-- Scripts -->
     <script src={% static "tripblog/js/jquery.min.js" %}></script>
