@@ -153,11 +153,18 @@ def new_article(request, user_account=None):
         # create new article directory
         dir_path1 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'original')
         dir_path2 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'transfer')
+        dir_path3 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'trainA')
+        dir_path4 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'trainB')
         try:
             os.makedirs(dir_path1)
             os.makedirs(dir_path2)
+            os.makedirs(dir_path3)
+            os.makedirs(dir_path4)
         except FileExistsError:
             print(f"Directory {dir_path} already exists")
+        img_src = os.path.join(settings.MEDIA_ROOT, 'fortrain.jpg')
+        img_dst = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'transfer')
+        shutil.copy(img_src, img_dst)
 
         response = {}
         response['redirect'] = f'/tripblog/{ user_account }/'
