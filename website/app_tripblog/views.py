@@ -25,10 +25,6 @@ from app_tripblog.cyclegan import CycleGAN ###load cyclegan
 
 chatbot_object = ChatbotObject()
 img_classifier = Image_Classifier()
-gan = CycleGAN()
-gan.load_model_and_weights(gan.G_B2A)
-print('load gan sucess ===============================================')
-
 # openpose_object = OpenposeObject()
 ''' templates '''
 
@@ -151,11 +147,20 @@ def new_article(request, user_account=None):
         user_article.save()
 
         # create new article directory
-        dir_path = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id))
+        dir_path1 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'original')
+        dir_path2 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'transfer')
+        dir_path3 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'trainA')
+        dir_path4 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'trainB')
         try:
-            os.mkdir(dir_path)
+            os.makedirs(dir_path1)
+            os.makedirs(dir_path2)
+            os.makedirs(dir_path3)
+            os.makedirs(dir_path4)
         except FileExistsError:
             print(f"Directory {dir_path} already exists")
+        img_src = os.path.join(settings.MEDIA_ROOT, 'fortrain.jpg')
+        img_dst = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'transfer')
+        shutil.copy(img_src, img_dst)
 
         response = {}
         response['redirect'] = f'/tripblog/{ user_account }/'
@@ -512,8 +517,9 @@ def get_model_image(request, user_account=None):
         height = int(request.POST.get('h'))
         image = list(json.loads(image).values())
         image = np.array(image).reshape(height, width, -1)[:, :, :3]
-
-        openpose_object.load_model_img(image)
+        image = image.astype('uint8')
+        openpose_object.model_wh(width, height)
+        openpose_object.load_model_img(image, user_account)
         response = {}
         response['response'] = 'OK'
         return JsonResponse(response)
@@ -524,7 +530,10 @@ def pose_analysis(request, user_account=None):
         width = int(request.POST.get('w'))
         height = int(request.POST.get('h'))
         image = list(json.loads(image).values())
-        image = np.array(image).reshape(height, width, -1)
+        image = np.array(image).reshape(height, width, -1)[:, :, :3]
+        image = image.astype('uint8')
+        result = openpose_object.openpose_matching(image, user_account)
+        print(result)
 
         response = {}
         response['response'] = 'OK'
@@ -564,14 +573,12 @@ def article_cover_upload(request, user_account=None, article_id=None):
             for chunk in article_cover.chunks():
                 destination.write(chunk)
 
-        gan.user_account = user_account
-        gan.user_article_id = user_article_id 
-        print('user_account :', user_account, '&&&&&&&&&&&&&&&&&')
-        print('user_article_id :', user_article_id, '&&&&&&&&&&&') 
-        #GAN.load_model_and_weights(GAN.G_B2A)
-        gan.load_model_and_generate_synthetic_images()   
-        
-
+        GAN = CycleGAN(user_account = user_account, user_article_id = user_article_id )
+        # print('user_account :', user_account, '&&&&&&&&&&&&&&&&&')
+        # print('user_article_id :', user_article_id, '&&&&&&&&&&&') 
+        GAN.load_model_and_weights(GAN.G_B2A)
+        GAN.load_model_and_generate_synthetic_images()   
+    
         return JsonResponse({'article_cover_src': f'/media/{user_account}/articles/{user_article.id}/original/cover.jpg'})
 
     else:
