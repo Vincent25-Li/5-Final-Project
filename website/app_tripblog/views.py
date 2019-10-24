@@ -509,8 +509,9 @@ def get_model_image(request, user_account=None):
         height = int(request.POST.get('h'))
         image = list(json.loads(image).values())
         image = np.array(image).reshape(height, width, -1)[:, :, :3]
-
-        openpose_object.load_model_img(image)
+        image = image.astype('uint8')
+        openpose_object.model_wh(width, height)
+        openpose_object.load_model_img(image, user_account)
         response = {}
         response['response'] = 'OK'
         return JsonResponse(response)
@@ -521,7 +522,10 @@ def pose_analysis(request, user_account=None):
         width = int(request.POST.get('w'))
         height = int(request.POST.get('h'))
         image = list(json.loads(image).values())
-        image = np.array(image).reshape(height, width, -1)
+        image = np.array(image).reshape(height, width, -1)[:, :, :3]
+        image = image.astype('uint8')
+        result = openpose_object.openpose_matching(image, user_account)
+        print(result)
 
         response = {}
         response['response'] = 'OK'
