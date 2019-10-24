@@ -97,7 +97,7 @@
                     processData: false,
                     contentType: false,
                     success: data => {
-                        $('#article_cover_shown').attr('src', data['article_cover_src']+'?test='+Math.floor(Math.random()*100+1));
+                        $('#article_cover_shown_'+id).attr('src', data['article_cover_src']+'?test='+Math.floor(Math.random()*100+1));
                     },
                 });
                 $("#article_cover").val('');
