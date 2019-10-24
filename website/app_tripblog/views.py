@@ -20,8 +20,7 @@ from app_tripblog.function_chatbot_ch import ChatbotObject
 from app_tripblog.fn_image_classifier import Image_Classifier
 from app_tripblog.cyclegan import CycleGAN ###load cyclegan
 # from app_tripblog.fn_openpose import OpenposeObject
-
-
+from PIL import Image 
 
 chatbot_object = ChatbotObject()
 img_classifier = Image_Classifier()
@@ -570,6 +569,13 @@ def article_cover_upload(request, user_account=None, article_id=None):
         with open(article_cover_path, 'wb+') as destination:# store image at local side
             for chunk in article_cover.chunks():
                 destination.write(chunk)
+                
+        print('article_cover_path:',article_cover_path,'============================')
+        im = Image.open(article_cover_path)
+        width = 256
+        height = 256
+        nim = im.resize( (width, height), Image.BILINEAR )
+        nim.save(article_cover_path)  
 
         # GAN = CycleGAN(user_account = user_account, user_article_id = user_article_id )
         # # print('user_account :', user_account, '&&&&&&&&&&&&&&&&&')
@@ -592,5 +598,5 @@ def article_cover_style_change(request, user_account=None, article_id=None):
     # print('user_article_id :', user_article_id, '&&&&&&&&&&&') 
     GAN.load_model_and_weights(GAN.G_B2A)
     GAN.load_model_and_generate_synthetic_images()  
-    
+
     return JsonResponse({'article_style_src': f'/media/{user_account}/articles/{user_article.id}/transfer/cover.j_synthetic.png'}) 
