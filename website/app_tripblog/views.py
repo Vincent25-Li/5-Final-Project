@@ -151,9 +151,11 @@ def new_article(request, user_account=None):
         user_article.save()
 
         # create new article directory
-        dir_path = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id))
+        dir_path1 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'original')
+        dir_path2 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'transfer')
         try:
-            os.mkdir(dir_path)
+            os.makedirs(dir_path1)
+            os.makedirs(dir_path2)
         except FileExistsError:
             print(f"Directory {dir_path} already exists")
 
