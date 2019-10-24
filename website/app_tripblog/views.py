@@ -19,12 +19,16 @@ from app_tripblog.models import User, UserArticles, UserAlbums
 from app_tripblog.function_chatbot_ch import ChatbotObject
 from app_tripblog.fn_image_classifier import Image_Classifier
 from app_tripblog.cyclegan import CycleGAN ###load cyclegan
-# from app_tripblog.fn_openpose import OpenposeObject
 from PIL import Image 
+from app_tripblog.fn_openpose import OpenposeObject
 
 chatbot_object = ChatbotObject()
 img_classifier = Image_Classifier()
-# openpose_object = OpenposeObject()
+gan = CycleGAN()
+gan.load_model_and_weights(gan.G_B2A)
+print('load gan sucess ===============================================')
+
+openpose_object = OpenposeObject()
 ''' templates '''
 
 # base template
@@ -531,13 +535,16 @@ def pose_analysis(request, user_account=None):
         image = list(json.loads(image).values())
         image = np.array(image).reshape(height, width, -1)[:, :, :3]
         image = image.astype('uint8')
-        result = openpose_object.openpose_matching(image, user_account)
+        
+        try:
+            result = openpose_object.openpose_matching(image, user_account)
+        except IndexError:
+            result = False
+
         response = {}
         response['result'] = result
         return JsonResponse(response)
         
-
-
 '''internal functions'''
 
 # check user_account whether exist in database
@@ -569,7 +576,7 @@ def article_cover_upload(request, user_account=None, article_id=None):
         with open(article_cover_path, 'wb+') as destination:# store image at local side
             for chunk in article_cover.chunks():
                 destination.write(chunk)
-                
+
         print('article_cover_path:',article_cover_path,'============================')
         im = Image.open(article_cover_path)
         width = 256

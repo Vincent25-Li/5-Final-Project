@@ -24,7 +24,7 @@
         width:480;
     }
 	body {
-		
+		background-image: url( "{% static 'tripblog/images/wallpaper4.jpg' %}");
 	}
 </style>
 {% endblock %}
@@ -108,11 +108,11 @@
     function playPause(){
         if (video.paused){
             video.play();
-            var take_image = setInterval(get_pose, 6000)
+            var take_image = setInterval(get_pose, 10000)
         }
         else{
-            clearInterval(take_image);
             video.pause();
+            clearInterval(take_image);
         }
     }
     if (navigator.mediaDevices.getUserMedia) {
