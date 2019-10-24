@@ -19,15 +19,18 @@ from app_tripblog.models import User, UserArticles, UserAlbums
 from app_tripblog.function_chatbot_ch import ChatbotObject
 from app_tripblog.fn_image_classifier import Image_Classifier
 from app_tripblog.cyclegan import CycleGAN ###load cyclegan
-from app_tripblog.fn_openpose import OpenposeObject
+# from app_tripblog.fn_openpose import OpenposeObject
 
 
 
 chatbot_object = ChatbotObject()
 img_classifier = Image_Classifier()
-openpose_object = OpenposeObject()
-''' templates '''
+gan = CycleGAN()
+gan.load_model_and_weights(gan.G_B2A)
+print('load gan sucess ===============================================')
 
+# openpose_object = OpenposeObject()
+''' templates '''
 
 # base template
 def base(request):
@@ -148,11 +151,20 @@ def new_article(request, user_account=None):
         user_article.save()
 
         # create new article directory
-        dir_path = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id))
+        dir_path1 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'original')
+        dir_path2 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'transfer')
+        dir_path3 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'trainA')
+        dir_path4 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'trainB')
         try:
-            os.mkdir(dir_path)
+            os.makedirs(dir_path1)
+            os.makedirs(dir_path2)
+            os.makedirs(dir_path3)
+            os.makedirs(dir_path4)
         except FileExistsError:
             print(f"Directory {dir_path} already exists")
+        img_src = os.path.join(settings.MEDIA_ROOT, 'fortrain.jpg')
+        img_dst = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'transfer')
+        shutil.copy(img_src, img_dst)
 
         response = {}
         response['redirect'] = f'/tripblog/{ user_account }/'
@@ -546,32 +558,41 @@ def check_useraccount_exist(user_account):
     else:
         return None
         
-def blog_image_upload(request, user_account=None, article_id=None):
+def article_cover_upload(request, user_account=None, article_id=None):
     if request.method == 'POST' and request.is_ajax():
-        blog_image = request.FILES['blog_image'] # retrieve post image
-
+        article_cover = request.FILES['article_cover'] # retrieve post image
+        print('article_cover :', article_cover ,'==========================###==========================') #
         user = User.objects.get(user_account=user_account)
-        print(user,'====================================')
+        # print('user is :', user,'====================================') #jessie
         user_article = UserArticles.objects.get(id=article_id)
-        print(user_article,'====================================')
+        print('user_article is :', user_article ,'====###======') #jessie:TEST
+        print('user_article.article_title is :', user_article.article_title ,'====###======') #TEST
+        print('user_article.id is :', user_article.id ,'====###======') #16
+        user_article_id = str(user_article.id)
 
-        # define stored media path
-        blog_image_path = os.path.join(settings.MEDIA_ROOT, user_account,'articles', str(user_article.id) ,'original','blog_image.jpg')
-        # store image at local side
-        with open(blog_image_path, 'wb+') as destination:
-            for chunk in blog_image.chunks():
+        article_cover_path = os.path.join(settings.MEDIA_ROOT, user_account,'articles', 
+                                          user_article_id ,'original','cover.jpg')   # define stored media path
+        
+        with open(article_cover_path, 'wb+') as destination:# store image at local side
+            for chunk in article_cover.chunks():
                 destination.write(chunk)
+
+        gan.user_account = user_account
+        gan.user_article_id = user_article_id 
+        print('user_account :', user_account, '&&&&&&&&&&&&&&&&&')
+        print('user_article_id :', user_article_id, '&&&&&&&&&&&') 
+        #GAN.load_model_and_weights(GAN.G_B2A)
+        gan.load_model_and_generate_synthetic_images()   
+        
+
+        return JsonResponse({'article_cover_src': f'/media/{user_account}/articles/{user_article.id}/original/cover.jpg'})
 
     else:
         raise Http404
-    
-        # ###===
-        # #img process w/ our model
-        # GAN = CycleGAN(image_folder=blog_image_path) #物件實體化,指定img_forder的argument
-        # GAN.load_model_and_weights(GAN.G_B2A)
-        # GAN.load_model_and_generate_synthetic_images()
-        # ###===
-        # # return JsonResponse({'blog_image_src': f'/media/{user}/blogs/original/blog_image.jpg'}) #return original img 
-        # return JsonResponse({'blog_image_src': f'/media/{user_account}/articles/16/transfer/blog_image.j_synthetic.png'}) # return cyclegan img
 
+def article_cover_style_change(request, user_account=None, article_id=None):
+    user = User.objects.get(user_account=user_account)
+    user_article = UserArticles.objects.get(id=article_id)
+    user_article_id = str(user_article.id)
     
+    return JsonResponse({'article_style_src': f'/media/{user_account}/articles/{user_article.id}/transfer/cover.j_synthetic.png'}) 

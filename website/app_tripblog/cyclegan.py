@@ -36,6 +36,8 @@ from django.template import loader # from class #test
 # from studentsapp.models import student
 # from studentsapp.forms import PostForm
 from app_tripblog import load_data
+from app_tripblog.models import User, UserArticles, UserAlbums
+
 
 
 np.random.seed(seed=12345)
@@ -57,7 +59,7 @@ np.random.seed(seed=12345)
 # ###cycle gan class###
 class CycleGAN():
     def __init__(self, lr_D=2e-4, lr_G=2e-4, image_shape=(256*1, 256*1, 3),
-                 date_time_string_addition='_test', image_folder='summer2winter_yosemite'):
+                 date_time_string_addition='_test', user_account='jessie', user_article_id='1'):
         self.img_shape = image_shape
         self.channels = self.img_shape[-1]
         self.normalization = InstanceNormalization
@@ -75,6 +77,11 @@ class CycleGAN():
         self.epochs = 51  ### choose multiples of 25 since the models are save each 25th epoch
         self.save_interval = 1
         self.synthetic_pool_size = 50
+
+        #To load database
+
+        self.user_account = user_account
+        self.article_id = user_article_id
 
         # Linear decay of learning rate, for both discriminators and generators
         self.use_linear_decay = False
@@ -215,7 +222,7 @@ class CycleGAN():
 
         if self.use_data_generator:            
             self.data_generator = load_data.load_data(
-                nr_of_channels=self.channels, batch_size=self.batch_size, generator=True, subfolder=image_folder)
+                nr_of_channels=self.channels, batch_size=self.batch_size, generator=True)
 
             # Only store test images
             nr_A_train_imgs = 0
@@ -227,7 +234,8 @@ class CycleGAN():
                                    nr_B_train_imgs=nr_B_train_imgs,
                                    nr_A_test_imgs=nr_A_test_imgs,
                                    nr_B_test_imgs=nr_B_test_imgs,
-                                   subfolder=image_folder)
+                                   user_account= self.user_account,   ###
+                                   article_id=self.article_id)     ###
 
         self.A_train = data["trainA_images"]
         self.B_train = data["trainB_images"]
@@ -272,7 +280,7 @@ class CycleGAN():
         ########################################
         
         ############測試時解除標註##############
-        self.load_model_and_generate_synthetic_images()
+        #self.load_model_and_generate_synthetic_images()
         #########################################
 #===============================================================================
 # Architecture functions
@@ -861,14 +869,14 @@ class CycleGAN():
 # Load
     ###key to load model&weight ###
     def load_model_and_weights(self, model):
-        print(f'model.name: {model.name}') #G_A2B_model #G_B2A_model
-        print(f'model: {model}') # <keras.engine.training.Model object at 0x000001E422F6C7F0> E Model Object
-        print(f'settings.MEDIA_ROOT:{settings.MEDIA_ROOT}') #\Cyclegan_move_to_app\media  
+        #print(f'model.name: {model.name}') #G_A2B_model #G_B2A_model
+        #print(f'model: {model}') # <keras.engine.training.Model object at 0x000001E422F6C7F0> E Model Object
+        #print(f'settings.MEDIA_ROOT:{settings.MEDIA_ROOT}') #\Cyclegan_move_to_app\media  
         #path_to_model = os.path.join(settings.MEDIA_ROOT, 'generate_images', 'models', f'{model.name}.json')
         path_to_weights = os.path.join(settings.MEDIA_ROOT, 'models_weights','cyclegan', 'G_B2A_model.hdf5')
         #model = model_from_json(path_to_model)
         model.load_weights(path_to_weights)
-        print('sucess load model========================================')
+        #print('sucess load model========================================')
         
     ###after model loaded, prcoess user's img w/ our model###
     def load_model_and_generate_synthetic_images(self):
@@ -885,7 +893,7 @@ class CycleGAN():
                 print(f'name : {name}') #name : user_im_synthetic.png
                 if self.channels == 1:
                     image = image[:, :, 0]
-                toimage(image, cmin=-1, cmax=1).save(os.path.join(settings.MEDIA_ROOT, 'jessie','blogs','transfer', name))
+                toimage(image, cmin=-1, cmax=1).save(os.path.join(settings.MEDIA_ROOT, self.user_account ,'articles',self.article_id,'transfer', name))
 
             # # Test A images
             # for i in range(len(synthetic_images_A)):
@@ -899,7 +907,12 @@ class CycleGAN():
                 # Get the name from the image it was conditioned on
                 name = self.testA_image_names[i].strip('.png') + '_synthetic.png'
                 synt_B = synthetic_images_B[i]
+                #print('ready to transfer===============########===========########===========########===========############')
+                #print('self variable:',self.user_account, self.article_id)
+                
+
                 save_image(synt_B, name, 'B')
+                #print('after transfer===============########===========########===========########===========############')
 
             print('{} synthetic images have been generated and placed in ./generate_images/synthetic_images'
                   .format(len(self.A_test) + len(self.B_test)))

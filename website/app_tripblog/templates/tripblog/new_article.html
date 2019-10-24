@@ -1,7 +1,7 @@
 {% extends 'tripblog/base.html' %}
 {% load customed_filter %}
-{% block css %}
 {% load static %}
+{% block css %}
 <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -13,7 +13,13 @@
 <link rel="stylesheet" href={% static "tripblog/css/plugins/table.css" %}>
 <link rel="stylesheet" href={% static "tripblog/css/plugins/video.css" %}>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.css">
-<link rel="stylesheet" href={% static "tripblog/css/edit_article2.css" %}>
+<link rel="stylesheet" href={% static "tripblog/css/edit_article.css" %}>
+
+<style>
+	body {
+		
+	}
+</style>
 {% endblock %}
 
 

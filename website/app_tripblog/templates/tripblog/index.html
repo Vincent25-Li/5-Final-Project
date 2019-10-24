@@ -3,7 +3,17 @@
 {% block css %}
 <style>
     .outer-wrapper_BH {
-        background-image: url( "{% static 'tripblog/images/corkboard2.jpg' %}");
+        background-image: url("{% static 'tripblog/images/corkboard2.jpg' %}");
+        background-size: 78%;
+        background-attachment: local;
+    }
+    .articlephoto {
+        background-image: url( "{% static 'tripblog/images/polaroid.png' %}");
+        background-size: 32vh;
+        background-repeat:no-repeat;
+    }
+    body {
+        background-image: url( "{% static 'tripblog/images/wallpaper4.jpg' %}");
     }
 </style>
 {% endblock %}
@@ -24,45 +34,37 @@
     </div>
 </section>
 
-<!-- scrollong -->
-{% load static %}
 <div class="outer-wrapper_BH">
     <div class="wrapper_BH">
         {% for user_article in user_articles %}
         <div id='article_{{user_article.id}}' class="articlephoto photo_{{ no|random }}">
         {% if status and login_user == user_account %}
             <p class='delete_article' id='delete_{{user_article.id}}'>[X]</p>
-            <p class='edit_picture' id='edit_{{user_article.id}}'>換圖片</p>
-            <p class='style_picture' id='style_{{user_article.id}}'>換風格</p>
+            <label for="article_cover_{{user_article.id}}">
+                <p class='edit_picture' id='edit_{{user_article.id}}'>換圖片</p>
+            </label>
+            <form method="POST" id='article_cover_upload' class="form-container" enctype="multipart/form-data", style='display:none'>   
+                <input type="file" class='upload_article_cover' id="article_cover_{{user_article.id}}" name='article_cover', style='display:none'> 
+            </form>         
+            <label for="article_cover_change">
+                <p class='style_picture' id='style_{{user_article.id}}'>換風格</p>
+            </label>
         {% endif %}
             <a href="/tripblog/{{ user_account }}/article/{{ user_article.id }}">
-            <img src= "/media/{{ user_account }}/articles/{{ user_article.id }}/cover.jpg" alt=""/>{{ user_article.article_title }}</a>
+
+                <img class="article_coverphoto" id='article_cover_shown_{{ user_article.id }}'src= "/media/{{ user_account }}/articles/{{ user_article.id }}/original/cover.jpg?*cachebuster*" alt=""/>                
+                <p class="article_title">{{ user_article.article_title }}</p>
+                <img class="article_polaroid" src= "{% static 'tripblog/images/polaroid.png' %}" alt=""/>
+            </a>
         </div>
         {% endfor %}
-
-
-        <!-- <div class="articlephoto photo_1">
-            
-            <label for="blog_image">
-                    <img id='blog_image_shown' src="/media/{{ user_account }}/articles/original/blog_image.jpg"/>
-            </label>
-            
-            <form method="POST" id='blog_image_upload' class="form-container" enctype="multipart/form-data">
-                <input type="file" id="blog_image" name='blog_image'> 
-            </form>
-        </div> -->
-    </div>
-    <!-- Oliver fxn test -->
-    
-    <!-- Oliver fxn test -->
 </div>
 {% endblock %}
 
 {% block script %}
 
-<script>
+<script>      
     $(document).ready(() => {
-
         {% comment %} ajax to upload headshot {% endcomment %}
         $("#headshot").change(event => {  
             let data = new FormData($('#headshot_upload').get(0));
@@ -82,12 +84,12 @@
         });
 
         {% comment %} Oliver fxn testing   {% endcomment %}
-            $("#blog_image").change(event => {
-                
-                let data = new FormData($('#blog_image_upload').get(0));
-                
+            $(".upload_article_cover").change(event => {
+                let data = new FormData($('#article_cover_upload').get(0));
+                let id = event.target.id.split('_')[2];
+                console.log(id)
                 $.ajax({
-                    url: "/tripblog/{{user_account}}/blog_image_upload/16/",
+                    url: "/tripblog/{{user_account}}/article_cover_upload/"+id+"/",
                     {% comment %} introduce to view by the url {% endcomment %}
                     type: "POST",
                     data: data,
@@ -95,18 +97,33 @@
                     processData: false,
                     contentType: false,
                     success: data => {
-                        $('#blog_image_shown').attr('src', data['blog_image_src']+'?test='+Math.floor(Math.random()*100+1));
+                        $('#article_cover_shown_'+id).attr('src', data['article_cover_src']+'?test='+Math.floor(Math.random()*100+1));
                     },
                 });
-                $("#blog_image").val('');
+                $("#article_cover").val('');
             });
+
+        {% comment %} to change cover img style {% endcomment %}
+        $('p.style_picture').click(event=>{
+            let id = event.target.id.split('_')[1];
+            console.log('style transfer:', id)
+            if (confirm('Please confirm to transfer image style: ')){
+                $.ajax({
+                    url: "/tripblog/{{ user_account }}/article_cover_style_change/"+id+"/",
+                    type: "GET",
+                    success: function(data){
+                        $('#article_cover_shown_'+id).attr('src', data['article_style_src']+'?test='+Math.floor(Math.random()*100+1));              
+                    },
+                });
+            };
+        })
 
         {% comment %} ajax to delete article {% endcomment %}
         $('p.delete_article').click(event=>{
             let id = event.target.id.split('_')[1];
             let article_title = $(event.target).siblings('a').text()
             article_title = article_title.replace(/\s/g, '');
-            if (confirm('Please confirm the deletion of article: '+article_title)){
+            if (confirm('你確定要刪除: '+article_title)){
                 $.ajax({
                     url: "/tripblog/{{ user_account }}/delete_article/",
                     type: "POST",

@@ -1,11 +1,16 @@
 {% extends 'tripblog/base.html' %}
 {% load customed_filter %}
+{% load static %}
 {% block css %}
-	{% load static %}
-	
-	<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-	<link rel="stylesheet" href={% static "tripblog/css/edit_article2.css" %}>
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel="stylesheet" href={% static "tripblog/css/edit_article.css" %}>
+
+<style>
+	body {
+		
+	}
+</style>
 {% endblock %}
 
 {% block content %}
