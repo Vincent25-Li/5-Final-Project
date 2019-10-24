@@ -76,7 +76,8 @@ class OpenposeObject():
 
 
     def openpose_matching(self, imageToProcess, user_account):
-        self.datum.cvInputData = imageToProcess
+        imageToProcess_flip = cv2.flip(imageToProcess, 1)
+        self.datum.cvInputData = imageToProcess_flip
         self.opWrapper.emplaceAndPop([self.datum])
         realtime_keypoints = self.datum.poseKeypoints[0, :, :2]
 
