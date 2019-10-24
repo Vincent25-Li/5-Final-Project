@@ -533,10 +533,8 @@ def pose_analysis(request, user_account=None):
         image = np.array(image).reshape(height, width, -1)[:, :, :3]
         image = image.astype('uint8')
         result = openpose_object.openpose_matching(image, user_account)
-        print(result)
-
         response = {}
-        response['response'] = 'OK'
+        response['result'] = result
         return JsonResponse(response)
         
 

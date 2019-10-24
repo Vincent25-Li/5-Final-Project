@@ -12,6 +12,8 @@
         width: 640px;
         height: 360px;
         background-color: #666;
+        transform: rotateY(180deg);
+        -webkit-transform:rotateY(180deg); /* Safari and Chrome */
     }
     .upload_photo {
         margin-top: 15vh;
@@ -106,7 +108,7 @@
     function playPause(){
         if (video.paused){
             video.play();
-            var take_image = setInterval(get_pose, 10000)
+            var take_image = setInterval(get_pose, 6000)
         }
         else{
             clearInterval(take_image);
