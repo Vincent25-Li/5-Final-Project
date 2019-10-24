@@ -18,6 +18,11 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 	font: inherit;
 	vertical-align: baseline;
 	text-decoration: none;
+	font-family: "Comic Sans MS","Microsoft YaHei";
+}
+
+a {
+	color: #000;
 }
 
 /*上傳頭像 */
@@ -74,7 +79,7 @@ button,
 	color: #ffffff;
 	cursor: pointer;
 	display: inline-block;
-	font-family: sans-serif;
+	font-family: "Comic Sans MS","Microsoft YaHei";
 	vertical-align: middle;
 	padding: 0.3em 0.8em;
 	text-align: center;
@@ -431,13 +436,13 @@ button,
 /*以下是各相片樣式*/
 .photo_1 {
 	
-	transform: rotate(-0.5deg);
+	transform: rotate(-2deg);
 	transform-origin: top;
 	text-decoration: none;
 }
 .photo_2 {
 	
-	transform: rotate(+0.5deg);
+	transform: rotate(+2deg);
     transform-origin: top;
 }
 .photo_3 {
@@ -452,7 +457,7 @@ button,
 }
 .photo_5 {
 	
-	transform: rotate(+0deg);
+	transform: rotate(+0.1deg);
     transform-origin: top;
 }
 
@@ -496,8 +501,11 @@ button,
 	position: absolute;
 	top: 5vh;
 	right: 2vh;
-	background-color: #a7d9e7;
+	background-color: #d7df8f;
 	z-index: 9;
+	border-radius: 1px;
+	padding-left: 0.2vh;
+	padding-right: 0.2vh;
 }
 .edit_picture:hover {
 	cursor: pointer;
@@ -505,10 +513,12 @@ button,
 
 .style_picture {
 	position: absolute;
-	top: 7.5vh;
-	background-color: #a7d9e7;
+	top: 8vh;
+	background-color: #d7df8f;
 	right: 2vh;
 	z-index: 9;
+	padding-left: 0.2vh;
+	padding-right: 0.2vh;
 }
 .style_picture:hover {
 	cursor: pointer;
