@@ -52,7 +52,7 @@
         {% endif %}
             <a href="/tripblog/{{ user_account }}/article/{{ user_article.id }}">
 
-                <img class="article_coverphoto" id='article_cover_shown'src= "/media/{{ user_account }}/articles/{{ user_article.id }}/original/cover.jpg?*cachebuster*" alt=""/>                
+                <img class="article_coverphoto" id='article_cover_shown_{{ user_article.id }}'src= "/media/{{ user_account }}/articles/{{ user_article.id }}/original/cover.jpg?*cachebuster*" alt=""/>                
                 <p class="article_title">{{ user_article.article_title }}</p>
                 <img class="article_polaroid" src= "{% static 'tripblog/images/polaroid.png' %}" alt=""/>
             </a>
@@ -112,7 +112,7 @@
                     url: "/tripblog/{{ user_account }}/article_cover_style_change/"+id+"/",
                     type: "GET",
                     success: function(data){
-                        $('#article_cover_shown').attr('src', data['article_style_src']+'?test='+Math.floor(Math.random()*100+1));              
+                        $('#article_cover_shown_'+id).attr('src', data['article_style_src']+'?test='+Math.floor(Math.random()*100+1));              
                     },
                 });
             };

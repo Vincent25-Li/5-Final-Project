@@ -869,14 +869,14 @@ class CycleGAN():
 # Load
     ###key to load model&weight ###
     def load_model_and_weights(self, model):
-        print(f'model.name: {model.name}') #G_A2B_model #G_B2A_model
-        print(f'model: {model}') # <keras.engine.training.Model object at 0x000001E422F6C7F0> E Model Object
-        print(f'settings.MEDIA_ROOT:{settings.MEDIA_ROOT}') #\Cyclegan_move_to_app\media  
+        #print(f'model.name: {model.name}') #G_A2B_model #G_B2A_model
+        #print(f'model: {model}') # <keras.engine.training.Model object at 0x000001E422F6C7F0> E Model Object
+        #print(f'settings.MEDIA_ROOT:{settings.MEDIA_ROOT}') #\Cyclegan_move_to_app\media  
         #path_to_model = os.path.join(settings.MEDIA_ROOT, 'generate_images', 'models', f'{model.name}.json')
         path_to_weights = os.path.join(settings.MEDIA_ROOT, 'models_weights','cyclegan', 'G_B2A_model.hdf5')
         #model = model_from_json(path_to_model)
         model.load_weights(path_to_weights)
-        print('sucess load model========================================')
+        #print('sucess load model========================================')
         
     ###after model loaded, prcoess user's img w/ our model###
     def load_model_and_generate_synthetic_images(self):
@@ -907,12 +907,12 @@ class CycleGAN():
                 # Get the name from the image it was conditioned on
                 name = self.testA_image_names[i].strip('.png') + '_synthetic.png'
                 synt_B = synthetic_images_B[i]
-                print('ready to transfer===============########===========########===========########===========############')
-                print('self variable:',self.user_account, self.article_id)
+                #print('ready to transfer===============########===========########===========########===========############')
+                #print('self variable:',self.user_account, self.article_id)
                 
 
                 save_image(synt_B, name, 'B')
-                print('after transfer===============########===========########===========########===========############')
+                #print('after transfer===============########===========########===========########===========############')
 
             print('{} synthetic images have been generated and placed in ./generate_images/synthetic_images'
                   .format(len(self.A_test) + len(self.B_test)))

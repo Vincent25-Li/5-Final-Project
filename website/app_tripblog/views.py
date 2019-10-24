@@ -544,7 +544,7 @@ def check_useraccount_exist(user_account):
 def article_cover_upload(request, user_account=None, article_id=None):
     if request.method == 'POST' and request.is_ajax():
         article_cover = request.FILES['article_cover'] # retrieve post image
-
+        print('article_cover :', article_cover ,'==========================###==========================') #
         user = User.objects.get(user_account=user_account)
         # print('user is :', user,'====================================') #jessie
         user_article = UserArticles.objects.get(id=article_id)
