@@ -863,8 +863,8 @@ class CycleGAN():
             'number of B test examples': len(self.B_test),
         })
 
-        with open('images/{}/meta_data.json'.format(self.date_time), 'w') as outfile:
-            json.dump(data, outfile, sort_keys=True)
+        # with open('images/{}/meta_data.json'.format(self.date_time), 'w') as outfile:
+        #     json.dump(data, outfile, sort_keys=True)
 
 # Load
     ###key to load model&weight ###
@@ -876,6 +876,8 @@ class CycleGAN():
         path_to_weights = os.path.join(settings.MEDIA_ROOT, 'models_weights','cyclegan', 'G_B2A_model.hdf5')
         #model = model_from_json(path_to_model)
         model.load_weights(path_to_weights)
+        print('model:', model,'==================')
+        print('path_to_weights:',path_to_weights,'#############################################')
         #print('sucess load model========================================')
         
     ###after model loaded, prcoess user's img w/ our model###

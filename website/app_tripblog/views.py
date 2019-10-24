@@ -578,14 +578,12 @@ def article_cover_upload(request, user_account=None, article_id=None):
             for chunk in article_cover.chunks():
                 destination.write(chunk)
 
-        gan.user_account = user_account
-        gan.user_article_id = user_article_id 
-        print('user_account :', user_account, '&&&&&&&&&&&&&&&&&')
-        print('user_article_id :', user_article_id, '&&&&&&&&&&&') 
-        #GAN.load_model_and_weights(GAN.G_B2A)
-        gan.load_model_and_generate_synthetic_images()   
-        
-
+        GAN = CycleGAN(user_account = user_account, user_article_id = user_article_id )
+        # print('user_account :', user_account, '&&&&&&&&&&&&&&&&&')
+        # print('user_article_id :', user_article_id, '&&&&&&&&&&&') 
+        GAN.load_model_and_weights(GAN.G_B2A)
+        GAN.load_model_and_generate_synthetic_images()   
+    
         return JsonResponse({'article_cover_src': f'/media/{user_account}/articles/{user_article.id}/original/cover.jpg'})
 
     else:
