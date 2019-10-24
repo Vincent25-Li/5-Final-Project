@@ -106,12 +106,13 @@
         {% comment %} to change cover img style {% endcomment %}
         $('p.style_picture').click(event=>{
             let id = event.target.id.split('_')[1];
+            console.log('style transfer:', id)
             if (confirm('Please confirm to transfer image style: ')){
                 $.ajax({
                     url: "/tripblog/{{ user_account }}/article_cover_style_change/"+id+"/",
                     type: "GET",
                     success: function(data){
-                        $('#article_cover_shown').attr('src', data['article_cover_src']+'?test='+Math.floor(Math.random()*100+1));              
+                        $('#article_cover_shown').attr('src', data['article_style_src']+'?test='+Math.floor(Math.random()*100+1));              
                     },
                 });
             };

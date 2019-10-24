@@ -548,9 +548,9 @@ def article_cover_upload(request, user_account=None, article_id=None):
         user = User.objects.get(user_account=user_account)
         # print('user is :', user,'====================================') #jessie
         user_article = UserArticles.objects.get(id=article_id)
-        # print('user_article is :', user_article ,'====###======') #jessie:TEST
-        # print('user_article.article_title is :', user_article.article_title ,'====###======') #TEST
-        # print('user_article.id is :', user_article.id ,'====###======') #16
+        print('user_article is :', user_article ,'====###======') #jessie:TEST
+        print('user_article.article_title is :', user_article.article_title ,'====###======') #TEST
+        print('user_article.id is :', user_article.id ,'====###======') #16
         user_article_id = str(user_article.id)
 
         article_cover_path = os.path.join(settings.MEDIA_ROOT, user_account,'articles', 
@@ -579,4 +579,4 @@ def article_cover_style_change(request, user_account=None, article_id=None):
     user_article = UserArticles.objects.get(id=article_id)
     user_article_id = str(user_article.id)
     
-    return JsonResponse({'article_cover_src': f'/media/{user_account}/articles/{user_article.id}/transfer/cover.j_synthetic.png'}) 
+    return JsonResponse({'article_style_src': f'/media/{user_account}/articles/{user_article.id}/transfer/cover.j_synthetic.png'}) 

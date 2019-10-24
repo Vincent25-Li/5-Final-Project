@@ -893,7 +893,7 @@ class CycleGAN():
                 print(f'name : {name}') #name : user_im_synthetic.png
                 if self.channels == 1:
                     image = image[:, :, 0]
-                toimage(image, cmin=-1, cmax=1).save(os.path.join(settings.MEDIA_ROOT, 'jessie','articles','16','transfer', name))
+                toimage(image, cmin=-1, cmax=1).save(os.path.join(settings.MEDIA_ROOT, self.user_account ,'articles',self.article_id,'transfer', name))
 
             # # Test A images
             # for i in range(len(synthetic_images_A)):
@@ -907,7 +907,12 @@ class CycleGAN():
                 # Get the name from the image it was conditioned on
                 name = self.testA_image_names[i].strip('.png') + '_synthetic.png'
                 synt_B = synthetic_images_B[i]
+                print('ready to transfer===============########===========########===========########===========############')
+                print('self variable:',self.user_account, self.article_id)
+                
+
                 save_image(synt_B, name, 'B')
+                print('after transfer===============########===========########===========########===========############')
 
             print('{} synthetic images have been generated and placed in ./generate_images/synthetic_images'
                   .format(len(self.A_test) + len(self.B_test)))
