@@ -555,13 +555,13 @@ def check_useraccount_exist(user_account):
 def article_cover_upload(request, user_account=None, article_id=None):
     if request.method == 'POST' and request.is_ajax():
         article_cover = request.FILES['article_cover'] # retrieve post image
-        print('article_cover :', article_cover ,'==========================###==========================') #
+        print('article_cover :', article_cover ,'==============33333333333====3333333================') #
         user = User.objects.get(user_account=user_account)
         # print('user is :', user,'====================================') #jessie
         user_article = UserArticles.objects.get(id=article_id)
-        print('user_article is :', user_article ,'====###======') #jessie:TEST
-        print('user_article.article_title is :', user_article.article_title ,'====###======') #TEST
-        print('user_article.id is :', user_article.id ,'====###======') #16
+        # print('user_article is :', user_article ,'====###======') #jessie:TEST
+        # print('user_article.article_title is :', user_article.article_title ,'====###======') #TEST
+        # print('user_article.id is :', user_article.id ,'====###======') #16
         user_article_id = str(user_article.id)
 
         article_cover_path = os.path.join(settings.MEDIA_ROOT, user_account,'articles', 
@@ -571,11 +571,11 @@ def article_cover_upload(request, user_account=None, article_id=None):
             for chunk in article_cover.chunks():
                 destination.write(chunk)
 
-        GAN = CycleGAN(user_account = user_account, user_article_id = user_article_id )
-        # print('user_account :', user_account, '&&&&&&&&&&&&&&&&&')
-        # print('user_article_id :', user_article_id, '&&&&&&&&&&&') 
-        GAN.load_model_and_weights(GAN.G_B2A)
-        GAN.load_model_and_generate_synthetic_images()   
+        # GAN = CycleGAN(user_account = user_account, user_article_id = user_article_id )
+        # # print('user_account :', user_account, '&&&&&&&&&&&&&&&&&')
+        # # print('user_article_id :', user_article_id, '&&&&&&&&&&&') 
+        # GAN.load_model_and_weights(GAN.G_B2A)
+        # GAN.load_model_and_generate_synthetic_images()   
     
         return JsonResponse({'article_cover_src': f'/media/{user_account}/articles/{user_article.id}/original/cover.jpg'})
 
@@ -586,5 +586,11 @@ def article_cover_style_change(request, user_account=None, article_id=None):
     user = User.objects.get(user_account=user_account)
     user_article = UserArticles.objects.get(id=article_id)
     user_article_id = str(user_article.id)
+
+    GAN = CycleGAN(user_account = user_account, user_article_id = user_article_id )
+    # print('user_account :', user_account, '&&&&&&&&&&&&&&&&&')
+    # print('user_article_id :', user_article_id, '&&&&&&&&&&&') 
+    GAN.load_model_and_weights(GAN.G_B2A)
+    GAN.load_model_and_generate_synthetic_images()  
     
     return JsonResponse({'article_style_src': f'/media/{user_account}/articles/{user_article.id}/transfer/cover.j_synthetic.png'}) 
