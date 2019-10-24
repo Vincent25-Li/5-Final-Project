@@ -23,7 +23,7 @@
 <section>
     <div class="contentDiv">
             <label for="headshot">
-                <img id='headshot_shown' src="/media/{{ user_account }}/headshot.jpg?*cachebuster*"/>
+                <img id='headshot_shown' src="/media/{{ user_account }}/headshot.jpg?cachebuster={{ random_no }}"/>
             </label>
         <form method="POST" id='headshot_upload' class="form-container" enctype="multipart/form-data", style='display:none'>
             {% csrf_token %}
@@ -52,7 +52,7 @@
         {% endif %}
             <a href="/tripblog/{{ user_account }}/article/{{ user_article.id }}">
 
-                <img class="article_coverphoto" id='article_cover_shown_{{ user_article.id }}'src= "/media/{{ user_account }}/articles/{{ user_article.id }}/original/cover.jpg?*cachebuster*" alt=""/>                
+                <img class="article_coverphoto" id='article_cover_shown_{{ user_article.id }}'src= "/media/{{ user_account }}/articles/{{ user_article.id }}/original/cover.jpg?cachebuster={{ random_no }}" alt=""/>                
                 <p class="article_title">{{ user_article.article_title }}</p>
                 <img class="article_polaroid" src= "{% static 'tripblog/images/polaroid.png' %}" alt=""/>
             </a>
@@ -77,7 +77,7 @@
                 processData: false,
                 contentType: false,
                 success: data => {
-                    $('#headshot_shown').attr('src', data['headshot_src']+'?cachebuster='+Math.floor(Math.random()*100+1));
+                    $('#headshot_shown').attr('src', data['headshot_src']+'?cachebuster='+Math.floor(Math.random()*1000+1));
                 },
             });
             $("#headshot").val('');
@@ -97,7 +97,7 @@
                     processData: false,
                     contentType: false,
                     success: data => {
-                        $('#article_cover_shown_'+id).attr('src', data['article_cover_src']+'?test='+Math.floor(Math.random()*100+1));
+                        $('#article_cover_shown_'+id).attr('src', data['article_cover_src']+'?test='+Math.floor(Math.random()*1000+1));
                     },
                 });
                 $("#article_cover").val('');
@@ -112,7 +112,7 @@
                     url: "/tripblog/{{ user_account }}/article_cover_style_change/"+id+"/",
                     type: "GET",
                     success: function(data){
-                        $('#article_cover_shown_'+id).attr('src', data['article_style_src']+'?test='+Math.floor(Math.random()*100+1));              
+                        $('#article_cover_shown_'+id).attr('src', data['article_style_src']+'?test='+Math.floor(Math.random()*1000+1));              
                     },
                 });
             };
