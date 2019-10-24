@@ -34,7 +34,7 @@
     height: 300px;
     width: 220px;
     text-align: center;
-    margin-right: 30px;
+    margin-right: 4vw;
     margin-bottom: 5px;
   }
   .allalbums {
@@ -55,7 +55,7 @@
 
   {% for user_album in user_albums %}
   <div class="albumDiv">
-    <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/"><img src="{% static "tripblog/images/folder-icon.png" %}"/></a>
+    <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/"><img src="{% static "tripblog/images/folder-icon2.png" %}"/></a>
     <div>
       <a href="/tripblog/{{ user_account }}/albums/{{ user_album.id }}/">{{ user_album.album_title }}</a><br>
       {% if status and login_user == user_account %}

@@ -21,10 +21,6 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 	font-family: "Comic Sans MS","Microsoft YaHei";
 }
 
-a {
-	color: #000;
-}
-
 /*上傳頭像 */
 section{
 	display: -webkit-flex;
@@ -257,7 +253,7 @@ button,
 
 	#header nav {
 		position: absolute;
-		top: 1.5vh;
+		top: 0.5vh;
 		height: inherit;
 		line-height: inherit;
 	}
@@ -431,7 +427,6 @@ button,
 	width: 32vh;
 	height: 40vh;
 	overflow: visible;
-    
 }
 /*以下是各相片樣式*/
 .photo_1 {
@@ -466,7 +461,7 @@ button,
 	z-index: 3;
 	top: 31vh;
 	left: 3vh; 
-	
+	width: 100%;
 }
 
 .article_coverphoto {
@@ -483,13 +478,14 @@ button,
 
 .article_polaroid {
 	position: absolute; 
-	 z-index: 2;
+	width:100%;
+	z-index: 2;
 }
 
 .delete_article {
 	position: absolute;
-	top: 2.1vh;
-	right:1vh;
+	top: 1.4vh;
+	right:0.9vh;
 	z-index: 9;
 }
 
@@ -499,7 +495,7 @@ button,
 
 .edit_picture {
 	position: absolute;
-	top: 5vh;
+	top: 4.7vh;
 	right: 2vh;
 	background-color: #d7df8f;
 	z-index: 9;
@@ -513,7 +509,7 @@ button,
 
 .style_picture {
 	position: absolute;
-	top: 8vh;
+	top: 8.5vh;
 	background-color: #d7df8f;
 	right: 2vh;
 	z-index: 9;
