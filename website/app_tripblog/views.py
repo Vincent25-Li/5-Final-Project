@@ -25,10 +25,6 @@ from app_tripblog.cyclegan import CycleGAN ###load cyclegan
 
 chatbot_object = ChatbotObject()
 img_classifier = Image_Classifier()
-gan = CycleGAN()
-gan.load_model_and_weights(gan.G_B2A)
-print('load gan sucess ===============================================')
-
 # openpose_object = OpenposeObject()
 ''' templates '''
 
@@ -537,7 +533,6 @@ def pose_analysis(request, user_account=None):
         image = np.array(image).reshape(height, width, -1)[:, :, :3]
         image = image.astype('uint8')
         result = openpose_object.openpose_matching(image, user_account)
-
         response = {}
         response['result'] = result
         return JsonResponse(response)
@@ -576,14 +571,12 @@ def article_cover_upload(request, user_account=None, article_id=None):
             for chunk in article_cover.chunks():
                 destination.write(chunk)
 
-        gan.user_account = user_account
-        gan.user_article_id = user_article_id 
-        print('user_account :', user_account, '&&&&&&&&&&&&&&&&&')
-        print('user_article_id :', user_article_id, '&&&&&&&&&&&') 
-        #GAN.load_model_and_weights(GAN.G_B2A)
-        gan.load_model_and_generate_synthetic_images()   
-        
-
+        GAN = CycleGAN(user_account = user_account, user_article_id = user_article_id )
+        # print('user_account :', user_account, '&&&&&&&&&&&&&&&&&')
+        # print('user_article_id :', user_article_id, '&&&&&&&&&&&') 
+        GAN.load_model_and_weights(GAN.G_B2A)
+        GAN.load_model_and_generate_synthetic_images()   
+    
         return JsonResponse({'article_cover_src': f'/media/{user_account}/articles/{user_article.id}/original/cover.jpg'})
 
     else:
