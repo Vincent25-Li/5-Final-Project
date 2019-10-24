@@ -19,7 +19,7 @@ from app_tripblog.models import User, UserArticles, UserAlbums
 from app_tripblog.function_chatbot_ch import ChatbotObject
 from app_tripblog.fn_image_classifier import Image_Classifier
 from app_tripblog.cyclegan import CycleGAN ###load cyclegan
-# from app_tripblog.fn_openpose import OpenposeObject
+from app_tripblog.fn_openpose import OpenposeObject
 
 
 
@@ -29,7 +29,7 @@ gan = CycleGAN()
 gan.load_model_and_weights(gan.G_B2A)
 print('load gan sucess ===============================================')
 
-# openpose_object = OpenposeObject()
+openpose_object = OpenposeObject()
 ''' templates '''
 
 # base template
@@ -536,14 +536,16 @@ def pose_analysis(request, user_account=None):
         image = list(json.loads(image).values())
         image = np.array(image).reshape(height, width, -1)[:, :, :3]
         image = image.astype('uint8')
-        result = openpose_object.openpose_matching(image, user_account)
+        
+        try:
+            result = openpose_object.openpose_matching(image, user_account)
+        except IndexError:
+            result = False
 
         response = {}
         response['result'] = result
         return JsonResponse(response)
         
-
-
 '''internal functions'''
 
 # check user_account whether exist in database
