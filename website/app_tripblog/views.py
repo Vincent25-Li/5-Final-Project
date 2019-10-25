@@ -314,6 +314,22 @@ def chatbot(request, user_account=None):
                 user_article = UserArticles.objects.create(user_account=user_id, article_title=article_title, article_content=article_content)
                 user_article.save()
 
+                # create new article directory
+                dir_path1 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'original')
+                dir_path2 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'transfer')
+                dir_path3 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'trainA')
+                dir_path4 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'trainB')
+                try:
+                    os.makedirs(dir_path1)
+                    os.makedirs(dir_path2)
+                    os.makedirs(dir_path3)
+                    os.makedirs(dir_path4)
+                except FileExistsError:
+                    print(f"Directory {dir_path} already exists")
+                img_src = os.path.join(settings.MEDIA_ROOT, 'fortrain.jpg')
+                img_dst = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'transfer')
+                shutil.copy(img_src, img_dst)
+
                 response['title'] = article_title
                 response['id'] = user_article.id
                 reply = '已安排您的行程於遊記裡'
@@ -561,6 +577,7 @@ def check_useraccount_exist(user_account):
         
 def article_cover_upload(request, user_account=None, article_id=None):
     if request.method == 'POST' and request.is_ajax():
+        print(request.FILES.keys())
         article_cover = request.FILES['article_cover'] # retrieve post image
         print('article_cover :', article_cover ,'==============33333333333====3333333================') #
         user = User.objects.get(user_account=user_account)
