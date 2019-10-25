@@ -137,7 +137,7 @@
         let image = context.getImageData(0, 0, cw, ch);
         let image_pixel = image.data;
 
-        {% comment %} $.ajax({
+        $.ajax({
             url: "/tripblog/{{ user_account }}/pose_analysis/",
             type: "POST",
             data: {
@@ -148,8 +148,9 @@
             datatype: "json", 
             success: response => {
                 console.log(response['response'])
+                clearInterval(take_image)
             },
-        }); {% endcomment %}
+        });
     };
 
     // csrf code
