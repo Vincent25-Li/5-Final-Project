@@ -665,7 +665,18 @@ button,
 	float: left;
 }
 
-
 .fornav {
     margin-top: 8vh;
+}
+
+.add_article {
+	position: fixed;
+	top: 32vh;
+	left: 3vw;
+	z-index: 1000;
+}
+
+.img_add_article {
+	width: 40px;
+	height: 40px;
 }

@@ -34,6 +34,10 @@
     </div>
 </section>
 
+{% if status and login_user == user_account %}
+<a class="add_article" href="/tripblog/{{ user_account }}/new_article/"><img class="img_add_article" src="{% static "tripblog/images/plus.png" %}" /></a>
+{% endif %}
+
 <div class="outer-wrapper_BH">
     <div class="wrapper_BH">
         {% for user_article in user_articles %}
@@ -43,8 +47,8 @@
             <label for="article_cover_{{user_article.id}}">
                 <p class='edit_picture' id='edit_{{user_article.id}}'>換圖片</p>
             </label>
-            <form method="POST" id='article_cover_upload' class="form-container" enctype="multipart/form-data", style='display:none'>   
-                <input type="file" class='upload_article_cover' id="article_cover_{{user_article.id}}" name='article_cover', style='display:none'> 
+            <form method="POST" id='article_cover_upload_{{user_article.id}}' class="form-container" enctype="multipart/form-data", style='display:none'>   
+                <input type="file" class='upload_article_cover' id="article_cover_{{user_article.id}}" name='article_cover_{{user_article.id}}', style='display:none'> 
             </form>         
             <label for="article_cover_change">
                 <p class='style_picture' id='style_{{user_article.id}}'>換風格</p>
@@ -85,9 +89,9 @@
 
         {% comment %} Oliver fxn testing   {% endcomment %}
             $(".upload_article_cover").change(event => {
-                let data = new FormData($('#article_cover_upload').get(0));
                 let id = event.target.id.split('_')[2];
-                console.log(id)
+                let data = new FormData($('#article_cover_upload_' + id).get(0));
+                
                 $.ajax({
                     url: "/tripblog/{{user_account}}/article_cover_upload/"+id+"/",
                     {% comment %} introduce to view by the url {% endcomment %}
@@ -107,7 +111,7 @@
         $('p.style_picture').click(event=>{
             let id = event.target.id.split('_')[1];
             console.log('style transfer:', id)
-            if (confirm('Please confirm to transfer image style: ')){
+            if (confirm('轉換風格需等待約3秒: ')){
                 $.ajax({
                     url: "/tripblog/{{ user_account }}/article_cover_style_change/"+id+"/",
                     type: "GET",
