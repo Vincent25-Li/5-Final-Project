@@ -20,8 +20,7 @@ from app_tripblog.function_chatbot_ch import ChatbotObject
 from app_tripblog.fn_image_classifier import Image_Classifier
 from app_tripblog.cyclegan import CycleGAN ###load cyclegan
 from PIL import Image 
-from app_tripblog.fn_openpose import OpenposeObject
-from app_tripblog.fn_openpose import OpenposeObject
+# from app_tripblog.fn_openpose import OpenposeObject
 
 chatbot_object = ChatbotObject()
 img_classifier = Image_Classifier()
@@ -29,8 +28,7 @@ gan = CycleGAN()
 gan.load_model_and_weights(gan.G_B2A)
 print('load gan sucess ===============================================')
 
-openpose_object = OpenposeObject()
-openpose_object = OpenposeObject()
+# openpose_object = OpenposeObject()
 ''' templates '''
 
 # base template
@@ -302,8 +300,8 @@ def chatbot(request, user_account=None):
                 mission_completed += bool(request.session[item])
 
             user_name = User.objects.get(user_account=user_account).user_name
-            confirmation = ['y', 'yes', '確認']
-            cancellation = ['n', 'no', '取消', '我要取消']
+            confirmation = ['y', 'yes', '確認', '是', '好']
+            cancellation = ['n', 'no', '取消', '我要取消', '否', '不是']
             
             if user_msg.lower() in confirmation and mission_completed==5:
                 user_id = User.objects.only('id').get(user_account=user_account)
@@ -341,7 +339,7 @@ def chatbot(request, user_account=None):
                 reply = f'{user_name}您的旅程已取消'
                 del request.session['NER']
             elif mission_completed == 5:
-                reply = f"請確定您的以下行程：<br>{request.session['S-loc']}＞{request.session['D-loc']}<br>搭乘：{request.session['B-obj']}<br>時間：{request.session['first_date']}＞{request.session['last_date']}<br>[Y/N]"
+                reply = f"請確定您的以下行程：<br>{request.session['S-loc']}＞{request.session['D-loc']}<br>搭乘：{request.session['B-obj']}<br>時間：{request.session['first_date']}＞{request.session['last_date']}<br>[是/否]"
             elif not bool(request.session['S-loc']) and not bool(request.session['D-loc']):
                 reply = f'{user_name}請問您想如何規劃行程'
                 request.session['loc_a'] = True
