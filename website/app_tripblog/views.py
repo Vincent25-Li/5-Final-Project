@@ -330,6 +330,7 @@ def chatbot(request, user_account=None):
                 img_dst = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'transfer')
                 shutil.copy(img_src, img_dst)
 
+                response['redirect'] = '/tripblog/'+user_account+'/'
                 response['title'] = article_title
                 response['id'] = user_article.id
                 reply = '已安排您的行程於遊記裡'
