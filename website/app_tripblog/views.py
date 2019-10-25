@@ -20,7 +20,7 @@ from app_tripblog.function_chatbot_ch import ChatbotObject
 from app_tripblog.fn_image_classifier import Image_Classifier
 from app_tripblog.cyclegan import CycleGAN ###load cyclegan
 from PIL import Image 
-from app_tripblog.fn_openpose import OpenposeObject
+#from app_tripblog.fn_openpose import OpenposeObject
 
 chatbot_object = ChatbotObject()
 img_classifier = Image_Classifier()
@@ -28,7 +28,7 @@ gan = CycleGAN()
 gan.load_model_and_weights(gan.G_B2A)
 print('load gan sucess ===============================================')
 
-openpose_object = OpenposeObject()
+#openpose_object = OpenposeObject()
 ''' templates '''
 
 # base template
@@ -588,6 +588,10 @@ def article_cover_upload(request, user_account=None, article_id=None):
         article_cover_path = os.path.join(settings.MEDIA_ROOT, user_account,'articles', user_article_id ,'original','cover.jpg')   # define stored media path
         print('~~~~~~~~~~~~~~article_cover_path :', article_cover_path ,'~~~~~~~~~~~~~~')
 
+        cover_picture = True
+        user_article.cover_picture = cover_picture
+        user_article.save()
+
         with open(article_cover_path, 'wb+') as destination:# store image at local side
             for chunk in article_cover.chunks():
                 destination.write(chunk)
@@ -616,9 +620,28 @@ def article_cover_style_change(request, user_account=None, article_id=None):
     user_article_id = str(user_article.id)
 
     GAN = CycleGAN(user_account = user_account, user_article_id = user_article_id )
-    # print('user_account :', user_account, '&&&&&&&&&&&&&&&&&')
-    # print('user_article_id :', user_article_id, '&&&&&&&&&&&') 
+    # print('user_account :', user_account, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
+    # print('user_article_id :', user_article_id, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&') 
     GAN.load_model_and_weights(GAN.G_B2A)
-    GAN.load_model_and_generate_synthetic_images()  
+    GAN.load_model_and_generate_synthetic_images()
+    # cover_picture = GAN.database   
 
-    return JsonResponse({'article_style_src': f'/media/{user_account}/articles/{user_article.id}/transfer/cover.j_synthetic.png'}) 
+
+    # return JsonResponse({'article_style_src': f'/media/{user_account}/articles/{user_article.id}/transfer/cover.j_synthetic.png'}) 
+
+def article_cover_style_return(request, user_account=None, article_id=None):
+    user = User.objects.get(user_account=user_account)
+    user_article = UserArticles.objects.get(id=article_id)
+    user_article_id = str(user_article.id)
+
+    if  user_article.cover_picture == "True":
+        user_article.cover_picture = False
+        path = f'/media/{user_account}/articles/{user_article.id}/transfer/cover.j_synthetic.png'
+        user_article.save()
+
+    if  user_article.cover_picture == 'False' :
+        user_article.cover_picture = True
+        path = f'/media/{user_account}/articles/{user_article.id}/original/cover.jpg'
+        user_article.save()
+
+    return JsonResponse({'article_style_src': path }) 

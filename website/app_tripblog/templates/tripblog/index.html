@@ -112,19 +112,31 @@
                 $("#article_cover").val('');
             });
 
-            $('p.style_picture').on({
-                'click': function(){
-                    let id = event.target.id.split('_')[1];
-                    console.log('style transfer:', id)
-                    $('#article_cover_shown_'+id).attr('src',"/media/{{user_account}}/articles/"+id+"/transfer/cover.j_synthetic.png");
-                    $('p.style_picture').on({
-                         'click': function(){
-                        $('#article_cover_shown_'+id).attr('src',"/media/{{ user_account }}/articles/"+id+"/original/cover.jpg?cachebuster={{ random_no }}");
-                        }
-                    });
-                  }
-            });
-   
+            // $('p.style_picture').on({
+            //     'click': function(){
+            //         let id = event.target.id.split('_')[1];
+            //         console.log('style transfer:', id)
+            //         $('#article_cover_shown_'+id).attr('src',"/media/{{user_account}}/articles/"+id+"/transfer/cover.j_synthetic.png");
+            //         $('p.style_picture').on({
+            //              'click': function(){
+            //             $('#article_cover_shown_'+id).attr('src',"/media/{{ user_account }}/articles/"+id+"/original/cover.jpg?cachebuster={{ random_no }}");
+            //             }
+            //         });
+            //       }
+            // });
+        $('p.style_picture').click(event=>{
+            let id = event.target.id.split('_')[1];
+            console.log('heheheheeeeeeeeeeeehhhhhhhhhhhhe')
+                $.ajax({
+                    url: "/tripblog/{{ user_account }}/article_cover_style_return/"+id+"/",
+                    type: "GET",
+                    success: function(data){
+                        $('#article_cover_shown_'+id).attr('src', data['article_style_src']+'?test='+Math.floor(Math.random()*1000+1));              
+                    },
+                });
+        })
+        
+            
         {% comment %} ajax to delete article {% endcomment %}
         $('p.delete_article').click(event=>{
             let id = event.target.id.split('_')[1];
@@ -143,7 +155,6 @@
             };
         })
 
-        
         // csrf code
         function getCookie(name) {
             var cookieValue = null;
