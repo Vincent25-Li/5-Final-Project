@@ -3,7 +3,6 @@
 {% load static %}
 {% block css %}
 <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 <link rel="stylesheet" href={% static "tripblog/css/froala_editor.css" %}>
 <link rel="stylesheet" href={% static "tripblog/css/froala_style.css" %}>
@@ -39,8 +38,8 @@
 		</div>
 		<div class="description-flex-container" id="addinput2"> 
 			<p class="active">
-				<span>時間</span><input type="text" name='time'> <span>景點</span><input type="text" name='spot'>
-				<img src="{% static "tripblog/images/plus.png" %}" alt="addnewinput" class="imginputplus canclick" /><br>
+				<br><span>時間</span><input type="text" name='time'> <span>景點</span><input type="text" name='spot'>
+				<img src="{% static "tripblog/images/plus.png" %}" alt="addnewinput" class="imginputplus canclick" />
 			</p>
 		</div>
 	</div>
@@ -105,7 +104,7 @@
 	});
 
 	$("img.imginputplus").click(function () {
-		var addtextinput = $("<a>時間</a><input type='text' name='time'> <a>景點</a><input type='text' name='spot'><br>");
+		var addtextinput = $("<br><a>時間</a><input type='text' name='time'> <a>景點</a><input type='text' name='spot'>");
 		$("p.active").append(addtextinput);
 		$("img.imginputplus").addClass("canclick")
 	});

@@ -3,7 +3,6 @@
 {% load static %}
 {% block css %}
 <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 <link rel="stylesheet" href={% static "tripblog/css/froala_editor.css" %}>
 <link rel="stylesheet" href={% static "tripblog/css/froala_style.css" %}>
@@ -48,10 +47,10 @@
 				<p {% if key == '0' %} class="active" {% endif %}>
 				
 				{% for i in value.time|length|get_range %}
-					<span>時間</span><input type="text" name='time' value={{ value.time|get_listitem:i }}>
+					<br><span>時間</span><input type="text" name='time' value={{ value.time|get_listitem:i }}>
 					<span>景點</span><input type="text" name='spot' value={{ value.spot|get_listitem:i }}>
 					{% if i == 0 %}
-						<img src="{% static "tripblog/images/plus.png" %}" alt="addnewinput" class="imginputplus canclick" /><br>
+						<img src="{% static "tripblog/images/plus.png" %}" alt="addnewinput" class="imginputplus canclick"/>
 					{% endif %}
 				{% endfor %}
 				</p>

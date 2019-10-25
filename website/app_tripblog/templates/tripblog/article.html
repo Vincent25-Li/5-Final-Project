@@ -3,7 +3,6 @@
 {% load static %}
 {% block css %}
 <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 <link rel="stylesheet" href={% static "tripblog/css/edit_article.css" %}>
 
 <style>
@@ -43,7 +42,7 @@
 		</div>
 	</div>
 	{% if status and login_user == user_account %}
-	<h1 class="edit_article_btn"><a href='/tripblog/{{ user_account }}/edit_article/{{ article_id }}/'>進入編輯模式</a></h1>
+	<div class="edit_article_btn"><a href='/tripblog/{{ user_account }}/edit_article/{{ article_id }}/'>進入編輯模式</a></div>
 	{% endif %}
 	<div class="flex-child">
 		<div class="child-flex-content">

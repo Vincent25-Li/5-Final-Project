@@ -20,7 +20,7 @@ from app_tripblog.function_chatbot_ch import ChatbotObject
 from app_tripblog.fn_image_classifier import Image_Classifier
 from app_tripblog.cyclegan import CycleGAN ###load cyclegan
 from PIL import Image 
-from app_tripblog.fn_openpose import OpenposeObject
+# from app_tripblog.fn_openpose import OpenposeObject
 
 chatbot_object = ChatbotObject()
 img_classifier = Image_Classifier()
@@ -28,7 +28,7 @@ gan = CycleGAN()
 gan.load_model_and_weights(gan.G_B2A)
 print('load gan sucess ===============================================')
 
-openpose_object = OpenposeObject()
+# openpose_object = OpenposeObject()
 ''' templates '''
 
 # base template
