@@ -20,7 +20,7 @@ from app_tripblog.function_chatbot_ch import ChatbotObject
 from app_tripblog.fn_image_classifier import Image_Classifier
 from app_tripblog.cyclegan import CycleGAN ###load cyclegan
 from PIL import Image 
-# from app_tripblog.fn_openpose import OpenposeObject
+from app_tripblog.fn_openpose import OpenposeObject
 
 chatbot_object = ChatbotObject()
 img_classifier = Image_Classifier()
@@ -28,7 +28,7 @@ gan = CycleGAN()
 gan.load_model_and_weights(gan.G_B2A)
 print('load gan sucess ===============================================')
 
-# openpose_object = OpenposeObject()
+openpose_object = OpenposeObject()
 ''' templates '''
 
 # base template
@@ -313,6 +313,22 @@ def chatbot(request, user_account=None):
                     }
                 user_article = UserArticles.objects.create(user_account=user_id, article_title=article_title, article_content=article_content)
                 user_article.save()
+
+                # create new article directory
+                dir_path1 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'original')
+                dir_path2 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'transfer')
+                dir_path3 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'trainA')
+                dir_path4 = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'trainB')
+                try:
+                    os.makedirs(dir_path1)
+                    os.makedirs(dir_path2)
+                    os.makedirs(dir_path3)
+                    os.makedirs(dir_path4)
+                except FileExistsError:
+                    print(f"Directory {dir_path} already exists")
+                img_src = os.path.join(settings.MEDIA_ROOT, 'fortrain.jpg')
+                img_dst = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'transfer')
+                shutil.copy(img_src, img_dst)
 
                 response['title'] = article_title
                 response['id'] = user_article.id

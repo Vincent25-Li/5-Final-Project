@@ -104,15 +104,17 @@
     const video = document.getElementById("video_element");
     const snap = document.getElementById('snap');
     const canvas = document.getElementById('canvas');
-
+    
+    var take_image;
     function playPause(){
         if (video.paused){
             video.play();
-            var take_image = setInterval(get_pose, 10000)
+            take_image = setInterval(get_pose, 10000)
+            console.log(take_image)
         }
         else{
-            video.pause();
-            clearInterval(take_image);
+            video.pause(); 
+            clearInterval(take_image)
         }
     }
     if (navigator.mediaDevices.getUserMedia) {
@@ -146,6 +148,7 @@
             datatype: "json", 
             success: response => {
                 console.log(response['response'])
+                clearInterval(take_image)
             },
         });
     };
