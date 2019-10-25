@@ -20,7 +20,8 @@ from app_tripblog.function_chatbot_ch import ChatbotObject
 from app_tripblog.fn_image_classifier import Image_Classifier
 from app_tripblog.cyclegan import CycleGAN ###load cyclegan
 from PIL import Image 
-#from app_tripblog.fn_openpose import OpenposeObject
+from app_tripblog.fn_openpose import OpenposeObject
+from app_tripblog.fn_openpose import OpenposeObject
 
 chatbot_object = ChatbotObject()
 img_classifier = Image_Classifier()
@@ -28,7 +29,8 @@ gan = CycleGAN()
 gan.load_model_and_weights(gan.G_B2A)
 print('load gan sucess ===============================================')
 
-#openpose_object = OpenposeObject()
+openpose_object = OpenposeObject()
+openpose_object = OpenposeObject()
 ''' templates '''
 
 # base template
@@ -330,6 +332,7 @@ def chatbot(request, user_account=None):
                 img_dst = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'transfer')
                 shutil.copy(img_src, img_dst)
 
+                response['redirect'] = '/tripblog/'+user_account+'/'
                 response['title'] = article_title
                 response['id'] = user_article.id
                 reply = '已安排您的行程於遊記裡'
