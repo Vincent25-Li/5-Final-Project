@@ -42,6 +42,7 @@ def base(request):
 def index(request, user_account=None):
     title = 'homepage'
     status = ''
+    random_no = random.randint(1, 1001)
     no = ['1','2','3','4','5']
     user_name = check_useraccount_exist(user_account)
     if not bool(user_name):
