@@ -38,8 +38,7 @@
 		</div>
 		<div class="description-flex-container" id="addinput2"> 
 			<p class="active">
-				<br><span>時間</span><input type="text" name='time'> <span>景點</span><input type="text" name='spot'>
-				<img src="{% static "tripblog/images/plus.png" %}" alt="addnewinput" class="imginputplus canclick" />
+				<span>時間</span> <input type="text" name='time'> <span>景點</span> <input type="text" name='spot'> <img src="{% static "tripblog/images/plus.png" %}" alt="addnewinput" class="imgtpinputplus canclick" />
 			</p>
 		</div>
 	</div>
@@ -103,10 +102,10 @@
 		});
 	});
 
-	$("img.imginputplus").click(function () {
-		var addtextinput = $("<br><a>時間</a><input type='text' name='time'> <a>景點</a><input type='text' name='spot'>");
+	$("img.imgtpinputplus").click(function () {
+		var addtextinput = $("<br><a>時間</a> <input type='text' name='time'> <a>景點</a> <input type='text' name='spot'>");
 		$("p.active").append(addtextinput);
-		$("img.imginputplus").addClass("canclick")
+		$("img.imgtpinputplus").addClass("canclick")
 	});
 	a = $('#addinput1 div:last-child span').attr('data-info').split('日')[0]
 	a = Number(a)
@@ -114,13 +113,13 @@
 		a = a + 1;
 		var addtextinput = $("<div class='input'><span data-info='" + a + "日'></span></div>");
 		$("#addinput1").append(addtextinput);
-		var addtextinput = $("<p><a>時間</a><input type='text' name='time'> <a>景點</a><input type='text' name='spot'> <img src='{% static "tripblog/images/plus.png" %}' alt='addnewinput' class='imginputplus'/><br></p>");
+		var addtextinput = $("<p><a>時間</a> <input type='text' name='time'> <a>景點</a> <input type='text' name='spot'> <img src='{% static "tripblog/images/plus.png" %}' alt='addnewinput' class='imgtpinputplus'/></p>");
 		$("#addinput2").append(addtextinput);
-		$("img[class='imginputplus'][class!='imginputplus canclick']").click(function () {
-			var addtextinput = $("<a>時間</a><input type='text' name='time'> <a>景點</a><input type='text' name='spot'><br>");
+		$("img[class='imgtpinputplus'][class!='imgtpinputplus canclick']").click(function () {
+			var addtextinput = $("<br><a>時間</a> <input type='text' name='time'> <a>景點</a> <input type='text' name='spot'>");
 			$("p.active").append(addtextinput);
 		});		
-		$("img[class='imginputplus']").addClass("canclick")
+		$("img[class='imgtpinputplus']").addClass("canclick")
 		var addtextinput = $("<textarea id='edit' style='margin-top: 30px;' placeholder='從這裡開始寫'></textarea>");
 		$("#editor").append(addtextinput);
 		$($('.input')).click(function () {
