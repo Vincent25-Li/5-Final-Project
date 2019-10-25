@@ -50,7 +50,7 @@
 
     {% if status and login_user == user_account %}
     <!--  Popup Chatbot -->
-	<img class="open-button" onclick="openForm()" src="{% static "tripblog/images/robot.png" %}" alt="open form">
+	<img class="open-button" id='open_chatbot' onclick="openForm()" src="{% static "tripblog/images/robot.png" %}" alt="open form">
 
     <div class="chat-popup" id="myForm">
         <form method="POST" class="form-container">
@@ -101,7 +101,9 @@
                         $("#chat_window_V").append(reply);
                         url = window.location.href.split('/')
                         if('title' in data && url[url.length-2]=='{{user_account}}'){
-                            let random_no = getRandomInt(1, 5)
+                            location.href = data['redirect']
+                            
+                            {% comment %} let random_no = getRandomInt(1, 5)
                             let article = "<div id='article_"+data['id']+"' class='articlephoto photo_"+random_no+"'>"
                             $('div.wrapper_BH').prepend(article)
 
@@ -109,13 +111,13 @@
                             $(article_id).append("<p class='delete_article' id='delete_"+data['id']+"'>[X]</p>")
                             $(article_id).append("<p class='edit_picture' id='edit_"+data['id']+"'>換圖片</p>")
                             $(article_id).append("<p class='style_picture' id='style_"+data['id']+"'>換風格</p>")
-                            $(article_id).append("<a href='/tripblog/{{ user_account }}/article/"+data['id']+"'>"+data['title']+"</a>")
+                            $(article_id).append("<a href='/tripblog/{{ user_account }}/article/"+data['id']+"'>"+data['title']+"</a>") {% endcomment %}
                         }
                     },
 					complete: function(){
 						$('#chat_window_V').scrollTop(9999999);
 					}
-                });
+                })
                 $("#user_msg").val('');
             });
             

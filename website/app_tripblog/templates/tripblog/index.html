@@ -91,37 +91,40 @@
             $(".upload_article_cover").change(event => {
                 let id = event.target.id.split('_')[2];
                 let data = new FormData($('#article_cover_upload_' + id).get(0));
-                
+                console.log('data1:===========================', data)
                 $.ajax({
                     url: "/tripblog/{{user_account}}/article_cover_upload/"+id+"/",
                     {% comment %} introduce to view by the url {% endcomment %}
                     type: "POST",
-                    data: data,
+                    data: data,                    
                     cache: false,
                     processData: false,
                     contentType: false,
                     success: data => {
                         $('#article_cover_shown_'+id).attr('src', data['article_cover_src']+'?test='+Math.floor(Math.random()*1000+1));
+
+                        $.ajax({
+                            url: "/tripblog/{{ user_account }}/article_cover_style_change/"+id+"/",
+                            success: console.log('datahaha:===========================')
+                        });    
                     },
                 });
                 $("#article_cover").val('');
             });
 
-        {% comment %} to change cover img style {% endcomment %}
-        $('p.style_picture').click(event=>{
-            let id = event.target.id.split('_')[1];
-            console.log('style transfer:', id)
-            if (confirm('轉換風格需等待約3秒: ')){
-                $.ajax({
-                    url: "/tripblog/{{ user_account }}/article_cover_style_change/"+id+"/",
-                    type: "GET",
-                    success: function(data){
-                        $('#article_cover_shown_'+id).attr('src', data['article_style_src']+'?test='+Math.floor(Math.random()*1000+1));              
-                    },
-                });
-            };
-        })
-
+            $('p.style_picture').on({
+                'click': function(){
+                    let id = event.target.id.split('_')[1];
+                    console.log('style transfer:', id)
+                    $('#article_cover_shown_'+id).attr('src',"/media/{{user_account}}/articles/"+id+"/transfer/cover.j_synthetic.png");
+                    $('p.style_picture').on({
+                         'click': function(){
+                        $('#article_cover_shown_'+id).attr('src',"/media/{{ user_account }}/articles/"+id+"/original/cover.jpg?cachebuster={{ random_no }}");
+                        }
+                    });
+                  }
+            });
+   
         {% comment %} ajax to delete article {% endcomment %}
         $('p.delete_article').click(event=>{
             let id = event.target.id.split('_')[1];
