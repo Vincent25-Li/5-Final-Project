@@ -16,6 +16,7 @@ ul[data-bsp-ul-index] li {
 #bsPhotoGalleryModal .modal-dialog img { /*彈出照片內圈*/
     text-align:center;
     margin:1% auto;
+    margin-bottom: -1%;
     width:98%;
     
 }
@@ -25,7 +26,6 @@ ul[data-bsp-ul-index] li {
 }
 #bsPhotoGalleryModal .bsp-text-container {
   text-align:left;
-  padding-top:25px;
 }
 
 #bsPhotoGalleryModal .bsp-close {
@@ -33,7 +33,7 @@ ul[data-bsp-ul-index] li {
   right: -8px;
   top: -7px;
   background: rgba(255, 255, 255, 0.89);
-  padding: 7px 8px 5px;
+  padding: 3px 8px;
   border: 1px solid rgba(0,0,0,.49);
   border-radius: 50%;
   height:31px;
