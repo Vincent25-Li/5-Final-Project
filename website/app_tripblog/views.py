@@ -562,23 +562,23 @@ def check_useraccount_exist(user_account):
 def article_cover_upload(request, user_account=None, article_id=None):
     if request.method == 'POST' and request.is_ajax():
         article_cover = request.FILES['article_cover'] # retrieve post image
-        print('article_cover :', article_cover ,'==============33333333333====3333333================') #
+        print('~~~~~~~~~~~~~~article_cover :', article_cover ,'~~~~~~~~~~~~~~')
         user = User.objects.get(user_account=user_account)
-        # print('user is :', user,'====================================') #jessie
+        # print('user is :', user,'====================================') 
         user_article = UserArticles.objects.get(id=article_id)
-        # print('user_article is :', user_article ,'====###======') #jessie:TEST
-        # print('user_article.article_title is :', user_article.article_title ,'====###======') #TEST
-        # print('user_article.id is :', user_article.id ,'====###======') #16
+        print('~~~~~~~~~~~~~~user_article :', user_article ,'~~~~~~~~~~~~~~') 
+        print('~~~~~~~~~~~~~~user_article.article_title :', user_article.article_title ,'~~~~~~~~~~~~~~') 
+        # print('user_article.id is :', user_article.id ,'====###======') 
         user_article_id = str(user_article.id)
 
-        article_cover_path = os.path.join(settings.MEDIA_ROOT, user_account,'articles', 
-                                          user_article_id ,'original','cover.jpg')   # define stored media path
-        
+        article_cover_path = os.path.join(settings.MEDIA_ROOT, user_account,'articles', user_article_id ,'original','cover.jpg')   # define stored media path
+        print('~~~~~~~~~~~~~~article_cover_path :', article_cover_path ,'~~~~~~~~~~~~~~')
+
         with open(article_cover_path, 'wb+') as destination:# store image at local side
             for chunk in article_cover.chunks():
                 destination.write(chunk)
 
-        print('article_cover_path:',article_cover_path,'============================')
+        print('~~~~~~~~~~~~~~OK~~~~~~~~~~~~~~')
         im = Image.open(article_cover_path)
         width = 256
         height = 256
