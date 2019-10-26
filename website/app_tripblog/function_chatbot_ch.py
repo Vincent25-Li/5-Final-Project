@@ -102,7 +102,7 @@ class ChatbotObject():
         user_msg_wp = nltk.pos_tag(user_msg_cut)
         X_msg = sent2features(user_msg_wp)
         y_msg_pred = self.ner_model_crf.predict([X_msg])
-        print(f'{user_msg_cut}\n{y_msg_pred}')
+        
         return user_msg_cut, y_msg_pred[0]
 
 def word2features(sent, i):

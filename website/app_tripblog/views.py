@@ -325,7 +325,7 @@ def chatbot(request, user_account=None):
                     os.makedirs(dir_path3)
                     os.makedirs(dir_path4)
                 except FileExistsError:
-                    print(f"Directory {dir_path} already exists")
+                    print(f"Directory {dir_path1} already exists")
                 img_src = os.path.join(settings.MEDIA_ROOT, 'fortrain.jpg')
                 img_dst = os.path.join(settings.MEDIA_ROOT, user_account, 'articles', str(user_article.id),'transfer')
                 shutil.copy(img_src, img_dst)
