@@ -109,7 +109,7 @@
     function playPause(){
         if (video.paused){
             video.play();
-            take_image = setInterval(get_pose, 10000)
+            take_image = setInterval(get_pose, 8000)
             console.log(take_image)
         }
         else{
@@ -148,7 +148,9 @@
             datatype: "json", 
             success: response => {
                 console.log(response['response'])
-                clearInterval(take_image)
+                if (response['result']){
+                    clearInterval(take_image)
+                }
             },
         });
     };
