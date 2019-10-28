@@ -82,6 +82,7 @@ class CycleGAN():
 
         self.user_account = user_account
         self.article_id = user_article_id
+        self.database = True
 
         # Linear decay of learning rate, for both discriminators and generators
         self.use_linear_decay = False
