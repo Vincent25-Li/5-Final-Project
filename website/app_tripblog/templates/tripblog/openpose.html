@@ -109,7 +109,6 @@
         if (video.paused){
             video.play();
             take_image = setInterval(get_pose, 8000)
-            console.log(take_image)
         }
         else{
             video.pause(); 
@@ -132,7 +131,7 @@
         const context = canvas.getContext('2d');
         let cw = canvas.clientWidth;
         let ch = canvas.clientHeight;
-        context.drawImage(video, 0, 0, cw, ch);
+        {% comment %} context.drawImage(video, 0, 0, cw, ch); {% endcomment %}
         let image = context.getImageData(0, 0, cw, ch);
         let image_pixel = image.data;
 
@@ -146,9 +145,10 @@
             },
             datatype: "json", 
             success: response => {
-                console.log(response['response'])
+                console.log(response['result'])
                 if (response['result']){
                     clearInterval(take_image)
+                    $('video').remove()
                 }
             },
         });
