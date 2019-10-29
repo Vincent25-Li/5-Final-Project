@@ -108,7 +108,7 @@
     function playPause(){
         if (video.paused){
             video.play();
-            take_image = setInterval(get_pose, 8000)
+            take_image = setInterval(get_pose, 10000)
         }
         else{
             video.pause(); 
@@ -128,12 +128,14 @@
     snap.addEventListener('click', get_pose);
 
     function get_pose(){
-        const context = canvas.getContext('2d');
+        const canvas_o = document.createElement('canvas');
+        const context_o = canvas_o.getContext('2d');
         let cw = canvas.clientWidth;
         let ch = canvas.clientHeight;
-        {% comment %} context.drawImage(video, 0, 0, cw, ch); {% endcomment %}
-        let image = context.getImageData(0, 0, cw, ch);
-        let image_pixel = image.data;
+
+        context_o.drawImage(video, 0, 0, cw, ch);
+        const image = context_o.getImageData(0, 0, cw, ch);
+        const image_pixel = image.data;
 
         $.ajax({
             url: "/tripblog/{{ user_account }}/pose_analysis/",
@@ -147,8 +149,10 @@
             success: response => {
                 console.log(response['result'])
                 if (response['result']){
-                    clearInterval(take_image)
-                    $('video').remove()
+                    $('button[name="playbutton"]').click()
+                    {% comment %} clearInterval(take_image)
+                    $('video').remove() {% endcomment %}
+                    
                 }
             },
         });

@@ -103,14 +103,12 @@ class OpenposeObject():
         
             openpose_path= os.path.join(settings.MEDIA_ROOT, user_account, "openpose")
             realtime_path = os.path.join(settings.MEDIA_ROOT, user_account, "openpose", "realtime.jpg")
-            realtime_original_path = os.path.join(settings.MEDIA_ROOT, user_account, "openpose", "realtime_o.jpg")
+            
             if os.path.exists(openpose_path):
-                cv2.imwrite(realtime_original_path, imageToProcess)
                 cv2.imwrite(realtime_path, self.datum.cvOutputData)
 
             else:
                 os.mkdir(openpose_path)
-                cv2.imwrite(realtime_original_path, imageToProcess)
                 cv2.imwrite(realtime_path, self.datum.cvOutputData)
           
             return True

@@ -556,9 +556,10 @@ def pose_analysis(request, user_account=None):
         
         try:
             result = openpose_object.openpose_matching(image, user_account)
+            
         except IndexError:
             result = False
-
+        
         response = {}
         response['result'] = result
         return JsonResponse(response)
