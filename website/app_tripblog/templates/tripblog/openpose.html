@@ -37,7 +37,6 @@
         <input type="file" name='upload_imgs' accept=".png, .jpg, .jpeg" enctype="multipart/form-data", id='upload_imgs'>
     </form>
     <label for="upload_imgs"><p class="button">上傳圖片</p></label>
-    <button type="button">分析</button>
     <div id="empty_photo"></div>
 </div>
 <div class="show_photo">
@@ -45,9 +44,9 @@
 </div>
 
 <div id="video_container">
-    <video id="video_element"></video>
     <button onclick='playPause()' name="playbutton">播放/暫停</button>
     <button id="snap">擷取</button>
+    <video id="video_element"></video>
     <div>
         <canvas id="canvas" width='320' height='180'></canvas>
     </div>
@@ -109,7 +108,7 @@
     function playPause(){
         if (video.paused){
             video.play();
-            take_image = setInterval(get_pose, 10000)
+            take_image = setInterval(get_pose, 8000)
             console.log(take_image)
         }
         else{
@@ -148,7 +147,9 @@
             datatype: "json", 
             success: response => {
                 console.log(response['response'])
-                clearInterval(take_image)
+                if (response['result']){
+                    clearInterval(take_image)
+                }
             },
         });
     };
