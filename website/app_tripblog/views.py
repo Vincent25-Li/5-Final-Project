@@ -645,4 +645,13 @@ def article_cover_style_return(request, user_account=None, article_id=None):
         path = f'/media/{user_account}/articles/{user_article.id}/original/cover.jpg'
         user_article.save()
 
-    return JsonResponse({'article_style_src': path }) 
+    try:
+        return JsonResponse({'article_style_src': path })
+
+    except:
+        pass
+    #     JsonResponse = None
+    #     time.sleep(5) 
+    #     return JsonResponse({'article_style_src': path })
+
+
