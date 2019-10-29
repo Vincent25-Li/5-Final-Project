@@ -216,7 +216,7 @@ def albums(request, user_account=None):
         return render(request, 'tripblog/albums.html', locals())
 
 def openpose(request, user_account=None):
-    title = 'OpenPose'
+    title = 'Pose Recognition'
     status = ''
     if 'is_login' in request.session:
             login_user = request.session['login_user']
